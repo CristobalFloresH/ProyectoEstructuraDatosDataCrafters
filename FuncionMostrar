@@ -48,18 +48,20 @@ void mostrarDenunciaPorRut(struct nodoPersonas *personas, char *rutBuscado) {
     struct nodoDenuncias *actual = personaBuscada->denuncias;
     int contadorDenuncias = 0;
 
-    printf("Denuncias de %s\n, rut: %s\n", personaBuscada->nombre, personaBuscada->rut);
+    printf("========================================\n");
+    printf("Denuncias de %s %s | Rut: %s\n", personaBuscada->nombre, personaBuscada->apellido, personaBuscada->rut);
+    printf("========================================\n");
 
     while (actual != NULL)
     {
         if (actual->datosDenuncia != NULL)
         {
             contadorDenuncias++;
-            printf("Denuncia %d\n", contadorDenuncias);
-            printf("Ruc: %s\n", actual->datosDenuncia->ruc);
-            printf("Fecha: %s\n", actual->datosDenuncia->fecha);
-            printf("Descripción: %s\n", actual->datosDenuncia->descripcion);
-            printf("Tipo de denuncia: %s\n", actual->datosDenuncia->tipoDeDenuncia);
+            printf("\n--------- DENUNCIA %d ---------\n", contadorDenuncias);
+            printf("RUC           : %s\n", actual->datosDenuncia->ruc);
+            printf("Fecha         : %s\n", actual->datosDenuncia->fecha);
+            printf("Descripción   : %s\n", actual->datosDenuncia->descripcion);
+            printf("Tipo de delito: %s\n", actual->datosDenuncia->tipoDeDenuncia);
 
             if (strcmp(actual->datosDenuncia->denunciante->rut, personaBuscada->rut) == 0) {
                 printf("Denuncia Enviada a %s %s\n", actual->datosDenuncia->denunciado->nombre,
@@ -75,6 +77,6 @@ void mostrarDenunciaPorRut(struct nodoPersonas *personas, char *rutBuscado) {
     }
     if (contadorDenuncias == 0)
     {
-        printf("Usuario no tiene denuncias\n");
+        printf("No se encontraron denuncias asociadas a este usuario.\n");
     }
 }
