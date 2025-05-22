@@ -120,6 +120,6 @@ struct nodoResolucion
 };
 
 struct ministerio {
-    struct nodoPersonas personas;
-    struct nodoCarpetas carpetas;
+    struct nodoPersonas *personas;
+    struct nodoCarpetas *carpetas;
 };
