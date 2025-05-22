@@ -80,3 +80,109 @@ void mostrarDenunciaPorRut(struct nodoPersonas *personas, char *rutBuscado) {
         printf("No se encontraron denuncias asociadas a este usuario.\n");
     }
 }
+
+struct carpeta *buscarCarpetaPorRuc(struct nodoCarpetas *carpetas, char *rucBuscado) {
+    if (carpetas == NULL || rucBuscado == NULL) return NULL;
+
+    struct nodoCarpetas *actual = carpetas;
+
+    do {
+        if (strcmp(actual->datosCarpeta->ruc, rucBuscado) == 0)
+        {
+            return actual->datosCarpeta;
+        }
+
+        actual = actual->siguiente;
+    } while (actual != carpetas);
+
+    return NULL;
+}
+
+void mostrarDenunciasDeCarpeta(struct carpeta *carpetaActual)
+{
+    //caso teorico que carpeta no tenga denuncias por X o Y motivo
+    if (carpetaActual == NULL || carpetaActual->denuncias == NULL)
+    {
+        printf("La carpeta no contiene denuncias.\n");
+        return;
+    }
+    //si tiene denuncias declaramos actual e imprimimos :)
+    struct nodoDenuncias *actual = carpetaActual->denuncias;
+    int contadorDenuncias = 0;
+
+    printf("========================================\n");
+    printf("DENUNCIAS EN LA CARPETA RUC: %s\n", carpetaActual->ruc);
+    printf("========================================\n");
+
+    while (actual != NULL)
+    {
+        if (actual->datosDenuncia != NULL)
+        {
+            contadorDenuncias++;
+            printf("\n--------- DENUNCIA %d ---------\n", contadorDenuncias);
+            printf("RUC           : %s\n", actual->datosDenuncia->ruc);
+            printf("Fecha         : %s\n", actual->datosDenuncia->fecha);
+            printf("Descripción   : %s\n", actual->datosDenuncia->descripcion);
+            printf("Tipo de delito: %s\n", actual->datosDenuncia->tipoDeDenuncia);
+
+            if (actual->datosDenuncia->denunciante != NULL && actual->datosDenuncia->denunciado != NULL)
+            {
+                printf("Denunciante   : %s %s (RUT: %s)\n", actual->datosDenuncia->denunciante->nombre,
+                       actual->datosDenuncia->denunciante->apellido,
+                       actual->datosDenuncia->denunciante->rut);
+
+                printf("Denunciado    : %s %s (RUT: %s)\n", actual->datosDenuncia->denunciado->nombre,
+                       actual->datosDenuncia->denunciado->apellido,
+                       actual->datosDenuncia->denunciado->rut);
+            }
+        }
+        actual = actual->siguiente;
+    }
+
+    if (contadorDenuncias == 0)
+    {
+        printf("No se encontraron denuncias en esta carpeta.\n");
+    }
+}
+
+void mostrarCarpetaPorRuc(struct nodoCarpetas *carpetas, char *rucBuscado) {
+    //se busca a la carpeta indicada
+    struct carpeta *carpetaBuscada = buscarCarpetaPorRuc(carpetas, rucBuscado);
+
+    //si no se encuentra o algun dato es invalido, retorna mensaje de error
+    if (carpetaBuscada == NULL)
+    {
+        printf("Se genero un error al buscar la carpeta o esta no existe\n");
+        return;
+    }
+
+    printf("\n========================================\n");
+    printf("CARPETA INVESTIGATIVA - Ruc: %s\n", carpetaBuscada->ruc);
+    printf("========================================\n");
+
+    // Sección de denuncias
+    printf("\n>> DENUNCIAS REGISTRADAS:\n");
+    mostrarDenunciasDeCarpeta(carpetaBuscada);
+
+    // Sección de declaraciones
+    printf("\n>> DECLARACIONES (omaigad):\n");
+    printf("Aquí irían todas las declaraciones formales de testigos, víctimas, etc.\n");
+
+    // Sección de pruebas
+    printf("\n>> PRUEBAS (muy incriminatorias aquí):\n");
+    printf("Las evidencias más contundentes del caso estarían listadas aquí.\n");
+
+    // Sección de diligencias
+    printf("\n>> DILIGENCIAS (muy desubicadas):\n");
+    printf("Inspecciones, allanamientos y otras cositas procesales.\n");
+
+    // Sección de imputados
+    printf("\n>> IMPUTADOS (díganles sospechosos nomás, pa que el nombre raro):\n");
+    printf("Lista de personas formalmente investigadas.\n");
+
+    // Sección de resoluciones
+    printf("\n>> RESOLUCIONES (muy sabias, claramente):\n");
+    printf("Sobreseimientos, sentencias y otras decisiones judiciales.\n");
+
+    printf("========================================\n\n");
+}
