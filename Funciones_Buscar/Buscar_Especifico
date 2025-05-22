@@ -14,3 +14,20 @@ struct carpeta *buscarCarpetaPorRuc(struct nodoCarpetas *carpetas, char *rucBusc
 
     return NULL;
 }
+
+struct persona *buscarPersonaPorRut(struct nodoPersonas *personas, char *rutBuscado) {
+    if (personas == NULL || rutBuscado == NULL) return NULL;
+
+    struct nodoPersonas *actual = personas;
+
+    do {
+        if (strcmp(actual->datosPersona->rut, rutBuscado) == 0)
+        {
+            return actual->datosPersona;
+        }
+
+        actual = actual->siguiente;
+    } while (actual != personas);
+
+    return NULL;
+}
