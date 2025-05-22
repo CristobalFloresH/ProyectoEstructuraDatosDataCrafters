@@ -1,2 +1,3 @@
 # ProyectoEstructuraDatosDataCrafters
-FUNCIONA CTM FUNCIONA
+Holaaaa aqui hacemos las funciones?
+
