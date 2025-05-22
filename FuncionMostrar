@@ -27,13 +27,12 @@ void mostrarUsuarioPorRut(struct nodoPersonas *personas, char *rutBuscado) {
     }
 
     //si se encuentra y no es null (paso el if anterior), muestra los datos de la persona
-    
-    printf("Nombre: %s\n", personaBuscada->nombre);
-    printf("Apellido: %s\n", personaBuscada->apellido);
-    printf("Rut: %s\n", personaBuscada->rut);
-    printf("Ocupación: %s\n", personaBuscada->ocupacion);
-}
 
+    printf("Nombre      : %s\n", personaBuscada->nombre);
+    printf("Apellido    : %s\n", personaBuscada->apellido);
+    printf("Rut         : %s\n", personaBuscada->rut);
+    printf("Ocupación   : %s\n", personaBuscada->ocupacion);
+}
 
 void mostrarDenunciaPorRut(struct nodoPersonas *personas, char *rutBuscado) {
     //se busca a la persona indicada
@@ -63,11 +62,12 @@ void mostrarDenunciaPorRut(struct nodoPersonas *personas, char *rutBuscado) {
             printf("Descripción   : %s\n", actual->datosDenuncia->descripcion);
             printf("Tipo de delito: %s\n", actual->datosDenuncia->tipoDeDenuncia);
 
+            //Si el rut del denunciante es el mismo de la persona buscada significa que la persona envio esta denuncia
             if (strcmp(actual->datosDenuncia->denunciante->rut, personaBuscada->rut) == 0) {
                 printf("Denuncia Enviada a %s %s\n", actual->datosDenuncia->denunciado->nombre,
                     actual->datosDenuncia->denunciado->apellido);
             }
-
+            //si el rut del denunciado es el mismo de la persona buscada significa que la persona recibio esta denuncia
             if (strcmp(actual->datosDenuncia->denunciado->rut, personaBuscada->rut) == 0) {
                 printf("Denuncia Recibida por %s %s\n", actual->datosDenuncia->denunciante->nombre,
                     actual->datosDenuncia->denunciante->apellido);
