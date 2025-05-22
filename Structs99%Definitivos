@@ -106,9 +106,9 @@ struct nodoImputados { //lista simple doblemente enlazada
 };
 
 struct resolucion { //Arbol Binario de busqueda
-    char Tipo;
-    char Fecha;
-    char Descripcion;
+    char *Tipo;
+    char *Fecha;
+    char *Descripcion;
     int Gravedad; // valor numérico para ordenar en el ABB
 };
 
