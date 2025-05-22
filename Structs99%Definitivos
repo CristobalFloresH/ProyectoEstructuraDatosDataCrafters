@@ -4,7 +4,7 @@
 
 struct ministerio {
     struct nodoPersonas personas;
-    struct nodoCarpetascarpetas;
+    struct nodoCarpetas carpetas;
 };
 
 struct denuncia { //Datos denuncia singular.
