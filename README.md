@@ -1,3 +1,2 @@
 # ProyectoEstructuraDatosDataCrafters
-Holaaaa aqui hacemos las funciones?
-
+funciona ctm funciona!!!
