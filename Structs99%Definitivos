@@ -105,7 +105,7 @@ struct nodoImputados { //lista simple doblemente enlazada
     struct nodoImputados *anterior;
 };
 
-struct Resolucion { //Arbol Binario de busqueda
+struct resolucion { //Arbol Binario de busqueda
     char Tipo;
     char Fecha;
     char Descripcion;
@@ -114,9 +114,9 @@ struct Resolucion { //Arbol Binario de busqueda
 
 struct nodoResolucion
 {
-    struct Resolucion *datoResolucion;
-    struct NodoResolucion *Izquierda;
-    struct NodoResolucion *Derecha;
+    struct resolucion *datoResolucion;
+    struct nodoResolucion *Izquierda;
+    struct nodoResolucion *Derecha;
 };
 
 struct ministerio {
