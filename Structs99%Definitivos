@@ -32,7 +32,7 @@ struct persona { //Datos persona singular
     char *nacionalidad;
     //Opcional
 
-    struct nodoDenuncia *denuncias;
+    struct nodoDenuncias *denuncias;
 };
 
 struct nodoPersonas { //Lista Circular Doblemente Enlazada De Personas
@@ -43,12 +43,12 @@ struct nodoPersonas { //Lista Circular Doblemente Enlazada De Personas
 
 struct carpeta { //Datos carpeta singular
     char *ruc;
-    struct nodoDenuncia *denuncias;
+    struct nodoDenuncias *denuncias;
     struct nodoDeclaraciones *declaraciones;
     struct nodoPruebas *pruebas;
     struct nodoDiligencias *diligencias;
-    struct imputados **imputados; //array imputados
-    struct nodoResolucion *resoluciones;
+    struct imputado **imputados; //array imputados
+    struct nodoResoluciones *resoluciones;
 };
 
 struct nodoCarpetas { //Lista simple doblemente enlazada
@@ -112,14 +112,13 @@ struct resolucion { //Arbol Binario de busqueda
     int Gravedad; // valor numérico para ordenar en el ABB
 };
 
-struct nodoResolucion
-{
+struct nodoResoluciones { //nodo del ABB de resoluciones
     struct resolucion *datoResolucion;
-    struct nodoResolucion *Izquierda;
-    struct nodoResolucion *Derecha;
+    struct nodoResoluciones *Izquierda;
+    struct nodoResoluciones *Derecha;
 };
 
-struct ministerio {
+struct ministerio { //el mismisimo ministerio
     struct nodoPersonas *personas;
     struct nodoCarpetas *carpetas;
 };
