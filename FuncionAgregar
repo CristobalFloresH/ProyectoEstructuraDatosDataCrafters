@@ -134,7 +134,7 @@ void agregar(struct ministerio *ministerio){
         
         char palabra[300];
         
-        struct carpeta *nuevaCarpeta = (struct carpeta *)malloc(struct carpeta);
+        struct carpeta *nuevaCarpeta = (struct carpeta *)malloc(sizeof(struct carpeta));
         
         if(nuevaCarpeta == NULL)printf("Error al asignar memoria");
         return;
