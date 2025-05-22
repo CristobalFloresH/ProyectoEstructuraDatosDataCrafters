@@ -29,6 +29,9 @@ void agregar(struct ministerio *ministerio){
     if (opcion == 1) {
         struct persona *nuevaPersona = (struct persona *)malloc(sizeof(struct persona));
         char palabra[300];
+        
+        if(nuevaPersona == NULL)printf("Error al asignar memora");
+        return;
 
         printf("Ingrese nombre del denunciante: ");
         scanf(" %[^\n]", palabra);
@@ -53,12 +56,12 @@ void agregar(struct ministerio *ministerio){
         nuevaPersona->denuncias = NULL; // Por ahora no se agregan denuncias acá
 
         agregarPersonas(&ministerio->personas, nuevaPersona); // Agrega la persona a la lista circular
-    }
+    } /*agregar persona*/
 
     else if(opcion == 2){
         
-        char *rutDenunciante;
-        char *rutDenunciado;
+        char rutDenunciante[100];
+        char rutDenunciado[100];
         char palabra[100];
         
         printf("Ingrese RUT del denunciante");
@@ -74,6 +77,10 @@ void agregar(struct ministerio *ministerio){
         return;
     
         struct denuncia *nuevaDenuncia = (struct denuncia *)malloc(sizeof(struct denuncia));
+        
+        if(nuevaDenuncia == NULL)printf("Error al asignar memoria");
+        return;
+        
         nuevaDenuncia->denunciante = nuevoDenunciante;
         nuevaDenuncia->denunciado = nuevoDenunciado;
         
@@ -97,10 +104,13 @@ void agregar(struct ministerio *ministerio){
         nuevaDenuncia->tipoDeDenuncia = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaDenuncia->tipoDeDenuncia, palabra);        
         
-        agregarDenuncias(listaDenuncias, nuevaDenuncia);
+        agregarDenunciasDenunciante(rutDenunciante, ministerio, nuevaDenuncia);
+        agregarDenunciasDenunciado(rutDenunciado, ministerio, nuevaDenuncia);
+        
+        /* recorrer ministerio->personas y validar que el rut sea el del denunciante o denunciado (en cada caso) si es el rut, agregar a la lista de denuncias  */
         
         /*buscar el rut y recorrer la lista de denuncias que tiene, agregar */
-    }
+    } /*agregar denuncia*/
     
     else if(opcion == 3){
         
@@ -124,6 +134,6 @@ void agregar(struct ministerio *ministerio){
         nuevaCarpeta->imputados = NULL;
         nuevaCarpeta->resoluciones = NULL;
         
-        agregarCaroeta(listaCarpeta, nuevaCarpeta);
-    }
+        agregarCarpeta(listaCarpeta, nuevaCarpeta);
+    } /*agregar carpeta*/
 }
