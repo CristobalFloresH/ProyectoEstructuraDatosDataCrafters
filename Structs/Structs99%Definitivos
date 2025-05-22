@@ -1,1 +1,124 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+struct denuncia { //Datos denuncia singular.
+    struct persona *denunciante;
+    struct persona *denunciado;
+    char *fecha;
+    char *descripcion;
+    char *ruc;
+    char *tipoDeDenuncia;
+};
+
+struct nodoDenuncias { //Lista simple Doblemente Enlazada De Denuncias
+    struct denuncia *datosDenuncia;
+    struct nodoDenuncias *siguiente;
+    struct nodoDenuncias *anterior;
+};
+
+struct persona { //Datos persona singular
+    char *nombre;
+    char *apellido;
+    char *rut;
+    char *ocupacion;
+    //Opcional
+    char *correo;
+    char *direccion;
+    char *fechaNacimiento;
+    char *genero;
+    char *estadoCivil;
+    char *telefono;
+    char *nacionalidad;
+    //Opcional
+
+    struct nodoDenuncias *denuncias;
+};
+
+struct nodoPersonas { //Lista Circular Doblemente Enlazada De Personas
+    struct persona *datosPersona;
+    struct nodoPersonas *siguiente;
+    struct nodoPersonas *anterior;
+};
+
+struct carpeta { //Datos carpeta singular
+    char *ruc;
+    struct nodoDenuncias *denuncias;
+    struct nodoDeclaraciones *declaraciones;
+    struct nodoPruebas *pruebas;
+    struct nodoDiligencias *diligencias;
+    struct imputado **imputados; //array imputados
+    struct nodoResoluciones *resoluciones;
+};
+
+struct nodoCarpetas { //Lista simple doblemente enlazada
+    struct carpeta *datosCarpeta;
+    struct nodoCarpetas *siguiente;
+    struct nodoCarpetas *anterior;
+};
+
+struct declaracion { //Datos declaracion singular
+    char *declaracion;
+    char *fecha;
+    struct persona *persona;
+};
+
+struct nodoDeclaraciones { //lista simple doblemente enlazada
+    struct declaracion *datosDeclaracion;
+    struct nodoDeclaraciones *siguiente;
+    struct nodoDeclaraciones *anterior;
+};
+
+struct prueba { //datos prueba singular
+    char *prueba; //inseguros del tipo de dato, ya que podria ser video/imagen/mp3
+    char *fecha;
+    char *tipoDePrueba;
+};
+
+struct nodoPruebas { //lista simple doblemente enlazada
+    struct prueba *datosPrueba;
+    struct nodoPruebas *siguiente;
+    struct nodoPruebas *anterior;
+};
+
+struct diligencia { //datos diligencia singular
+    char *diligencia;
+    char *fecha;
+    char *tipoDeDiligencia;
+};
+
+struct nodoDiligencias { //lista simple doblemente enlazada
+    struct diligencia *datosDiligencia;
+    struct nodoDiligencias *siguiente;
+    struct nodoDiligencias *anterior;
+};
+
+struct imputado { //datos imputado singular // puede ser array
+    struct nodoDeclaraciones *declaraciones;
+    struct nodoMedidasCautelares *medidasCautelares;
+    char *estadoProcesal;
+};
+
+struct nodoImputados { //lista simple doblemente enlazada
+    struct imputado *datosImputado;
+    struct nodoImputados *siguiente;
+    struct nodoImputados *anterior;
+};
+
+struct resolucion { //Arbol Binario de busqueda
+    char *Tipo;
+    char *Fecha;
+    char *Descripcion;
+    int Gravedad; // valor numérico para ordenar en el ABB
+};
+
+struct nodoResoluciones { //nodo del ABB de resoluciones
+    struct resolucion *datoResolucion;
+    struct nodoResoluciones *Izquierda;
+    struct nodoResoluciones *Derecha;
+};
+
+struct ministerio { //el mismisimo ministerio
+    struct nodoPersonas *personas;
+    struct nodoCarpetas *carpetas;
+};
