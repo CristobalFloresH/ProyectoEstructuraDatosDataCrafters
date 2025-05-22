@@ -2,11 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct ministerio {
-    struct nodoPersonas personas;
-    struct nodoCarpetas carpetas;
-};
-
 struct denuncia { //Datos denuncia singular.
     struct persona *denunciante;
     struct persona *denunciado;
@@ -122,4 +117,9 @@ struct nodoResolucion
     struct Resolucion *datoResolucion;
     struct NodoResolucion *Izquierda;
     struct NodoResolucion *Derecha;
+};
+
+struct ministerio {
+    struct nodoPersonas personas;
+    struct nodoCarpetas carpetas;
 };
