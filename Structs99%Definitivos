@@ -22,7 +22,7 @@ struct persona { //Datos persona singular
     char *apellido;
     char *rut;
     char *ocupacion;
-
+    //Opcional
     char *correo;
     char *direccion;
     char *fechaNacimiento;
@@ -30,6 +30,7 @@ struct persona { //Datos persona singular
     char *estadoCivil;
     char *telefono;
     char *nacionalidad;
+    //Opcional
 
     struct nodoDenuncia *denuncias;
 };
