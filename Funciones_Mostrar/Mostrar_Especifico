@@ -1,3 +1,20 @@
+struct persona *buscarPersonaPorRut(struct nodoPersonas *personas, char *rutBuscado) {
+    if (personas == NULL || rutBuscado == NULL) return NULL;
+
+    struct nodoPersonas *actual = personas;
+
+    do {
+        if (strcmp(actual->datosPersona->rut, rutBuscado) == 0)
+        {
+            return actual->datosPersona;
+        }
+
+        actual = actual->siguiente;
+    } while (actual != personas);
+
+    return NULL;
+}
+
 void mostrarUsuarioPorRut(struct nodoPersonas *personas, char *rutBuscado) {
     //se busca a la persona indicada
     struct persona *personaBuscada = buscarPersonaPorRut(personas, rutBuscado);
