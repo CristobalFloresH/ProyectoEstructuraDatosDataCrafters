@@ -53,7 +53,7 @@ void agregar(struct Ministerio *ministerio){
     
         nuevaPersona->denuncias = NULL; // Por ahora no se agregan denuncias acá
     
-        agregarPersonas(listaPersona, nuevaPersona); // Agrega la persona a la lista circular
+        agregarPersonas(&ministerio->personas, nuevaPersona); // Agrega la persona a la lista circular
     }
     
     else if(opcion == 2){
