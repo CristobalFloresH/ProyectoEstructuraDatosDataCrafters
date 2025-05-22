@@ -1,7 +1,20 @@
-void agregarPersonas(){
+void agregarPersonas(struct nodoPersonas **persona, struct persona *nuevaPersona) { //paso el nodo con doble puntero para modificar el head.
+    struct nodoPersonas *nuevoNodo = (struct nodoPersonas *)malloc(sizeof(struct nodoPersonas));
+    nuevoNodo->datosPersona = nuevaPersona;
 
-  /*agregar*/
+    if (*persona == NULL) { // caso en que la lista circular se encuentre vacia
+        *persona = nuevoNodo;
+        nuevoNodo->siguiente = nuevoNodo;
+        nuevoNodo->anterior = nuevoNodo;
+    }
 
+    else { // en caso contrario, agregamos en el ultimo nodo, antes del head.
+        struct nodoPersonas *ultimo = (*persona)->anterior;// buscamos el ultimo dato de la lista circular.
+        nuevoNodo->siguiente = *persona; 
+        nuevoNodo->anterior = ultimo;
+        ultimo->siguiente = nuevoNodo;
+        (*persona)->anterior = nuevoNodo;
+    }
 }
 
 void agregar(struct Ministerio *ministerio){
