@@ -1,0 +1,51 @@
+void agregarPersonas(){
+
+  /*agregar*/
+
+}
+
+void agregar(struct Ministerio *ministerio){
+
+
+    int opcion;
+
+    printf("Marque una opcion: \n\n");
+    printf("Opcion 1: Agregar persona\n");
+    printf("Opcion 3: Agregar denuncia\n");
+    scanf("%d", &opcion);
+
+    if (opcion == 1) {
+        struct persona *nuevaPersona = (struct persona *)malloc(sizeof(struct persona));
+        char palabra[100];
+    
+        printf("Ingrese nombre del denunciante: ");
+        scanf(" %[^\n]", palabra);
+        nuevaPersona->nombre = (char *)malloc(strlen(palabra) + 1);
+        strcpy(nuevaPersona->nombre, palabra);
+    
+        printf("Ingrese apellido del denunciante: ");
+        scanf(" %[^\n]", palabra);
+        nuevaPersona->apellido = (char *)malloc(strlen(palabra) + 1);
+        strcpy(nuevaPersona->apellido, palabra);
+    
+        printf("Ingrese rut del denunciante: ");
+        scanf(" %[^\n]", palabra);
+        nuevaPersona->rut = (char *)malloc(strlen(palabra) + 1);
+        strcpy(nuevaPersona->rut, palabra);
+    
+        printf("Ingrese nacionalidad del denunciante: ");
+        scanf(" %[^\n]", palabra);
+        nuevaPersona->nacionalidad = (char *)malloc(strlen(palabra) + 1);
+        strcpy(nuevaPersona->nacionalidad, palabra);
+    
+        nuevaPersona->denuncias = NULL; // Por ahora no se agregan denuncias acá
+    
+        agregarPersonas(listaPersona, nuevaPersona); // Agrega la persona a la lista circular
+    }
+    
+    else if(opcion == 2){
+    }
+    else if(opcion == 3){
+
+    }
+};
