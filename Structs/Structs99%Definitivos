@@ -3,8 +3,8 @@
 #include <string.h>
 
 struct denuncia { //Datos denuncia singular.
-    struct persona *denunciante;
-    struct persona *denunciado;
+    struct persona *denunciante; //persona que envio la denuncia
+    struct persona *denunciado; //persona que recibio la denuncia
     char *fecha;
     char *descripcion;
     char *ruc;
@@ -22,33 +22,22 @@ struct persona { //Datos persona singular
     char *apellido;
     char *rut;
     char *ocupacion;
-    //Opcional
-    char *correo;
-    char *direccion;
-    char *fechaNacimiento;
-    char *genero;
-    char *estadoCivil;
-    char *telefono;
-    char *nacionalidad;
-    //Opcional
+    char *contrasena;
 
     struct nodoDenuncias *denuncias;
 };
 
-struct nodoPersonas { //Lista Circular Doblemente Enlazada De Personas
+struct nodoPersonasABB { //arbol (ABB)
     struct persona *datosPersona;
-    struct nodoPersonas *siguiente;
-    struct nodoPersonas *anterior;
+    struct nodoPersonasABB *izquierda;
+    struct nodoPersonasABB *derecha;
 };
 
 struct carpeta { //Datos carpeta singular
     char *ruc;
-    struct nodoDenuncias *denuncias;
-    struct nodoDeclaraciones *declaraciones;
-    struct nodoPruebas *pruebas;
-    struct nodoDiligencias *diligencias;
-    struct imputado **imputados; //array imputados
-    struct nodoResoluciones *resoluciones;
+    struct nodoDatosInvestigaciones *datosInvestigacion; //datos investigativos de la carpeta
+    struct denuncia **denuncias; //array de denuncias
+    int tamDenuncias;
 };
 
 struct nodoCarpetas { //Lista simple doblemente enlazada
@@ -57,65 +46,30 @@ struct nodoCarpetas { //Lista simple doblemente enlazada
     struct nodoCarpetas *anterior;
 };
 
-struct declaracion { //Datos declaracion singular
-    char *declaracion;
-    char *fecha;
-    struct persona *persona;
+struct nodoDatosInvestigaciones { //lista doblemente enlazada
+    struct datosInvestigacion *datosInvestigacion;
+    struct nodoDatosInvestigaciones *siguiente;
+    struct nodoDatosInvestigaciones *anterior;
 };
 
-struct nodoDeclaraciones { //lista simple doblemente enlazada
-    struct declaracion *datosDeclaracion;
-    struct nodoDeclaraciones *siguiente;
-    struct nodoDeclaraciones *anterior;
-};
+struct datosInvestigacion { //dato singular de 1 tipo de dato
+    char *fecha; //fecha
+    char *descripcion; //descripción generica
 
-struct prueba { //datos prueba singular
-    char *prueba; //inseguros del tipo de dato, ya que podria ser video/imagen/mp3
-    char *fecha;
-    char *tipoDePrueba;
-};
+    int tipoDeDato; //tipo de dato
+    /** 1 = declaraciones, 2 = resolución judicial, 3 = pruebas,
+    4 = diligencias, 5 = imputados **/
 
-struct nodoPruebas { //lista simple doblemente enlazada
-    struct prueba *datosPrueba;
-    struct nodoPruebas *siguiente;
-    struct nodoPruebas *anterior;
-};
+    char *detalle1, detalle2;
+    //este existe para información adicional si no es suficiente con una descripción general
 
-struct diligencia { //datos diligencia singular
-    char *diligencia;
-    char *fecha;
-    char *tipoDeDiligencia;
-};
+    struct persona *persona; //Información de persona si es necesitada
 
-struct nodoDiligencias { //lista simple doblemente enlazada
-    struct diligencia *datosDiligencia;
-    struct nodoDiligencias *siguiente;
-    struct nodoDiligencias *anterior;
-};
+    int numero1, numero2; //Numeros si es necesitado en algun caso
 
-struct imputado { //datos imputado singular // puede ser array
-    struct nodoDeclaraciones *declaraciones;
-    struct nodoMedidasCautelares *medidasCautelares;
-    char *estadoProcesal;
-};
-
-struct nodoImputados { //lista simple doblemente enlazada
-    struct imputado *datosImputado;
-    struct nodoImputados *siguiente;
-    struct nodoImputados *anterior;
-};
-
-struct resolucion { //Arbol Binario de busqueda
-    char *Tipo;
-    char *Fecha;
-    char *Descripcion;
-    int Gravedad; // valor numérico para ordenar en el ABB
-};
-
-struct nodoResoluciones { //nodo del ABB de resoluciones
-    struct resolucion *datoResolucion;
-    struct nodoResoluciones *Izquierda;
-    struct nodoResoluciones *Derecha;
+    //si algun dato int no se usa, se asigna el valor -1
+    //si algun valor char no se usa, se asigna valor NULL
+    //si el struct persona no se usa, se asigna valor NULL
 };
 
 struct ministerio { //el mismisimo ministerio
