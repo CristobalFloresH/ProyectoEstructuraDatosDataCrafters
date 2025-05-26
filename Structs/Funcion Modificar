@@ -16,8 +16,8 @@ void modificarPersona(struct persona *p) { // puntero simple ya que no necesitam
             case 1:
                 printf("Nuevo nombre: ");
                 scanf(" %[^\n]", palabra);
-                free(p->nombre);
-                p->nombre = strdup(palabra); // strdup > strcpy, ya que reserva automáticamente la memoria necesaria y copia el contenido
+                free(p->nombre); // Libera la cantidad de memoria para que strdup le de una nueva cantidad de memoria pero se mantiene la misma direccion de memoria 
+                p->nombre = strdup(palabra); // strdup > strcpy, ya que reserva automáticamente la memoria necesaria y copia el contenido en esa d
                 break;
             case 2:
                 printf("Nuevo apellido: ");
@@ -54,4 +54,27 @@ void modificarDatosPersona(struct ministerio *ministerio) { // puntero simple ya
         printf("Persona no encontrada.\n");
 }
 
+
+
+void modificarCarpeta(struct carpeta *c) {
+    int opcion;
+    char palabra[300];
+
+    do {
+        printf("\n--- Modificar Carpeta RUC: %s ---\n", c->ruc);
+        printf("1. Cambiar RUC\n");
+        printf("2. Agregar denuncia\n");
+        printf("3. Agregar dato investigativo\n");
+        printf("0. Salir\n");
+        printf("Seleccione una opción: ");
+        scanf("%d", &opcion);
+
+        switch(opcion) {
+            case 1:
+                printf("Nuevo RUC: ");
+                scanf(" %[^\n]", palabra);
+                free(c->ruc);
+                c->ruc = strdup(palabra);
+                break;
+            
 
