@@ -3,7 +3,7 @@ struct persona *buscarPersonaPorRut(struct nodoPersonasABB *raiz, char *rutBusca
 
     /** esto es para que retorne NULL si no encuentra la persona, ya que al ser recursivo 
     Esto sera NULL cuando raiz apunte a NULL y eso significa que llego a la hoja del arbol
-    por lo cual no hay donde mas buscar**/
+    por lo cual no hay donde mas buscar **/
 
     if (raiz == NULL || rutBuscado == NULL)
     {
