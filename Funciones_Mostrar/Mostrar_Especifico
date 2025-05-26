@@ -64,23 +64,6 @@ void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
     }
 }
 
-struct carpeta *buscarCarpetaPorRuc(struct nodoCarpetas *carpetas, char *rucBuscado) {
-    if (carpetas == NULL || rucBuscado == NULL) return NULL;
-
-    struct nodoCarpetas *actual = carpetas;
-
-    do {
-        if (strcmp(actual->datosCarpeta->ruc, rucBuscado) == 0)
-        {
-            return actual->datosCarpeta;
-        }
-
-        actual = actual->siguiente;
-    } while (actual != carpetas);
-
-    return NULL;
-}
-
 void mostrarDenunciasDeCarpeta(struct carpeta *carpetaActual)
 {
     //caso teorico que carpeta no tenga denuncias por X o Y motivo
