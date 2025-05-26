@@ -1,37 +1,3 @@
-struct persona *buscarPersonaPorRut(struct nodoPersonasABB *raiz, char *rutBuscado)
-{
-
-    /** esto es para que retorne NULL si no encuentra la persona, ya que al ser recursivo 
-    Esto sera NULL cuando raiz apunte a NULL y eso significa que llego a la hoja del arbol
-    por lo cual no hay donde mas buscar **/
-
-    if (raiz == NULL || rutBuscado == NULL)
-    {
-        return NULL;
-    }
-
-    //compara datos del arbol con el buscado
-    int comparacionActual = strcmp(raiz->datosPersona->rut, rutBuscado);
-
-    /** comparacionActual == 0 se encontro
-    comparacionActual > 0 vamos a la izquierda (menores), ya que el numero en el que estamos es mayor al buscado
-    comparacionActual < 0 (o else) vamos a la derecha (mayores), ya que el numero en el que estamos es menor al buscado
-    **/
-
-    if (comparacionActual == 0)
-    {
-        return raiz->datosPersona;
-    }
-    else if (comparacionActual > 0)
-    {
-        return buscarPersonaPorRut(raiz->izquierda, rutBuscado);
-    }
-    else
-    {
-        return buscarPersonaPorRut(raiz->derecha, rutBuscado);
-    }
-}
-
 void mostrarUsuarioPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
     //se busca a la persona indicada
     struct persona *personaBuscada = buscarPersonaPorRut(personas, rutBuscado);
