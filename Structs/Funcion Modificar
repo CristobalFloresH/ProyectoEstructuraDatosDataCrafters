@@ -42,7 +42,7 @@ void modificarPersona(struct persona *p) {
     } while (opcion != 0);
 }
 
-void modificarDatosPersona(struct ministerio *ministerio) {
+void modificarDatosPersona(struct ministerio *ministerio) { // puntero simple ya que no modificaremos direccion de memoria y solo necesitamos entrar a las personas del ministerio
     char rut[100];
     printf("Ingrese RUT de la persona a modificar: ");
     scanf(" %[^\n]", rut);
