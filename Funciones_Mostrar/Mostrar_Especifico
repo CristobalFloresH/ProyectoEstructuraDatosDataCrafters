@@ -32,7 +32,7 @@ struct persona *buscarPersonaPorRut(struct nodoPersonasABB *raiz, char *rutBusca
     }
 }
 
-void mostrarUsuarioPorRut(struct nodoPersonas *personas, char *rutBuscado) {
+void mostrarUsuarioPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
     //se busca a la persona indicada
     struct persona *personaBuscada = buscarPersonaPorRut(personas, rutBuscado);
 
@@ -51,7 +51,7 @@ void mostrarUsuarioPorRut(struct nodoPersonas *personas, char *rutBuscado) {
     printf("Ocupación   : %s\n", personaBuscada->ocupacion);
 }
 
-void mostrarDenunciaPorRut(struct nodoPersonas *personas, char *rutBuscado) {
+void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
     //se busca a la persona indicada
     struct persona *personaBuscada = buscarPersonaPorRut(personas, rutBuscado);
 
