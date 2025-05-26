@@ -1,4 +1,4 @@
-void modificarPersona(struct persona *p) { // puntero simple ya que no necesitamos cambiar direccion de memoria, usar un free para liberar y usar el mismo campo de memoria, haciendo una copia.
+void modificarPersona(struct persona *p) { // puntero simple ya que no necesitamos cambiar direccion de memoria, implementamos un free para liberar y usar el mismo campo de memoria, haciendo una copia.
     int opcion;
     char palabra[300];
 
