@@ -1,9 +1,9 @@
-void modificarPersona(struct usuarios *usuario) {
+void modificarPersona(struct persona *p) {
     int opcion;
     char palabra[300];
 
     do {
-        printf("\n--- Modificar Persona (%s %s) ---\n", usuario->nombre, usuario->apellido);
+        printf("\n--- Modificar Persona (%s %s) ---\n", p->nombre, p->apellido);
         printf("1. Cambiar nombre\n");
         printf("2. Cambiar apellido\n");
         printf("3. Cambiar ocupación\n");
@@ -16,26 +16,26 @@ void modificarPersona(struct usuarios *usuario) {
             case 1:
                 printf("Nuevo nombre: ");
                 scanf(" %[^\n]", palabra);
-                free(usuario->nombre);
-                usuario->nombre = strdup(palabra); // strdup > strcpy, ya que reserva automáticamente la memoria necesaria y copia el contenido
+                free(p->nombre);
+                p->nombre = strdup(palabra); // strdup > strcpy, ya que reserva automáticamente la memoria necesaria y copia el contenido
                 break;
             case 2:
                 printf("Nuevo apellido: ");
                 scanf(" %[^\n]", palabra);
-                free(usuario->apellido);
-                usuario->apellido = strdup(palabra);
+                free(p->apellido);
+                p->apellido = strdup(palabra);
                 break;
             case 3:
                 printf("Nueva ocupación: ");
                 scanf(" %[^\n]", palabra);
-                free(usuario->ocupacion);
-                usuario->ocupacion = strdup(palabra);
+                free(p->ocupacion);
+                p->ocupacion = strdup(palabra);
                 break;
             case 4:
                 printf("Nueva contraseña: ");
                 scanf(" %[^\n]", palabra);
-                free(usuario->contrasena);
-                usuario->contrasena = strdup(palabra);
+                free(p->contrasena);
+                p->contrasena = strdup(palabra);
                 break;
         }
 
