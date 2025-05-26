@@ -47,7 +47,7 @@ void modificarDatosPersona(struct ministerio *ministerio) {
     printf("Ingrese RUT de la persona a modificar: ");
     scanf(" %[^\n]", rut);
 
-    struct persona *p = buscarPersona(ministerio->personas, rut);
+    struct persona *p = buscarPersonaPorRut(ministerio->personas, rut);
     if (p != NULL)
         modificarPersona(p);  // Aquí solo modificas ya que ya buscaste
     else
