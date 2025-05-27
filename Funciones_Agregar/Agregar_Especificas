@@ -1,19 +1,25 @@
-void agregarPersonas(struct nodoPersonas **persona, struct persona *nuevaPersona) { //paso el nodo con doble puntero para modificar el head.
-    struct nodoPersonas *nuevoNodo = (struct nodoPersonas *)malloc(sizeof(struct nodoPersonas));
-    nuevoNodo->datosPersona = nuevaPersona;
-
-    if (*persona == NULL) { // caso en que la lista circular se encuentre vacia
-        *persona = nuevoNodo;
-        nuevoNodo->siguiente = nuevoNodo;
-        nuevoNodo->anterior = nuevoNodo;
+void agregarPersonas(struct nodoPersonasABB **nodoPersonasABB, struct persona *nuevaPersona){
+    
+    if(*nodoPersonasABB == NULL){ /*Lista arbol vacia, datos se agregan al inicio*/
+    
+        struct nodoPersonasABB *nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
+        
+        nuevoNodo->datosPersona = nuevaPersona;
+        nuevoNodo->izquierda = NULL;
+        nuevoNodo->derecha = NULL;
+        *nodoPersonasABB = nuevoNodo;
+        return;
     }
-
-    else { // en caso contrario, agregamos en el ultimo nodo, antes del head.
-        struct nodoPersonas *ultimo = (*persona)->anterior;// buscamos el ultimo dato de la lista circular.
-        nuevoNodo->siguiente = *persona; 
-        nuevoNodo->anterior = ultimo;
-        ultimo->siguiente = nuevoNodo;
-        (*persona)->anterior = nuevoNodo;
+    if(strcmp(nuevaPersona->rut, (*nodoPersonasABB)->datosPersona->rut) < 0){
+        agregarPersonas(&((*nodoPersonasABB)->izquierda), nuevaPersona);
+    }
+    
+    else if(strcmp(nuevaPersona->rut, (*nodoPersonasABB)->datosPersona->rut) > 0){
+        agregarPersonas(&((*nodoPersonasABB)->derecha), nuevaPersona);
+    }
+    
+    else{
+        printf("Esta persona ya se registro");   
     }
 }
 
