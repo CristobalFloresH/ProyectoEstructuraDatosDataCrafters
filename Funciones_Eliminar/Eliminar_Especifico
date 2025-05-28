@@ -1,4 +1,3 @@
-
 struct nodoPersonasABB* minimo(struct nodoPersonasABB *arbol) { // esta funcion busca el rut mas bajo, es decir el nodo mas a la izquierda en el arbol.
     while (arbol != NULL && arbol->izquierda != NULL)
         arbol = arbol->izquierda; // simplemente nos movemos a la izquierda hasta encontrar el menor.
