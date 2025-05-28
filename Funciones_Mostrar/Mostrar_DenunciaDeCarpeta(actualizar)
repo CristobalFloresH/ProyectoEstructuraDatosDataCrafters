@@ -1,0 +1,46 @@
+void mostrarDenunciasDeCarpeta(struct carpeta *carpetaActual)
+{
+    //caso teorico que carpeta no tenga denuncias por X o Y motivo
+    if (carpetaActual == NULL || carpetaActual->denuncias == NULL)
+    {
+        printf("La carpeta no contiene denuncias.\n");
+        return;
+    }
+    //si tiene denuncias declaramos actual e imprimimos :)
+    struct nodoDenuncias *actual = carpetaActual->denuncias;
+    int contadorDenuncias = 0;
+
+    printf("========================================\n");
+    printf("DENUNCIAS EN LA CARPETA RUC: %s\n", carpetaActual->ruc);
+    printf("========================================\n");
+
+    while (actual != NULL)
+    {
+        if (actual->datosDenuncia != NULL)
+        {
+            contadorDenuncias++;
+            printf("\n--------- DENUNCIA %d ---------\n", contadorDenuncias);
+            printf("RUC           : %s\n", actual->datosDenuncia->ruc);
+            printf("Fecha         : %s\n", actual->datosDenuncia->fecha);
+            printf("Descripción   : %s\n", actual->datosDenuncia->descripcion);
+            printf("Tipo de delito: %s\n", actual->datosDenuncia->tipoDeDenuncia);
+
+            if (actual->datosDenuncia->denunciante != NULL && actual->datosDenuncia->denunciado != NULL)
+            {
+                printf("Denunciante   : %s %s (RUT: %s)\n", actual->datosDenuncia->denunciante->nombre,
+                       actual->datosDenuncia->denunciante->apellido,
+                       actual->datosDenuncia->denunciante->rut);
+
+                printf("Denunciado    : %s %s (RUT: %s)\n", actual->datosDenuncia->denunciado->nombre,
+                       actual->datosDenuncia->denunciado->apellido,
+                       actual->datosDenuncia->denunciado->rut);
+            }
+        }
+        actual = actual->siguiente;
+    }
+
+    if (contadorDenuncias == 0)
+    {
+        printf("No se encontraron denuncias en esta carpeta.\n");
+    }
+}
