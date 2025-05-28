@@ -1,1 +1,18 @@
+void mostrarUsuarioPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
+    //se busca a la persona indicada
+    struct persona *personaBuscada = buscarPersonaPorRut(personas, rutBuscado);
 
+    //si no se encuentra o algun dato es invalido, retorna mensaje de error
+    if (personaBuscada == NULL)
+    {
+        printf("Se genero un error al buscar el usuario o este no existe\n");
+        return;
+    }
+
+    //si se encuentra y no es null (paso el if anterior), muestra los datos de la persona
+
+    printf("Nombre      : %s\n", personaBuscada->nombre);
+    printf("Apellido    : %s\n", personaBuscada->apellido);
+    printf("Rut         : %s\n", personaBuscada->rut);
+    printf("Ocupación   : %s\n", personaBuscada->ocupacion);
+}
