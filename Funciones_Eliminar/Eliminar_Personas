@@ -1,1 +1,58 @@
+struct nodoPersonasABB* minimo(struct nodoPersonasABB *arbol) { // esta funcion busca el rut mas bajo, es decir el nodo mas a la izquierda en el arbol.
+    while (arbol != NULL && arbol->izquierda != NULL)
+        arbol = arbol->izquierda; // simplemente nos movemos a la izquierda hasta encontrar el menor.
+    return arbol;
+}
 
+void liberarPersona(struct persona *persona) { // esta funcion libera todos los datos de persona.
+    if (persona == NULL) return;
+    free(persona->nombre);
+    free(persona->apellido);
+    free(persona->rut);
+    free(persona->ocupacion);
+    free(persona->contrasena);
+    free(persona);
+}
+
+struct nodoPersonasABB* eliminarPersonasPorRut(struct nodoPersonasABB *personas, char *rut) { //Funcion recursiva para eliminar personas por RUT.
+    int comparar;
+
+    if (personas == NULL) {
+        printf("No se encontraron personas.\n");
+        return NULL;
+    }
+
+    comparar = strcmp(rut, personas->datosPersona->rut);
+
+    if (comparar < 0) { //caso en el que el rut a buscar sea menor que el rut del nodo, se indexa hacia la izquierda hasta encontrar el rut.
+        personas->izquierda = eliminarPersonasPorRut(personas->izquierda, rut);
+    }
+    else if (comparar > 0) { //caso en el que el rut a buscar sea mayor que el rut del nodo, se indexa hacia la derecha hasta encontrar el rut.
+        personas->derecha = eliminarPersonasPorRut(personas->derecha, rut);
+    }
+    else { //caso en el que el nodo a eliminar sea la raiz.
+
+        if (personas->izquierda == NULL) { // en caso de que no hayan nodos por la izquierda.
+            struct nodoPersonasABB *aux = personas ->derecha; // utilizamos aux para apuntar al sucesor.
+            liberarPersona(personas->datosPersona);
+            free(personas);
+            return aux;
+        }
+        else if (personas->derecha == NULL) { // en caso de que no hayan nodos por la derecha.
+            struct nodoPersonasABB *aux = personas ->izquierda; // utilizamos aux para apuntar al sucesor.
+            liberarPersona(personas->datosPersona);
+            free(personas);
+            return aux;
+        }
+        else { // en caso de que hayan nodos por izquierda y derecha
+            struct nodoPersonasABB *nuevoNodo = minimo(personas->derecha); // buscamos el sucesor inmediato del nodo a eliminar (valor minimo por la derecha).
+
+            struct persona *aux = personas->datosPersona; // auxiliar para intercambiar datos.
+            personas->datosPersona = nuevoNodo->datosPersona;
+            nuevoNodo->datosPersona = aux;
+
+            personas->derecha = eliminarPersonasPorRut(personas->derecha, aux-> rut); // eliminamos nodo duplicado, recordemos que este ahora seria el head.
+        }
+    }
+    return personas;
+};
