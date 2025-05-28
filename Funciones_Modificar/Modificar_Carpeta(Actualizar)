@@ -1,1 +1,20 @@
+void modificarCarpeta(struct carpeta *c) {
+    int opcion;
+    char palabra[300];
 
+    do {
+        printf("\n--- Modificar Carpeta RUC: %s ---\n", c->ruc);
+        printf("1. Cambiar RUC\n");
+        printf("2. Agregar denuncia\n");
+        printf("3. Agregar dato investigativo\n");
+        printf("0. Salir\n");
+        printf("Seleccione una opción: ");
+        scanf("%d", &opcion);
+
+        switch(opcion) {
+            case 1:
+                printf("Nuevo RUC: ");
+                scanf(" %[^\n]", palabra);
+                free(c->ruc);
+                c->ruc = strdup(palabra);
+                break;
