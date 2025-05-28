@@ -21,7 +21,9 @@ struct persona { //Datos persona singular
     char *nombre;
     char *apellido;
     char *rut;
-    char *ocupacion;
+    int rol;
+    /** 1 = usuario comun, 2 = fiscal, 3 = juez**/
+
     char *contrasena;
 
     struct nodoDenuncias *denuncias;
@@ -33,46 +35,68 @@ struct nodoPersonasABB { //arbol (ABB)
     struct nodoPersonasABB *derecha;
 };
 
-struct carpeta { //Datos carpeta singular
-    char *ruc;
-    struct nodoDatosInvestigaciones *datosInvestigacion; //datos investigativos de la carpeta
-    struct denuncia **denuncias; //array de denuncias
-    int tamDenuncias;
+struct datosImputados {
+    char *declaracion;
+    int medidasCautelar; /**1 = Prision Preventiva, 2 = Arraígo nacional, 3 = firma periódica,
+    4 = orden de alejamiento, 5 = arresto domicilario, 6 = libertad bajo fianza, 7 = ninguna**/
+    char *fechaInicioMedida;
+    char *fechaFinMedida;
+
+    int estadoProcesal; /**1 = medida cautelar, 2 = formalizado (arrestado), 3 = sobreseido**/
 };
 
-struct nodoCarpetas { //Lista simple doblemente enlazada
-    struct carpeta *datosCarpeta;
-    struct nodoCarpetas *siguiente;
-    struct nodoCarpetas *anterior;
+struct involucrados {
+    int tipoInvolucrado; //1 = victima, 2 = imputado, 3 = fiscal, 4 = juez
+    struct datosImputados *datosImputados;
+    struct persona *persona;
 };
 
-struct nodoDatosInvestigaciones { //lista doblemente enlazada
-    struct datosInvestigacion *datosInvestigacion;
-    struct nodoDatosInvestigaciones *siguiente;
-    struct nodoDatosInvestigaciones *anterior;
+struct causa { //Datos causa singular
+    char *ruc; //Rol unico de causa (identificador unico)
+    struct denuncia *denuncia; //LA denuncia de esta causa
+    struct nodoDatosCarpetas *datosCarpetas; //datos investigativos de la carpeta
+    struct involucrados **involucrados; //array de involucrados
+    int tamInvolucrados; //tamaño array involucrados
+
+    int estadoCausa; //1 = archivada, 2 = investigacion en progreso, 3 = cerrada, 4 = en juicio
+
+    char *sentencia;
 };
 
-struct datosInvestigacion { //dato singular de 1 tipo de dato
+struct nodoCausas { //Lista simple doblemente enlazada
+    struct causa *datosCausa;
+    struct nodoCausas *siguiente;
+    struct nodoCausas *anterior;
+};
+
+struct nodoDatosCarpetas { //lista doblemente enlazada
+    struct datosCarpeta *datosCarpeta;
+    struct nodoDatosCarpetas *siguiente;
+    struct nodoDatosCarpetas *anterior;
+};
+
+struct datosDiligencias {
+    int prioridad; //1 = muy baja, 2 = baja, 3 = media, 4 = alta, 5 = muy alta
+    char *fechaInicio;
+    char *fechaFin;
+    char *descripcion;
+    char *estado;
+    char *tipoDiligencia;
+};
+
+struct datosCarpeta { //datos investigativos (NO PERSONAS) singular de 1 tipo de dato
     char *fecha; //fecha
     char *descripcion; //descripción generica
+    struct persona *datosPersona;
 
     int tipoDeDato; //tipo de dato
-    /** 1 = declaraciones, 2 = resolución judicial, 3 = pruebas,
-    4 = diligencias, 5 = imputados **/
+    /** 1 = declaraciones, 2 = pruebas generales (Fotos, videos, etc), 3 = diligencias, 4 = denuncia**/
 
-    char *detalle1, detalle2;
-    //este existe para información adicional si no es suficiente con una descripción general
-
-    struct persona *persona; //Información de persona si es necesitada
-
-    int numero1, numero2; //Numeros si es necesitado en algun caso
-
-    //si algun dato int no se usa, se asigna el valor -1
-    //si algun valor char no se usa, se asigna valor NULL
-    //si el struct persona no se usa, se asigna valor NULL
+    struct datosDiligencias *datosDiligencias;
+    struct denuncia *datosDenuncia;
 };
 
 struct ministerio { //el mismisimo ministerio
     struct nodoPersonas *personas;
-    struct nodoCarpetas *carpetas;
+    struct nodoCausas *causas;
 };
