@@ -1,0 +1,41 @@
+void mostrarCarpetaPorRuc(struct nodoCarpetas *carpetas, char *rucBuscado) {
+    //se busca a la carpeta indicada
+    struct carpeta *carpetaBuscada = buscarCarpetaPorRuc(carpetas, rucBuscado);
+
+    //si no se encuentra o algun dato es invalido, retorna mensaje de error
+    if (carpetaBuscada == NULL)
+    {
+        printf("Se genero un error al buscar la carpeta o esta no existe\n");
+        return;
+    }
+
+    printf("\n========================================\n");
+    printf("CARPETA INVESTIGATIVA - Ruc: %s\n", carpetaBuscada->ruc);
+    printf("========================================\n");
+
+    // Sección de denuncias
+    printf("\n>> DENUNCIAS REGISTRADAS:\n");
+    mostrarDenunciasDeCarpeta(carpetaBuscada);
+
+    // Sección de declaraciones
+    printf("\n>> DECLARACIONES (omaigad):\n");
+    printf("Aquí irían todas las declaraciones formales de testigos, víctimas, etc.\n");
+
+    // Sección de pruebas
+    printf("\n>> PRUEBAS (muy incriminatorias aquí):\n");
+    printf("Las evidencias más contundentes del caso estarían listadas aquí.\n");
+
+    // Sección de diligencias
+    printf("\n>> DILIGENCIAS (muy desubicadas):\n");
+    printf("Inspecciones, allanamientos y otras cositas procesales.\n");
+
+    // Sección de imputados
+    printf("\n>> IMPUTADOS (díganles sospechosos nomás, pa que el nombre raro):\n");
+    printf("Lista de personas formalmente investigadas.\n");
+
+    // Sección de resoluciones
+    printf("\n>> RESOLUCIONES (muy sabias, claramente):\n");
+    printf("Sobreseimientos, sentencias y otras decisiones judiciales.\n");
+
+    printf("========================================\n\n");
+}
