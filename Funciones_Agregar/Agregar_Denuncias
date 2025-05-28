@@ -1,0 +1,35 @@
+void agregarDenunciaAPersona(char *rut ,struct nodoPersonasABB *nodoPersonasABB, struct Denuncia *nuevaDenuncia){
+    if(nodoPersonasABB == NULL){
+        printf("No se encontraron personas\n");
+        return;
+    }
+    if(strcmp(rut, nodoPersonasABB->datosPersona->rut) == 0){
+        
+        struct Denuncia *actual = nodoPersonasABB->datosPersona->denuncias;
+        
+        if(actual == NULL){ /*en caso de que no haya ninguna denuncia entonces se agrega en el primero*/
+        
+        nodoPersonasABB->datosPersona->denuncias = nuevaDenuncia;
+        nuevaDenuncia->siguiente = NULL;
+        nuevaDenuncia->anterior = NULL;
+        } 
+        else {
+            
+            while(actual->siguiente != NULL){
+                actual = actual->siguiente;
+            }
+            
+            actual->siguiente = nuevaDenuncia;
+            nuevaDenuncia->anterior = actual;
+            nuevaDenuncia->siguiente = NULL;
+        }
+        return;
+    }
+    
+    if(strcmp(rut, nodoPersonasABB->datosPersona->rut) < 0){
+        agregarDenunciaAPersona(rut, nodoPersonasABB->izquierda, nuevaDenuncia);
+    } 
+    else{
+        agregarDenunciaAPersona(rut, nodoPersonasABB->derecha, nuevaDenuncia);
+    }
+}
