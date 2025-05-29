@@ -1,17 +1,16 @@
-struct carpeta *buscarCarpetaPorRuc(struct nodoCarpetas *carpetas, char *rucBuscado) {
-    if (carpetas == NULL || rucBuscado == NULL) return NULL;
+struct causa *buscarCausaPorRuc(struct nodoCausas *causas, char *rucBuscado) {
+    if (causas == NULL || rucBuscado == NULL) return NULL;
 
-    struct nodoCarpetas *actual = carpetas;
+    struct nodoCausas *actual = causas;
 
     do {
-        if (strcmp(actual->datosCarpeta->ruc, rucBuscado) == 0)
+        if (strcmp(actual->datosCausa->ruc, rucBuscado) == 0)
         {
-            return actual->datosCarpeta;
+            return actual->datosCausa;
         }
 
         actual = actual->siguiente;
-    } while (actual != carpetas);
+    } while (actual != causas);
 
     return NULL;
 }
-
