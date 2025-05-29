@@ -6,77 +6,96 @@ void agregar(struct ministerio *ministerio){
     printf("Opcion 2: Agregar denuncia\n");
     printf("Opcion 3: Agregar carpeta investigativa\n");
     scanf("%d", &opcion);
-/*El fiscal tendra que elegir la opcion a agregar, ya sea una persona, denuncia, carpeta investigativa*/
+    /*El fiscal tendra que elegir la opcion a agregar, ya sea una persona, denuncia, carpeta investigativa*/
 
     if (opcion == 1) {
+    /*Opcion 1 agregar persona*/
 
-/*Opcion 1 agregar persona*/
 
         struct persona *nuevaPersona = (struct persona *)malloc(sizeof(struct persona));
         char palabra[300];
+        int rol, contrasenaFiscalJuez = 111111 ; 
         
-        if(nuevaPersona == NULL)printf("Error al asignar memora");
-        return;
+        if(nuevaPersona == NULL){
+            printf("Error al asignar memora");
+            return;
+        }
 
-/*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
+        /*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
 
-        printf("Ingrese nombre del denunciante: ");
+        printf("Ingrese nombre del denunciante: \n");
         scanf(" %[^\n]", palabra);
         nuevaPersona->nombre = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaPersona->nombre, palabra);
 
-        printf("Ingrese apellido del denunciante: ");
+        printf("Ingrese apellido del denunciante: \n");
         scanf(" %[^\n]", palabra);
         nuevaPersona->apellido = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaPersona->apellido, palabra);
 
-        printf("Ingrese rut del denunciante: ");
+        printf("Ingrese rut del denunciante: \n");
         scanf(" %[^\n]", palabra);
         nuevaPersona->rut = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaPersona->rut, palabra);
 
-        printf("Ingrese nacionalidad del denunciante: ");
-        scanf(" %[^\n]", palabra);
-        nuevaPersona->nacionalidad = (char *)malloc(strlen(palabra) + 1);
-        strcpy(nuevaPersona->nacionalidad, palabra);
+        printf("Ingrese rol del denunciante: \n");
+        scanf(" %i", &rol);
+        
+        if (rol == 2 || rol == 3) {
+            int contrasenaIngresada;
+        
+            printf("Ingrese la contraseña del sistema: \n");
+            scanf(" %i", &contrasenaIngresada);
+        
+            if (contrasenaIngresada != contrasenaFiscalJuez) {
+                printf("Contraseña incorrecta, se ingresará como Usuario Común\n");
+                nuevaPersona->rol = 1;
+                nuevaPersona->contrasena = 0;
+            } else {
+                nuevaPersona->rol = rol;
+                nuevaPersona->contrasena = contrasenaIngresada;
+            }
+        } else {
+            /* Para roles distintos a 2 y 3 */
+            nuevaPersona->rol = rol;
+            nuevaPersona->contrasena = 0;
+        }
 
-/*Pregunta informacion sobre la persona a agregar, como el nombre, rut etc, se usa strcopy de manera que lo escrito en la palabra se guarde en la variable elegida*/
+        nuevaPersona->denuncias = NULL; 
 
-        nuevaPersona->denuncias = NULL; // Por ahora no se agregan denuncias acá
-
-        agregarPersonas(&ministerio->personas, nuevaPersona); // Agrega la persona a la lista circular
-
-/*Funcion agregarPersonas recorre la lista de personas que se encuentra en ministerio para asi agregar a la nueva persona al final de la lista*/
+        agregarPersonas(&ministerio->personas, nuevaPersona); 
+        /*Funcion agregarPersonas recorre la lista de personas que se encuentra en ministerio para asi agregar a la nueva persona al final de la lista*/
     }
 
     else if(opcion == 2){
-
-/*Opcion 2 agregar denuncia */
+    /*Opcion 2 agregar denuncia */
 
         char rutDenunciante[100];
         char rutDenunciado[100];
         char palabra[100];
         
-        printf("Ingrese RUT del denunciante");
+        printf("Ingrese RUT del denunciante\n");
         scanf(" %[^\n]", rutDenunciante);
         
-        printf("Ingrese RUT del denunciado");
+        printf("Ingrese RUT del denunciado\n");
         scanf(" %[^\n]", rutDenunciado);
         
         struct persona *nuevoDenunciante = buscarPersona(ministerio->personas, rutDenunciante);
         struct persona *nuevoDenunciado = buscarPersona(ministerio->personas, rutDenunciado);
+        /*Se pregunta y lee los ruts de denunciante y denunciado para asi copiar esta informacion en 2 strcut personas */
 
-/*Se pregunta y lee los ruts de denunciante y denunciado para asi copiar esta informacion en 2 strcut personas */
-
-        if(nuevoDenunciante == NULL || nuevoDenunciado == NULL)printf("Denunciante y denunciado no encontrados, intente con un RUT valido");
-        return;
+        if(nuevoDenunciante == NULL || nuevoDenunciado == NULL){
+            printf("Denunciante y denunciado no encontrados, intente con un RUT valido\n");
+            return;
+        }
     
         struct denuncia *nuevaDenuncia = (struct denuncia *)malloc(sizeof(struct denuncia));
         
-        if(nuevaDenuncia == NULL)printf("Error al asignar memoria");
-        return;
-
-/*Se corrobora que exita denunciante y denunciado para luego asignar memoria a la nueva denuncia (tambien se corrobora que se asigne correctamente la memoria)*/
+        if(nuevaDenuncia == NULL){
+            printf("Error al asignar memoria");
+            return;
+        }
+        /*Se corrobora que exita denunciante y denunciado para luego asignar memoria a la nueva denuncia (tambien se corrobora que se asigne correctamente la memoria)*/
 
         nuevaDenuncia->denunciante = nuevoDenunciante;
         nuevaDenuncia->denunciado = nuevoDenunciado;
@@ -96,18 +115,15 @@ void agregar(struct ministerio *ministerio){
         nuevaDenuncia->ruc = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaDenuncia->ruc, palabra);    
 
-        printf("Ingrese el tipo de denuncia: ");
+        printf("Ingrese el tipo de denuncia: \n");
         scanf(" %[^\n]", palabra);
         nuevaDenuncia->tipoDeDenuncia = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaDenuncia->tipoDeDenuncia, palabra);        
-
-/*Se le asigna la informacion a la denuncia como la fecha, quien es el denunciante y el denunciado entre otros*/
+        /*Se le asigna la informacion a la denuncia como la fecha, quien es el denunciante y el denunciado entre otros*/
 
         agregarDenunciasDenunciante(rutDenunciante, ministerio, nuevaDenuncia);
         agregarDenunciasDenunciado(rutDenunciado, ministerio, nuevaDenuncia);
-        
-/* recorrer ministerio->personas y validar que el rut sea el del denunciante o denunciado (en cada caso) si es el rut, agregar a la lista de denuncias  */
-        
+        /* recorrer ministerio->personas y validar que el rut sea el del denunciante o denunciado (en cada caso) si es el rut, agregar a la lista de denuncias  */
         /*buscar el rut y recorrer la lista de denuncias que tiene, agregar */
     } 
     
@@ -115,29 +131,54 @@ void agregar(struct ministerio *ministerio){
         
         char palabra[300];
         
-        struct carpeta *nuevaCarpeta = (struct carpeta *)malloc(sizeof(struct carpeta));
+        struct datosCarpeta *nuevaCarpeta = (struct datosCarpeta *)malloc(sizeof(struct datosCarpeta));
         
-        if(nuevaCarpeta == NULL)printf("Error al asignar memoria");
-        return;
-        
-/*Se le asigna memoria a la nueva caprtea, si esta falla termina el programa*/
+        if(nuevaCarpeta == NULL){
+            printf("Error al asignar memoria");
+            return;
+        }
+        /*Se le asigna memoria a la nueva caprtea, si esta falla termina el programa*/
 
-        printf("Ingrese RUC de la carpeta");
+        printf("Ingrese RUC de la carpeta\n");
         scanf(" %[^\n]", palabra);
         nuevaCarpeta->ruc = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaCarpeta->ruc, palabra);    
+        
+        printf("Ingrese fecha de la carpeta\n|");
+        scanf(" %[^\n]", palabra);
+        nuevaCarpeta->fecha = (char *)malloc(strlen(palabra) + 1);
+        strcpy(nuevaCarpeta->fecha, palabra); 
+        
+        printf("Ingrese descripcion de la carpeta\n");
+        scanf(" %[^\n]", palabra);
+        nuevaCarpeta->descripcion = (char *)malloc(strlen(palabra) + 1);
+        strcpy(nuevaCarpeta->descripcion, palabra);  
+        
+        nuevaCarpeta->datosPersona = NULL;
+        
+        printf("Ingrese el tipo de dato, ya sea \n 1 = Declaraciones \n 2 = Pruebas Generales  \n 3 = Diligencias \n 4 = Denuncia");
+        scanf(" %[^\n]", palabra);
+        nuevaCarpeta->tipoDeDato = (char *)malloc(strlen(palabra) + 1);
+        strcpy(nuevaCarpeta->tipoDeDato, palabra);          
+        
+        nuevaCarpeta->datosDiligencias = NULL;
+        nuevaCarpeta->datosDenuncia = NULL;
+        
+        if(ministerio->causas != NULL && ministerio->causas->datosCausa != NULL){
+            agregarCarpeta(&ministerio->causas->datosCausa->datosCarpetas, nuevaCarpeta);
+            /*Se recorre la lista de carpetas y se agrega al final*/
+        } else{
+            printf("No hay causas disponibles a las que asociar la carpeta.\n");
+            free(nuevaCarpeta);
+            return;    
+        }
 
-        nuevaCarpeta->denuncias = NULL;
-        nuevaCarpeta->declaraciones = NULL;
-        nuevaCarpeta->pruebas = NULL;
-        nuevaCarpeta->diligencias = NULL;
-        nuevaCarpeta->imputados = NULL;
-        nuevaCarpeta->resoluciones = NULL;
-
-/*Se asigna la informacion como el ruc vinculado a la carpeta y se crea los struct de denuncias, declaraciones, pruebas entre  otros*/
-
-        agregarCarpeta(listaCarpeta, nuevaCarpeta);
-
-/*Se recorre la lista de carpetas y se agrega al final*/
-    } /*agregar carpeta*/
+    } 
+    else if(opcion != 1 && opcion != 2 && opcion != 3){
+        printf("Opcion no Valida");
+    }
 }
+
+
+
+
