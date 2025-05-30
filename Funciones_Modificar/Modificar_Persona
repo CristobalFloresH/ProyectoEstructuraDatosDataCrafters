@@ -1,4 +1,4 @@
-void modificarPersona(struct persona *p) {
+void modificarPersona(struct persona *p) { // puntero simple ya que solo necesitamos los datos de cada persona y no cambiar su direccion de memoria 
     int opcion;
     char palabra[300];
 
@@ -17,8 +17,8 @@ void modificarPersona(struct persona *p) {
             case 1:
                 printf("Nuevo nombre: ");
                 scanf(" %[^\n]", palabra);
-                free(p->nombre);
-                p->nombre = strdup(palabra);
+                free(p->nombre); // Libera memoria pero no la borra la direccion de memoria
+                p->nombre = strdup(palabra); // strdup se encarga de reservar memoria necesaria 
                 break;
             case 2:
                 printf("Nuevo apellido: ");
@@ -49,7 +49,7 @@ void modificarPersona(struct persona *p) {
     } while (opcion != 0);
 }
 
-void modificarDatosPersona(struct ministerio *ministerio) {
+void modificarDatosPersona(struct ministerio *ministerio) { // puntero simple ya que solo necesitamos ingresar a los datos y modificarlos, no cambiarlos de dirrecion de memoria 
     char rut[100];
     printf("Ingrese RUT de la persona a modificar: ");
     scanf(" %[^\n]", rut);
