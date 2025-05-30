@@ -121,8 +121,8 @@ void agregar(struct ministerio *ministerio){
         strcpy(nuevaDenuncia->tipoDeDenuncia, palabra);        
         /*Se le asigna la informacion a la denuncia como la fecha, quien es el denunciante y el denunciado entre otros*/
 
-        agregarDenunciasDenunciante(rutDenunciante, ministerio, nuevaDenuncia);
-        agregarDenunciasDenunciado(rutDenunciado, ministerio, nuevaDenuncia);
+        agregarDenunciaAPersona(rutDenunciante, ministerio, nuevaDenuncia);
+        agregarDenunciaAPersona(rutDenunciado, ministerio, nuevaDenuncia);
         /* recorrer ministerio->personas y validar que el rut sea el del denunciante o denunciado (en cada caso) si es el rut, agregar a la lista de denuncias  */
         /*buscar el rut y recorrer la lista de denuncias que tiene, agregar */
     } 
