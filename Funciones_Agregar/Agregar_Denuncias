@@ -1,28 +1,36 @@
-void agregarDenunciaAPersona(char *rut ,struct nodoPersonasABB *nodoPersonasABB, struct Denuncia *nuevaDenuncia){
+void agregarDenunciaAPersona(char *rut ,struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
     if(nodoPersonasABB == NULL){
         printf("No se encontraron personas\n");
         return;
     }
-    if(strcmp(rut, nodoPersonasABB->datosPersona->rut) == 0){
+    if (strcmp(rut, nodoPersonasABB->datosPersona->rut) == 0) {
+        // Crear nodo nuevo para la lista de denuncias
+        struct nodoDenuncias *nuevoNodo = (struct nodoDenuncias *)malloc(sizeof(struct nodoDenuncias));
         
-        struct Denuncia *actual = nodoPersonasABB->datosPersona->denuncias;
+        if (nuevoNodo == NULL) {
+            printf("Error al asignar memoria\n");
+            return;
+        }
+
+        nuevoNodo->datosDenuncia = nuevaDenuncia;
         
-        if(actual == NULL){ /*en caso de que no haya ninguna denuncia entonces se agrega en el primero*/
-        
-        nodoPersonasABB->datosPersona->denuncias = nuevaDenuncia;
-        nuevaDenuncia->siguiente = NULL;
-        nuevaDenuncia->anterior = NULL;
-        } 
-        else {
-            
-            while(actual->siguiente != NULL){
+        nuevoNodo->siguiente = NULL;
+        nuevoNodo->anterior = NULL;
+
+        struct nodoDenuncias *actual = nodoPersonasABB->datosPersona->denuncias;
+
+        if (actual == NULL) {
+            /*Si esta vacia agregar al inicio*/
+            nodoPersonasABB->datosPersona->denuncias = nuevoNodo;
+        } else {
+            // Ir al final de la lista
+            while (actual->siguiente != NULL) {
                 actual = actual->siguiente;
             }
-            
-            actual->siguiente = nuevaDenuncia;
-            nuevaDenuncia->anterior = actual;
-            nuevaDenuncia->siguiente = NULL;
+            actual->siguiente = nuevoNodo;
+            nuevoNodo->anterior = actual;
         }
+
         return;
     }
     
