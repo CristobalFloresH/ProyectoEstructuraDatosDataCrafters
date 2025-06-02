@@ -50,7 +50,7 @@ void modificarPersona(struct persona *p) { // puntero simple ya que solo necesit
 }
 
 void modificarDatosPersona(struct ministerio *ministerio) { // puntero simple ya que solo necesitamos ingresar a los datos y modificarlos, no cambiarlos de dirrecion de memoria 
-    char rut[100];
+    char rut[20];
     printf("Ingrese RUT de la persona a modificar: ");
     scanf(" %[^\n]", rut);
 
