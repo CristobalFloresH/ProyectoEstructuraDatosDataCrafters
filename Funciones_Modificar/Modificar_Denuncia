@@ -21,8 +21,8 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
         printf("4. Salir\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
-        getchar(); 
-
+        getchar(); // limpia el salto de linea para que en cada case pueda leer bien los nuevos datos ingresados 
+         
         switch (opcion) {
             case 1:
                 printf("Ingrese nueva fecha: ");
