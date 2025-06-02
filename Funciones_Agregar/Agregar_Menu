@@ -13,7 +13,8 @@ void agregar(struct ministerio *ministerio){
 
 
         struct persona *nuevaPersona = (struct persona *)malloc(sizeof(struct persona));
-        char palabra[300];
+        /*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
+        char palabra[100];
         int rol, contrasenaFiscalJuez = 111111 ; 
         
         if(nuevaPersona == NULL){
@@ -21,25 +22,71 @@ void agregar(struct ministerio *ministerio){
             return;
         }
 
-        /*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
-
+        printf("Ingrese rut del denunciante: \n");
+        
+        while(1){
+            scanf(" %[^\n]", palabra);
+            if(strlen(palabra) == 0){
+                printf("El RUT no puede estar vacio, intente nuevamente\n");
+            } else if(strlen(palabra) > 99){
+                printf("El RUT ingresado es demasiado largo, intente nuevamente\n");
+            } else if (buscarPersona(ministerio->personas, palabra) != NULL) {
+                printf("Ya existe una persona con ese RUT. No se puede agregar duplicado.\n");
+                free(nuevaPersona);
+                return;
+            } else {
+                break;
+            }
+        }
+        nuevaPersona->rut = (char *)malloc(strlen(palabra) + 1);
+        strcpy(nuevaPersona->rut, palabra);
+        
         printf("Ingrese nombre del denunciante: \n");
-        scanf(" %[^\n]", palabra);
+        while(1){
+            scanf(" %[^\n]", palabra);
+            if(strlen(palabra) == 0){
+                printf("El nombre no puede estar vacio, intente nuevamente");
+            } else if(strlen(palabra) > 100){
+                printf("El nombre no puede ser tan largo, intente nuevamente");
+            } else {
+                break;
+            }
+        } 
         nuevaPersona->nombre = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaPersona->nombre, palabra);
 
         printf("Ingrese apellido del denunciante: \n");
-        scanf(" %[^\n]", palabra);
+        while(1){
+            scanf(" %[^\n]", palabra);
+            if(strlen(palabra) == 0){
+                printf("El apellido no puede estar vacio, intente nuevamente");
+            } else if(strlen(palabra) > 100){
+                printf("El apellido no puede ser tan largo, intente nuevamente");
+            } else {
+                break;
+            }
+        }         
         nuevaPersona->apellido = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaPersona->apellido, palabra);
 
-        printf("Ingrese rut del denunciante: \n");
-        scanf(" %[^\n]", palabra);
-        nuevaPersona->rut = (char *)malloc(strlen(palabra) + 1);
-        strcpy(nuevaPersona->rut, palabra);
-
-        printf("Ingrese rol del denunciante: \n");
-        scanf(" %i", &rol);
+        printf("Ingrese rol del denunciante (1, 2 o 3): \n");
+        while (1) {
+            if (scanf("%i", &rol) != 1) {
+                printf("Rol inválido. Intente nuevamente:\n");
+                while (getchar() != '\n'); // Limpiar buffer
+                continue;
+            }
+            if (rol >= 1 && rol <= 3) break;
+            
+            printf("Rol inválido. Se asignará rol 1 por defecto.\n");
+            rol = 1;
+            break;
+        }
+                
+        if(rol > 3 || rol < 1){
+            printf("Se ingreso rol incorrecto, se le asignara rol 1\n");
+            rol = 1;
+        }
         
         if (rol == 2 || rol == 3) {
             int contrasenaIngresada;
@@ -64,21 +111,40 @@ void agregar(struct ministerio *ministerio){
         nuevaPersona->denuncias = NULL; 
 
         agregarPersonas(&ministerio->personas, nuevaPersona); 
+        printf("La persona fue agregara con exito.\n");
         /*Funcion agregarPersonas recorre la lista de personas que se encuentra en ministerio para asi agregar a la nueva persona al final de la lista*/
     }
 
     else if(opcion == 2){
     /*Opcion 2 agregar denuncia */
 
-        char rutDenunciante[100];
-        char rutDenunciado[100];
+        char rutDenunciante[20];
+        char rutDenunciado[20];
         char palabra[100];
         
         printf("Ingrese RUT del denunciante\n");
-        scanf(" %[^\n]", rutDenunciante);
+        while(1){
+            scanf(" %[^\n]", rutDenunciante);
+            if(strlen(rutDenunciante) == 0){
+                printf("El RUT no puede estar vacio, intente nuevamente");
+            } else if(strlen(rutDenunciante) > 20){
+                printf("El RUT es demasiado largo, intente nuevamente");
+            } else {
+                break;
+            }
+        }
         
         printf("Ingrese RUT del denunciado\n");
-        scanf(" %[^\n]", rutDenunciado);
+        while(1){
+            scanf(" %[^\n]", rutDenunciado);
+            if(strlen(rutDenunciado) == 0){
+                printf("El RUT no puede estar vacio, intente nuevamente");
+            } else if(strlen(rutDenunciado) > 20){
+                printf("El RUT es demasiado largo, intente nuevamente");
+            } else {
+                break;
+            }
+        }        
         
         struct persona *nuevoDenunciante = buscarPersona(ministerio->personas, rutDenunciante);
         struct persona *nuevoDenunciado = buscarPersona(ministerio->personas, rutDenunciado);
@@ -101,28 +167,65 @@ void agregar(struct ministerio *ministerio){
         nuevaDenuncia->denunciado = nuevoDenunciado;
         
         printf("Ingrese la fecha actual: \n");
-        scanf(" %[^\n]", palabra);
+        while (1) {
+            scanf(" %[^\n]", palabra);
+            if (strlen(palabra) == 0) {
+                printf("La fecha no puede quedar vacía. Intente de nuevo:\n");
+            } else if (strlen(palabra) > 20) {
+                printf("La fecha es demasiado larga. Intente de nuevo:\n");
+            } else {
+                break;
+            }
+        }        
         nuevaDenuncia->fecha = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaDenuncia->fecha, palabra);
         
         printf("Ingrese descripcion de la denuncia: \n");
-        scanf(" %[^\n]", palabra);
+        while (1) {
+            scanf(" %[^\n]", palabra);
+            if (strlen(palabra) == 0) {
+                printf("La descripcion  no puede quedar vacía. Intente de nuevo:\n");
+            } else if (strlen(palabra) > 20) {
+                printf("La descripcion  es demasiado larga. Intente de nuevo:\n");
+            } else {
+                break;
+            }
+        }        
         nuevaDenuncia->descripcion = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaDenuncia->descripcion, palabra);        
     
         printf("Ingrese RUC de la denuncia: \n");
-        scanf(" %[^\n]", palabra);
+        while (1) {
+            scanf(" %[^\n]", palabra);
+            if (strlen(palabra) == 0) {
+                printf("La RUC no puede quedar vacía. Intente de nuevo:\n");
+            } else if (strlen(palabra) > 200) {
+                printf("La RUC es demasiado larga. Intente de nuevo:\n");
+            } else {
+                break;
+            }
+        }
         nuevaDenuncia->ruc = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaDenuncia->ruc, palabra);    
 
         printf("Ingrese el tipo de denuncia: \n");
-        scanf(" %[^\n]", palabra);
+        while (1) {
+            scanf(" %[^\n]", palabra);
+            if (strlen(palabra) == 0) {
+                printf("El tipo de denuncia no puede quedar vacío. Intente de nuevo:\n");
+            } else if (strlen(palabra) > 50) {
+                printf("El tipo de denuncia es demasiado largo. Intente de nuevo:\n");
+            } else {
+                break;
+            }
+        }        
         nuevaDenuncia->tipoDeDenuncia = (char *)malloc(strlen(palabra) + 1);
         strcpy(nuevaDenuncia->tipoDeDenuncia, palabra);        
         /*Se le asigna la informacion a la denuncia como la fecha, quien es el denunciante y el denunciado entre otros*/
 
         agregarDenunciaAPersona(rutDenunciante, ministerio, nuevaDenuncia);
         agregarDenunciaAPersona(rutDenunciado, ministerio, nuevaDenuncia);
+        printf("Denuncua agregada correctamente. \n");
         /* recorrer ministerio->personas y validar que el rut sea el del denunciante o denunciado (en cada caso) si es el rut, agregar a la lista de denuncias  */
         /*buscar el rut y recorrer la lista de denuncias que tiene, agregar */
     } 
@@ -130,6 +233,7 @@ void agregar(struct ministerio *ministerio){
     else if(opcion == 3){
         
         char palabra[300];
+        int tipoDato;
         
         struct datosCarpeta *nuevaCarpeta = (struct datosCarpeta *)malloc(sizeof(struct datosCarpeta));
         
@@ -139,46 +243,134 @@ void agregar(struct ministerio *ministerio){
         }
         /*Se le asigna memoria a la nueva caprtea, si esta falla termina el programa*/
 
-        printf("Ingrese RUC de la carpeta\n");
-        scanf(" %[^\n]", palabra);
-        nuevaCarpeta->ruc = (char *)malloc(strlen(palabra) + 1);
-        strcpy(nuevaCarpeta->ruc, palabra);    
-        
-        printf("Ingrese fecha de la carpeta\n|");
-        scanf(" %[^\n]", palabra);
+        printf("Ingrese fecha de la carpeta\n");
+        while (1) {
+            scanf(" %[^\n]", palabra);
+            if (strlen(palabra) == 0) {
+                printf("La fecha no puede quedar vacía. Intente de nuevo:\n");
+            } else if (strlen(palabra) > 50) {
+                printf("La fecha es demasiada larga. Intente de nuevo:\n");
+            } else {
+                break;
+            }
+        }
         nuevaCarpeta->fecha = (char *)malloc(strlen(palabra) + 1);
+        if (nuevaCarpeta->fecha == NULL) {
+            printf("Error al asignar memoria para la fecha\n");
+            free(nuevaCarpeta);
+            return;
+        }        
         strcpy(nuevaCarpeta->fecha, palabra); 
         
         printf("Ingrese descripcion de la carpeta\n");
-        scanf(" %[^\n]", palabra);
+        while (1) {
+            scanf(" %[^\n]", palabra);
+            if (strlen(palabra) == 0) {
+                printf("La descripcion no puede quedar vacía. Intente de nuevo:\n");
+            } else if (strlen(palabra) > 200) {
+                printf("La descripcion es demasiado larga. Intente de nuevo:\n");
+            } else {
+                break;
+            }
+        }
         nuevaCarpeta->descripcion = (char *)malloc(strlen(palabra) + 1);
+        if (nuevaCarpeta->descripcion == NULL) {
+        printf("Error al asignar memoria para la descripcion\n");
+        free(nuevaCarpeta->fecha);
+        free(nuevaCarpeta);
+        return;
+    }        
         strcpy(nuevaCarpeta->descripcion, palabra);  
         
-        nuevaCarpeta->datosPersona = NULL;
-        
         printf("Ingrese el tipo de dato, ya sea \n 1 = Declaraciones \n 2 = Pruebas Generales  \n 3 = Diligencias \n 4 = Denuncia");
-        scanf(" %[^\n]", palabra);
-        nuevaCarpeta->tipoDeDato = (char *)malloc(strlen(palabra) + 1);
-        strcpy(nuevaCarpeta->tipoDeDato, palabra);          
-        
-        nuevaCarpeta->datosDiligencias = NULL;
-        nuevaCarpeta->datosDenuncia = NULL;
-        
-        if(ministerio->causas != NULL && ministerio->causas->datosCausa != NULL){
-            agregarCarpeta(&ministerio->causas->datosCausa->datosCarpetas, nuevaCarpeta);
-            /*Se recorre la lista de carpetas y se agrega al final*/
-        } else{
-            printf("No hay causas disponibles a las que asociar la carpeta.\n");
-            free(nuevaCarpeta);
-            return;    
+        while (1) {
+            if (scanf("%i", &tipoDato) != 1) {
+                printf("Tipo de dato inválido. Intente nuevamente:\n");
+                while (getchar() != '\n'); 
+            } else if (tipoDato >= 1 && tipoDato <= 4){
+                break;
+            } else{
+                printf("Tipo de dato fuera de rango, intente nuevamente");
+            }
         }
-
-    } 
-    else if(opcion != 1 && opcion != 2 && opcion != 3){
-        printf("Opcion no Valida");
+             
+        
+        nuevaCarpeta->tipoDeDato = tipoDato;
+        
+        nuevaCarpeta->datosPersona = NULL;
+        nuevaCarpeta->datosDiligencias  = NULL;
+        nuevaCarpeta->datosDenuncia  = NULL;        
+        
+        printf("Ingrese RUC de la causa a la que desea asociar esta carpeta:\n");
+        while(1){
+            scanf(" %[^\n]", palabra);        
+            if(strlen(palabra) == 0){
+                printf("El RUC  no puede quedar vacio, intente nuevamente\n");
+            } else if(strlen(palabra) > 20){
+                printf("El RUC es demasiado largo, intente nuevamente\n");
+            } else{
+                break;
+            }
+        }
+        struct nodoCausas *actual = ministerio->causas;
+        int encontrado = 0;
+        
+        
+        while(actual != NULL){
+            if(strcmp(actual->datosCausa->ruc, palabra) == 0){
+                agregarCarpetaInvestigativa(&actual->datosCausa->datosCarpeta, nuevaCarpeta);
+                printf("La carpeta investigativa fue agregada correctamente.\n");
+                encontrado = 1;
+                break;
+            }
+            actual = actual->siguiente;
+        }
+        if(encontrado == 0){
+            printf("No se encontro ninguna causa con ese RUC\n");
+            free(nuevaCarpeta->fecha);
+            free(nuevaCarpeta->descripcion);
+            free(nuevaCarpeta);
+        }
+    }
+    
+    else if(opcion == 4){
+        char ruc[30];
+        
+        printf("Ingrese RUC de la causa.\n");
+        while(1){
+            scanf(" %[^\n]", ruc);        
+            if(strlen(ruc) == 0){
+                printf("El RUC  no puede quedar vacio, intente nuevamente\n");
+            } else if(strlen(ruc) > 20){
+                printf("El RUC es demasiado largo, intente nuevamente\n");
+            } else{
+                break;
+            }
+        }
+        
+        struct denuncia *denunciaAsociada = buscarDenunciaPorRuc(ruc);
+        
+        if(denunciaAsociada == NULL){
+            printf("No se encontro denuncia con ese RUC\n");
+            return;
+        }
+        
+        struct causa *nuevaCausa = crearCausa(ruc, denunciaAsociada);
+        if(nuevaCausa == NULL){
+            printf("Error al asignar memoria\n");
+            return;
+        }
+        
+        agregarCausa(&ministerio->causas, nuevaCausa);
+        printf("Causa agregada correctamente\n");
+    }
+    
+    else{
+        printf("Opcion invalida, intente nuevamente.\n");
     }
 }
 
+/*Agregar buffers */
 
 
 
