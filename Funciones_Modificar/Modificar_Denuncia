@@ -1,5 +1,5 @@
 void modificarDenunciaMenu(struct ministerio *ministerio) {
-    char ruc[50];
+    char ruc[20];
     printf("Ingrese el RUC de la denuncia que desea modificar: ");
     scanf(" %[^\n]", ruc);
 
