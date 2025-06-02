@@ -11,7 +11,7 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
     }
 
     int opcion;
-    char nuevoValor[256];
+    char palabras[300];
 
     do {
         printf("\n--- MODIFICAR DENUNCIA ---\n");
@@ -21,28 +21,28 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
         printf("4. Salir\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
-        getchar(); // limpiar buffer
+        getchar(); 
 
         switch (opcion) {
             case 1:
                 printf("Ingrese nueva fecha: ");
-                scanf(" %[^\n]", nuevoValor);
+                scanf(" %[^\n]", palabras);
                 free(denunciaMod->fecha);
-                denunciaMod->fecha = strdup(nuevoValor);
+                denunciaMod->fecha = strdup(palabras);
                 printf("Fecha modificada.\n");
                 break;
             case 2:
                 printf("Ingrese nueva descripción: ");
-                scanf(" %[^\n]", nuevoValor);
+                scanf(" %[^\n]", palabras);
                 free(denunciaMod->descripcion);
-                denunciaMod->descripcion = strdup(nuevoValor);
+                denunciaMod->descripcion = strdup(palabras);
                 printf("Descripción modificada.\n");
                 break;
             case 3:
                 printf("Ingrese nuevo tipo de denuncia: ");
-                scanf(" %[^\n]", nuevoValor);
+                scanf(" %[^\n]", palabras);
                 free(denunciaMod->tipoDeDenuncia);
-                denunciaMod->tipoDeDenuncia = strdup(nuevoValor);
+                denunciaMod->tipoDeDenuncia = strdup(palabras);
                 printf("Tipo de denuncia modificado.\n");
                 break;
             case 4:
