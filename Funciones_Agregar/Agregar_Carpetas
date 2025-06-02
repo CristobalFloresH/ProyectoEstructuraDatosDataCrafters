@@ -1,0 +1,23 @@
+void agregarCarpetaInvestigativa(struct nodoDatosCarpetas **carpetas, struct datosCarpeta *nuevaCarpeta){
+    
+    if(nuevaCarpeta == NULL){
+        printf("Nueva carpeta no existe");
+        return;
+    }
+    nuevoNodo->datosCarpeta = nuevaCarpeta;
+    nuevoNodo->siguiente = NULL;
+    nuevoNodo->derecha = NULL;
+    
+    if(*carpetas == NULL){
+        /*En caso de que carpetas este vacio, se agrega la nueva carpeta al inicio*/
+        *carpetas = nuevaCarpeta;
+    } else {
+        
+        struct nodoDatosCarpetas *actual = *carpetas;
+        while(actual->siguiente != NULL) {
+            actual = actual->siguiente;
+        }
+        actual->siguiente = nuevoNodo;
+        nuevoNodo->anterior = actual;
+    }
+}
