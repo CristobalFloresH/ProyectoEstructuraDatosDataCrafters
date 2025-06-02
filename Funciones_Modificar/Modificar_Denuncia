@@ -3,7 +3,7 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
     printf("Ingrese el RUC de la denuncia que desea modificar: ");
     scanf(" %[^\n]", ruc);
 
-    struct denuncia *denunciaMod = buscarDenunciaPorRUC(min, ruc);
+    struct denuncia *denunciaMod = buscarDenunciaPorRUC(ministerio, ruc);
 
     if (denunciaMod == NULL) {
         printf("No se encontró una denuncia con el RUC ingresado.\n");
