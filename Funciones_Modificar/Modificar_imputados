@@ -17,7 +17,7 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
 
     if (imp->datosImputados == NULL) {
         imp->datosImputados = (struct datosImputados *) malloc(sizeof(struct datosImputados));
-        memset(imp->datosImputados, 0, sizeof(struct datosImputados));
+        memset(imp->datosImputados, 0, sizeof(struct datosImputados)); // si el imputado es nulo lo incializamos en 0;
     }
 
     struct datosImputados *datos = imp->datosImputados;
