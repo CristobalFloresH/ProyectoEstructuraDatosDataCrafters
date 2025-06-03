@@ -1,3 +1,13 @@
+void liberarPersona(struct persona *persona) {
+    if (persona == NULL) return;
+    free(persona->nombre);
+    free(persona->apellido);
+    free(persona->rut);
+    free(persona->ocupacion);
+    free(persona->contrasena);
+    free(persona);
+};
+
 void liberarDenuncia(struct denuncia *denuncia) {
     if (denuncia == NULL) return;
 
