@@ -1,0 +1,14 @@
+struct denuncia *buscarDenunciaPorRuc(struct nodoDenuncias *listaDenuncias, char *rucBuscado){
+    
+    struct nodoDenuncias *actual = listaDenuncias;
+    
+    
+    while(actual != NULL){
+        
+        if(strcmp(actual->datosDenuncia->ruc, rucBuscado) == 0){
+            return actual->datosDenuncia;
+        }
+        actual = actual->siguiente;
+    }
+    return NULL;
+}
