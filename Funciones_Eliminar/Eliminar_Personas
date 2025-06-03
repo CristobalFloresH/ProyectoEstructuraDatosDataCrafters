@@ -4,15 +4,6 @@ struct nodoPersonasABB* minimo(struct nodoPersonasABB *arbol) { // esta funcion 
     return arbol;
 }
 
-void liberarPersona(struct persona *persona) { // esta funcion libera todos los datos de persona.
-    if (persona == NULL) return;
-    free(persona->nombre);
-    free(persona->apellido);
-    free(persona->rut);
-    free(persona->ocupacion);
-    free(persona->contrasena);
-    free(persona);
-}
 
 struct nodoPersonasABB* eliminarPersonasPorRut(struct nodoPersonasABB *personas, char *rut) { //Funcion recursiva para eliminar personas por RUT.
     int comparar;
