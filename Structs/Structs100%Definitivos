@@ -63,9 +63,10 @@ struct causa { //Datos causa singular
     char *sentencia;
 };
 
-struct nodoCausas { //Lista Circular 
+struct nodoCausas { //Lista Circular doblemente enlazada
     struct causa *datosCausa;
     struct nodoCausas *siguiente;
+    struct nodoCausas *anterior;
 };
 
 struct nodoDatosCarpetas { //lista doblemente enlazada
