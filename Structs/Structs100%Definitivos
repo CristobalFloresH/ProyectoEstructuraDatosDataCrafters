@@ -97,6 +97,6 @@ struct datosCarpeta { //datos investigativos (NO PERSONAS) singular de 1 tipo de
 };
 
 struct ministerio { //el mismisimo ministerio
-    struct nodoPersonas *personas;
+    struct nodoPersonasABB *personas;
     struct nodoCausas *causas;
 };
