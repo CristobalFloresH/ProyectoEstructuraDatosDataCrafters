@@ -1,0 +1,54 @@
+void reenlazarNodoCausas(struct nodoCausas **lista, struct nodoCausas *aEliminar) {
+    if (*lista == NULL || aEliminar == NULL) return;
+
+    // Si solo hay un nodo en la lista
+    if (aEliminar->siguiente == aEliminar && aEliminar->anterior == aEliminar) {
+        *lista = NULL;
+        return;
+    }
+
+    // Enlazamos anterior y siguiente del nodo a eliminar
+    aEliminar->anterior->siguiente = aEliminar->siguiente;
+    aEliminar->siguiente->anterior = aEliminar->anterior;
+
+    // Si el nodo a eliminar es el nodo apuntado por lista (inicio), movemos el puntero
+    if (*lista == aEliminar) {
+        *lista = aEliminar->siguiente;
+    }
+}
+
+void liberarCausa(struct causa *causa) {
+    if (causa == NULL) return;
+
+    free(causa->ruc);
+    free(causa->sentencia);
+
+    if (causa->denuncia != NULL) {
+        liberarDenuncia(causa->denuncia);
+    }
+
+    liberarDatosCarpeta(causa->datosCarpetas);
+    liberarInvolucrados(causa->involucrados, causa->tamInvolucrados);
+
+    free(causa);
+}
+
+void eliminarCausa(struct nodoCausas **lista, char *ruc) {
+    if (lista == NULL) {
+        printf("No se han encontrado causas");
+        return;
+    }
+
+    struct nodoCausas *actual = lista;
+
+    do {
+        if (strcmp(actual->datosCausa->ruc, ruc) == 0) {
+            reenlazarNodoCausas(lista, actual);
+            liberarCausa(actual->datosCausa);
+            free(actual);
+            printf("Causa eliminada correctamente.\n");
+            return;
+        }
+        actual = actual->siguiente;
+    }while (actual != lista);
+};
