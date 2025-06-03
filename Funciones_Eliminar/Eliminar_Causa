@@ -17,6 +17,42 @@ void reenlazarNodoCausas(struct nodoCausas **lista, struct nodoCausas *aEliminar
     }
 }
 
+void liberarDenuncia(struct denuncia *denuncia) {
+    if (denuncia == NULL) return;
+
+    // Liberar strings
+    free(denuncia->fecha);
+    free(denuncia->descripcion);
+    free(denuncia->ruc);
+    free(denuncia->tipoDeDenuncia);
+
+    free(denuncia);
+}
+
+void liberarDatosImputados(struct datosImputados *datos) {
+    if (datos == NULL) return;
+    free(datos->declaracion);
+    free(datos->fechaInicioMedida);
+    free(datos->fechaFinMedida);
+    
+    free(datos);
+}
+
+void liberarInvolucrados(struct involucrados **involucrados, int tam) {
+    if (involucrados == NULL) return;
+
+    for (int i = 0; i < tam; i++) {
+        if (involucrados[i] != NULL) {
+            if (involucrados[i]->datosImputados != NULL) {
+                liberarDatosImputados(involucrados[i]->datosImputados);
+            {
+            free(involucrados[i]);
+        }
+    }
+            
+    free(involucrados);
+}
+
 void liberarCausa(struct causa *causa) {
     if (causa == NULL) return;
 
