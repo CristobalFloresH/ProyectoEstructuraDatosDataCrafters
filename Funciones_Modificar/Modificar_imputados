@@ -1,1 +1,98 @@
+void modificarImputadoConSwitch(struct ministerio *ministerio, const char *rucCausa, const char *rutImputado) {
+    if (ministerio == NULL || rucCausa == NULL || rutImputado == NULL) {
+        return;
+    }
+
+    struct causa *c = buscarCausaPorRUC(ministerio, rucCausa);
+    if (c == NULL) {
+        printf("Causa con RUC %s no encontrada.\n", rucCausa);
+        return;
+    }
+
+    struct involucrados *imp = buscarImputadoEnCausa(c, rutImputado);
+    if (imp == NULL || imp->tipoInvolucrado != 2) {
+        printf("Imputado con RUT %s no encontrado en la causa.\n", rutImputado);
+        return;
+    }
+
+    if (imp->datosImputados == NULL) {
+        imp->datosImputados = (struct datosImputados *) malloc(sizeof(struct datosImputados));
+        memset(imp->datosImputados, 0, sizeof(struct datosImputados));
+    }
+
+    struct datosImputados *datos = imp->datosImputados;
+
+    int opcion = -1;
+    char buffer[256];
+
+    while (opcion != 0) {
+        printf("\n--- Modificar Imputado ---\n");
+        printf("1. Declaración\n");
+        printf("2. Medida Cautelar\n");
+        printf("3. Fecha Inicio Medida\n");
+        printf("4. Fecha Fin Medida\n");
+        printf("5. Estado Procesal\n");
+        printf("0. Salir\n");
+        printf("Seleccione una opción: ");
+        scanf("%d", &opcion);
+        getchar(); // Consumir newline después de scanf
+
+        switch (opcion) {
+            case 1:
+                printf("Ingrese nueva declaración: ");
+                fgets(buffer, sizeof(buffer), stdin);
+                buffer[strcspn(buffer, "\n")] = '\0';
+
+                if (datos->declaracion != NULL) {
+                    free(datos->declaracion);
+                }
+
+                datos->declaracion = strdup(buffer);
+                break;
+
+            case 2:
+                printf("Ingrese nueva medida cautelar (1-7): ");
+                scanf("%d", &datos->medidasCautelar);
+                getchar();
+                break;
+
+            case 3:
+                printf("Ingrese nueva fecha de inicio (YYYY-MM-DD): ");
+                fgets(buffer, sizeof(buffer), stdin);
+                buffer[strcspn(buffer, "\n")] = '\0';
+
+                if (datos->fechaInicioMedida != NULL) {
+                    free(datos->fechaInicioMedida);
+                }
+
+                datos->fechaInicioMedida = strdup(buffer);
+                break;
+
+            case 4:
+                printf("Ingrese nueva fecha de fin (YYYY-MM-DD): ");
+                fgets(buffer, sizeof(buffer), stdin);
+                buffer[strcspn(buffer, "\n")] = '\0';
+
+                if (datos->fechaFinMedida != NULL) {
+                    free(datos->fechaFinMedida);
+                }
+
+                datos->fechaFinMedida = strdup(buffer);
+                break;
+
+            case 5:
+                printf("Ingrese nuevo estado procesal (1: Cautelar, 2: Formalizado, 3: Sobreseído): ");
+                scanf("%d", &datos->estadoProcesal);
+                getchar();
+                break;
+
+            case 0:
+                printf("Saliendo de modificación.\n");
+                break;
+
+            default:
+                printf("Opción no válida.\n");
+        }
+    }
+}
 
