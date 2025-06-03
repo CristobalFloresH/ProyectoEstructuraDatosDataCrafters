@@ -1,6 +1,6 @@
 void eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
     if (listaDenuncia == NULL) {
-        printf("No se han encontrado de denuncia");
+        printf("No se han encontrado denuncias");
         return;
     }
 
