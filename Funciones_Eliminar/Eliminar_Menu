@@ -1,4 +1,4 @@
-void menuEliminar(struct ministerio *minsterio) {
+void menuEliminar(struct ministerio *ministerio) {
     int opcion;
     char rut[30],ruc[30];
     printf("Ingrese una opcion:\n");
@@ -14,19 +14,17 @@ void menuEliminar(struct ministerio *minsterio) {
             eliminarPersona(&(minsterio->personas), rut);
             break;
         case 2:
-            printf("Ingrese RUC de la causa a eliminar:\n");
+            printf("Ingrese RUC de la causa a eliminar:\n"); // provisional, creo que quedara mas comodo un menu para al igual que en carpeta 
             scanf("%s", ruc);
             eliminarCausa(&(ministerio->causas), ruc);
             break;
         case 3:
             printf("Ingrese RUC de la denuncia a eliminar:\n");
             scanf("%s", ruc);
-            eliminarDenuncia(&(ministerio->personas->denuncias), ruc);
+            eliminarDenuncia(&(ministerio->personas->datosPersona->denuncias), ruc);
             break;
         case 4:
-            printf("Ingrese RUC de la carpeta a eliminar:\n");
-            scanf("%s", ruc);
-            eliminarDatosCarpeta(&(ministerio->causa->datosCarpeta), ruc);
+            menuEliminarCarpeta(&(ministerio->causas));
             break;
 
 
