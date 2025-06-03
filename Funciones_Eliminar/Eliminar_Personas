@@ -6,7 +6,7 @@ struct nodoPersonasABB* minimo(struct nodoPersonasABB *arbol) { // esta funcion 
 
 void eliminarPersona(struct nodoPersonasABB **personas, char *rut) {
     if (personas == NULL || *personas == NULL) {
-        printf("No se encontraron personas.\n");
+        printf("No se encontraron personas\n");
         return;
     }
 
