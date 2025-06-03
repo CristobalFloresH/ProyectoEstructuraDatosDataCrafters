@@ -1,4 +1,4 @@
-void modificarImputadoConSwitch(struct ministerio *ministerio, const char *rucCausa, const char *rutImputado) {
+void modificarImputado(struct ministerio *ministerio, const char *rucCausa, const char *rutImputado) {
     if (ministerio == NULL || rucCausa == NULL || rutImputado == NULL) {
         return;
     }
@@ -22,8 +22,8 @@ void modificarImputadoConSwitch(struct ministerio *ministerio, const char *rucCa
 
     struct datosImputados *datos = imp->datosImputados;
 
-    int opcion = -1;
-    char buffer[256];
+    int opcion;
+    char palabras[300];
 
     while (opcion != 0) {
         printf("\n--- Modificar Imputado ---\n");
@@ -35,19 +35,18 @@ void modificarImputadoConSwitch(struct ministerio *ministerio, const char *rucCa
         printf("0. Salir\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
-        getchar(); // Consumir newline después de scanf
-
+        getchar(); 
         switch (opcion) {
             case 1:
                 printf("Ingrese nueva declaración: ");
-                fgets(buffer, sizeof(buffer), stdin);
-                buffer[strcspn(buffer, "\n")] = '\0';
+                fgets(palabras, sizeof(palabras), stdin); // lee hasta encontrar salto de linea o llenar el buffer de palabras
+                palabras[strcspn(palabras, "\n")] = '\0'; // cambia los salto de lineas por un espacio asi poder almacenar la declaracion sin interrupcion
 
                 if (datos->declaracion != NULL) {
                     free(datos->declaracion);
                 }
 
-                datos->declaracion = strdup(buffer);
+                datos->declaracion = strdup(palabras);
                 break;
 
             case 2:
