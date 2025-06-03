@@ -1,43 +1,30 @@
 void agregarDenunciaAPersona(char *rut ,struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
-    if(nodoPersonasABB == NULL){
+    struct persona *personaEncontrada = buscarPersonaPorRut(nodoPersonasABB, rut);
+    
+    if(personaEncontrada == NULL){
         printf("No se encontraron personas\n");
         return;
     }
-    if (strcmp(rut, nodoPersonasABB->datosPersona->rut) == 0) {
-        // Crear nodo nuevo para la lista de denuncias
-        struct nodoDenuncias *nuevoNodo = (struct nodoDenuncias *)malloc(sizeof(struct nodoDenuncias));
-        
-        if (nuevoNodo == NULL) {
-            printf("Error al asignar memoria\n");
-            return;
-        }
-
-        nuevoNodo->datosDenuncia = nuevaDenuncia;
-        
-        nuevoNodo->siguiente = NULL;
-        nuevoNodo->anterior = NULL;
-
-        struct nodoDenuncias *actual = nodoPersonasABB->datosPersona->denuncias;
-
-        if (actual == NULL) {
-            /*Si esta vacia agregar al inicio*/
-            nodoPersonasABB->datosPersona->denuncias = nuevoNodo;
-        } else {
-            // Ir al final de la lista
-            while (actual->siguiente != NULL) {
-                actual = actual->siguiente;
-            }
-            actual->siguiente = nuevoNodo;
-            nuevoNodo->anterior = actual;
-        }
-
+    
+    struct nodoDenuncias *nuevoNodo = (struct nodoDenuncias*)malloc(sizeof(struct nodoDenuncias));
+    if(nuevoNodo == NULL){
+        printf("Error al asignar memoria");
         return;
     }
     
-    if(strcmp(rut, nodoPersonasABB->datosPersona->rut) < 0){
-        agregarDenunciaAPersona(rut, nodoPersonasABB->izquierda, nuevaDenuncia);
-    } 
-    else{
-        agregarDenunciaAPersona(rut, nodoPersonasABB->derecha, nuevaDenuncia);
+    nuevoNodo->datosDenuncia = nuevaDenuncia;
+    nuevoNodo->siguiente = NULL;
+    nuevoNodo->anterior = NULL;
+    
+    struct nodoDenuncias *actual = personaEncontrada->denuncias;
+    if(actual == NULL){
+        /*denuncias vacia, se agrega de primero*/
+        personaEncontrada->denuncias = nuevoNodo;
+    } else {
+        while(actual->siguiente != NULL){
+            actual = actual->siguiente;
+        }
+        actual->siguiente = nuevoNodo;
+        nuevoNodo->anterior = actual;
     }
 }
