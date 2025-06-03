@@ -16,7 +16,6 @@ void reenlazarNodoCausas(struct nodoCausas **lista, struct nodoCausas *aEliminar
         *lista = aEliminar->siguiente;
     }
 }
-
 void liberarDenuncia(struct denuncia *denuncia) {
     if (denuncia == NULL) return;
 
@@ -34,7 +33,7 @@ void liberarDatosImputados(struct datosImputados *datos) {
     free(datos->declaracion);
     free(datos->fechaInicioMedida);
     free(datos->fechaFinMedida);
-    
+
     free(datos);
 }
 
@@ -45,12 +44,42 @@ void liberarInvolucrados(struct involucrados **involucrados, int tam) {
         if (involucrados[i] != NULL) {
             if (involucrados[i]->datosImputados != NULL) {
                 liberarDatosImputados(involucrados[i]->datosImputados);
-            {
-            free(involucrados[i]);
+                {
+                    free(involucrados[i]);
+                }
+            }
         }
     }
-            
     free(involucrados);
+}
+
+void liberarDatosDiligencias(struct datosDiligencias *degligencias) {
+    if (degligencias == NULL) return;
+
+    free(degligencias->fechaInicio);
+    free(degligencias->fechaFin);
+    free(degligencias->descripcion);
+    free(degligencias->estado);
+    free(degligencias->tipoDiligencia);
+
+    free(degligencias);
+}
+
+void liberarDatosCarpeta(struct datosCarpeta *datosCarpeta) {
+    if (datosCarpeta == NULL) return;
+
+    free(datosCarpeta->fecha);
+    free(datosCarpeta->descripcion);
+
+    if (datosCarpeta->datosDiligencias != NULL) {
+        liberarDatosDiligencias(datosCarpeta->datosDiligencias);
+    }
+
+    if (datosCarpeta->datosDenuncia != NULL) {
+        liberarDenuncia(datosCarpeta->datosDenuncia);
+    }
+
+    free(datosCarpeta);
 }
 
 void liberarCausa(struct causa *causa) {
