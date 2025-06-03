@@ -1,35 +1,3 @@
-void reenlazarNodoSimpleDoble(struct nodoDenuncias **listaDenuncias, struct nodoDenuncias *nodoEliminar) {
-    if (*listaDenuncias == NULL || nodoEliminar == NULL) return;
-
-    // Si el nodo a eliminar es el primero
-    if (*listaDenuncias == nodoEliminar) {
-        *listaDenuncias = nodoEliminar->siguiente;
-        if (*listaDenuncias != NULL) {
-            (*listaDenuncias)->anterior = NULL;
-        }
-    } else {
-        // Enlazamos
-        if (nodoEliminar->anterior != NULL) {
-            nodoEliminar->anterior->siguiente = nodoEliminar->siguiente;
-        }
-        if (nodoEliminar->siguiente != NULL) {
-            nodoEliminar->siguiente->anterior = nodoEliminar->anterior;
-        }
-    }
-};
-
-void liberarDenuncia(struct denuncia *denuncia) {
-    if (denuncia == NULL) return;
-
-    // Liberar strings
-    free(denuncia->fecha);
-    free(denuncia->descripcion);
-    free(denuncia->ruc);
-    free(denuncia->tipoDeDenuncia);
-
-    free(denuncia);
-};
-
 void eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
     if (listaDenuncia == NULL) {
         printf("No se han encontrado de denuncia");
