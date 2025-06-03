@@ -1,5 +1,6 @@
 void reenlazarNodoCircularDoble(struct nodoCausas **listaCausas, struct nodoCausas *nodoEliminar) {
-    if (*listaCausas == NULL || nodoEliminar == NULL) return;
+    if (*listaCausas == NULL || nodoEliminar == NULL)
+        return;
 
     // Si solo hay un nodo en la lista
     if (nodoEliminar->siguiente == nodoEliminar && nodoEliminar->anterior == nodoEliminar) {
