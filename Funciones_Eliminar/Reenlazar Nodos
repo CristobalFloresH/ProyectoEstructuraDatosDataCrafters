@@ -19,7 +19,8 @@ void reenlazarNodoCircularDoble(struct nodoCausas **listaCausas, struct nodoCaus
 };
 
 void reenlazarNodoSimpleDoble(struct nodoDenuncias **listaDenuncias, struct nodoDenuncias *nodoEliminar) {
-    if (*listaDenuncias == NULL || nodoEliminar == NULL) return;
+    if (*listaDenuncias == NULL || nodoEliminar == NULL)
+        return;
 
     // Si el nodo a eliminar es el primero
     if (*listaDenuncias == nodoEliminar) {
