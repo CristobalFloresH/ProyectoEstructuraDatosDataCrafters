@@ -1,3 +1,8 @@
+hice esta funcion pero se me ocurrio manejarlo como menu directamente, con la opcion de eliminar TODA la causa, y tambien modularmente dato por dato. 
+
+
+
+
 void eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
     if (listaCausa == NULL) {
         printf("No se han encontrado causas");
