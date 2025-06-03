@@ -331,44 +331,57 @@ void agregar(struct ministerio *ministerio){
             free(nuevaCarpeta->descripcion);
             free(nuevaCarpeta);
         }
-    }
-    
+    } 
     else if(opcion == 4){
-        char ruc[30];
-        
-        printf("Ingrese RUC de la causa.\n");
-        while(1){
-            scanf(" %[^\n]", ruc);        
-            if(strlen(ruc) == 0){
-                printf("El RUC  no puede quedar vacio, intente nuevamente\n");
-            } else if(strlen(ruc) > 20){
-                printf("El RUC es demasiado largo, intente nuevamente\n");
-            } else{
-                break;
+            char ruc[30];
+            
+            printf("Ingrese RUC de la causa.\n");
+            while(1){
+                scanf(" %[^\n]", ruc);        
+                if(strlen(ruc) == 0){
+                    printf("El RUC  no puede quedar vacio, intente nuevamente\n");
+                } else if(strlen(ruc) > 20){
+                    printf("El RUC es demasiado largo, intente nuevamente\n");
+                } else{
+                    break;
+                }
             }
+            
+            struct denuncia *denunciaAsociada = buscarDenunciaPorRuc(ruc);
+            
+            if(denunciaAsociada == NULL){
+                printf("No se encontro denuncia con ese RUC\n");
+                return;
+            }
+            
+            struct causa *nuevaCausa = (struct causa *)malloc(sizeof(struct causa));
+            if(nuevaCausa == NULL){
+                printf("Error al asignar memoria\n");
+                return;
+            }
+            nuevaCausa->ruc = malloc(strlen(ruc) + 1);
+            if (nuevaCausa->ruc == NULL) {
+                printf("Error al asignar memoria para el RUC\n");
+                free(nuevaCausa);
+                return;
+            }
+            
+            strcpy(nuevaCausa->ruc, ruc);
+            nuevaCausa->denuncia = denunciaAsociada;
+            nuevaCausa->datosCarpetas = NULL;
+            nuevaCausa->involucrados = NULL;
+            nuevaCausa->tamInvolucrados = 0;
+            nuevaCausa->estadoCausa = 2;
+            nuevaCausa->sentencia = NULL;
+            
+            agregarCausa(&ministerio->causas, nuevaCausa);
+            printf("Causa agregada correctamente\n");
         }
         
-        struct denuncia *denunciaAsociada = buscarDenunciaPorRuc(ruc);
-        
-        if(denunciaAsociada == NULL){
-            printf("No se encontro denuncia con ese RUC\n");
-            return;
+        else{
+            printf("Opcion invalida, intente nuevamente.\n");
         }
-        
-        struct causa *nuevaCausa = crearCausa(ruc, denunciaAsociada);
-        if(nuevaCausa == NULL){
-            printf("Error al asignar memoria\n");
-            return;
-        }
-        
-        agregarCausa(&ministerio->causas, nuevaCausa);
-        printf("Causa agregada correctamente\n");
     }
-    
-    else{
-        printf("Opcion invalida, intente nuevamente.\n");
-    }
-}
 
 /*Agregar buffers */
 
