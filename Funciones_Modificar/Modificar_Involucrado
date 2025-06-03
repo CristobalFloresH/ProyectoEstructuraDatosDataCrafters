@@ -1,1 +1,37 @@
+void cambiarTipoInvolucrado(struct causa *c, const char *rut, int nuevoTipo) {
+    if (c == NULL || rut == NULL || c->involucrados == NULL) {
+        printf("Error: causa o datos inválidos.\n");
+        return;
+    }
+
+    for (int i = 0; i < c->tamInvolucrados; i++) {
+        struct involucrados *inv = c->involucrados[i];
+
+        if (inv != NULL && inv->persona != NULL && strcmp(inv->persona->rut, rut) == 0) {
+            // Cambiar tipo
+            inv->tipoInvolucrado = nuevoTipo;
+
+            // Si el nuevo tipo es imputado y no tiene datosImputados, se inicializan
+            if (nuevoTipo == 2 && inv->datosImputados == NULL) {
+                inv->datosImputados = (struct datosImputados *)malloc(sizeof(struct datosImputados));
+                if (inv->datosImputados == NULL) {
+                    printf("Error al asignar memoria para datosImputados.\n");
+                    return;
+                }
+
+                // Inicialización con valores nulos o por defecto
+                inv->datosImputados->declaracion = NULL;
+                inv->datosImputados->medidasCautelar = 7; // Ninguna
+                inv->datosImputados->fechaInicioMedida = NULL;
+                inv->datosImputados->fechaFinMedida = NULL;
+                inv->datosImputados->estadoProcesal = 1; // Por defecto, medida cautelar
+            }
+
+            printf("Tipo de involucrado cambiado exitosamente para RUT: %s\n", rut);
+            return;
+        }
+    }
+
+    printf("Involucrado con RUT %s no encontrado en la causa.\n", rut);
+}
 
