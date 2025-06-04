@@ -1,4 +1,4 @@
-void modificarDatosDiligencia(struct datosDiligencia *diligencia) {
+void modificarDatosDiligencia(struct datosDiligencias *diligencia) {
     if (diligencia == NULL) {
         printf("Datos de diligencia inválidos.\n");
         return;
@@ -9,15 +9,18 @@ void modificarDatosDiligencia(struct datosDiligencia *diligencia) {
 
     while (opcion != 0) {
         printf("\n--- Modificar Datos de Diligencia ---\n");
-        printf("1. Modificar fecha (Actual: %s)\n", diligencia->fecha ? diligencia->fecha : "(no asignada)");
-        printf("2. Modificar lugar (Actual: %s)\n", diligencia->lugar ? diligencia->lugar : "(no asignado)");
-        printf("3. Modificar observaciones (Actual: %s)\n", diligencia->observaciones ? diligencia->observaciones : "(no asignadas)");
+        printf("1. Modificar prioridad (Actual: %d)\n", diligencia->prioridad);
+        printf("2. Modificar fecha inicio (Actual: %s)\n", mostrarCadena(diligencia->fechaInicio));
+        printf("3. Modificar fecha fin (Actual: %s)\n", mostrarCadena(diligencia->fechaFin));
+        printf("4. Modificar descripción (Actual: %s)\n", mostrarCadena(diligencia->descripcion));
+        printf("5. Modificar estado (Actual: %s)\n", mostrarCadena(diligencia->estado));
+        printf("6. Modificar tipo de diligencia (Actual: %s)\n", mostrarCadena(diligencia->tipoDiligencia));
         printf("0. Salir\n");
         printf("Seleccione una opción: ");
 
         if (scanf("%d", &opcion) != 1) {
             printf("Entrada inválida.\n");
-            while (getchar() != '\n'); // limpiar buffer
+            while (getchar() != '\n');  // limpiar buffer
             opcion = -1;
             continue;
         }
@@ -26,42 +29,66 @@ void modificarDatosDiligencia(struct datosDiligencia *diligencia) {
 
         switch (opcion) {
             case 1:
-                printf("Ingrese nueva fecha (YYYY-MM-DD): ");
-                if (fgets(buffer, sizeof(buffer), stdin)) {
-                    buffer[strcspn(buffer, "\n")] = '\0'; // eliminar salto de línea
-                    if (diligencia->fecha) free(diligencia->fecha);
-                    diligencia->fecha = strdup(buffer);
-                    printf("Fecha actualizada.\n");
+                printf("Ingrese nueva prioridad (1 = muy baja, ..., 5 = muy alta): ");
+                if (scanf("%d", &diligencia->prioridad) != 1 || diligencia->prioridad < 1 || diligencia->prioridad > 5) {
+                    printf("Prioridad inválida.\n");
+                    diligencia->prioridad = 1; // o un valor por defecto
+                    while (getchar() != '\n');  // limpiar buffer
                 }
+                getchar();
                 break;
 
             case 2:
-                printf("Ingrese nuevo lugar: ");
+                printf("Ingrese nueva fecha inicio (YYYY-MM-DD): ");
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     buffer[strcspn(buffer, "\n")] = '\0';
-                    if (diligencia->lugar) free(diligencia->lugar);
-                    diligencia->lugar = strdup(buffer);
-                    printf("Lugar actualizado.\n");
+                    if (diligencia->fechaInicio) free(diligencia->fechaInicio);
+                    diligencia->fechaInicio = strdup(buffer);
                 }
                 break;
 
             case 3:
-                printf("Ingrese nuevas observaciones: ");
+                printf("Ingrese nueva fecha fin (YYYY-MM-DD): ");
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     buffer[strcspn(buffer, "\n")] = '\0';
-                    if (diligencia->observaciones) free(diligencia->observaciones);
-                    diligencia->observaciones = strdup(buffer);
-                    printf("Observaciones actualizadas.\n");
+                    if (diligencia->fechaFin) free(diligencia->fechaFin);
+                    diligencia->fechaFin = strdup(buffer);
+                }
+                break;
+
+            case 4:
+                printf("Ingrese nueva descripción: ");
+                if (fgets(buffer, sizeof(buffer), stdin)) {
+                    buffer[strcspn(buffer, "\n")] = '\0';
+                    if (diligencia->descripcion) free(diligencia->descripcion);
+                    diligencia->descripcion = strdup(buffer);
+                }
+                break;
+
+            case 5:
+                printf("Ingrese nuevo estado: ");
+                if (fgets(buffer, sizeof(buffer), stdin)) {
+                    buffer[strcspn(buffer, "\n")] = '\0';
+                    if (diligencia->estado) free(diligencia->estado);
+                    diligencia->estado = strdup(buffer);
+                }
+                break;
+
+            case 6:
+                printf("Ingrese nuevo tipo de diligencia: ");
+                if (fgets(buffer, sizeof(buffer), stdin)) {
+                    buffer[strcspn(buffer, "\n")] = '\0';
+                    if (diligencia->tipoDiligencia) free(diligencia->tipoDiligencia);
+                    diligencia->tipoDiligencia = strdup(buffer);
                 }
                 break;
 
             case 0:
-                printf("Saliendo de modificación.\n");
+                printf("Saliendo...\n");
                 break;
 
             default:
                 printf("Opción inválida. Intente nuevamente.\n");
-                break;
         }
     }
 }
