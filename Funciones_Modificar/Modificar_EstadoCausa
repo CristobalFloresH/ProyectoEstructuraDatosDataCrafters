@@ -1,1 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Enum para los estados de causa
+enum estadoCausa {
+    ARCHIVADA = 1,
+    EN_PROGRESO = 2,
+    CERRADA = 3,
+    EN_JUICIO = 4
+};
+
+// Prototipo de la función para cambiar el estado de la causa
+void cambiarEstadoCausa(struct ministerio *min, char *rucCausa, int nuevoEstado);
+
+// Implementación de la función
+void cambiarEstadoCausa(struct ministerio *min, char *rucCausa, int nuevoEstado) {
+    // Verificamos si el estado es válido
+    if (nuevoEstado < 1 || nuevoEstado > 4) {
+        printf("Estado inválido. Los estados válidos son 1 a 4.\n");
+        return;
+    }
+
+    struct nodoCausas *nodoActual = min->causas;
+
+    // Recorremos la lista circular de causas
+    do {
+        // Comparamos el RUC de la causa actual con el proporcionado
+        if (nodoActual->datosCausa != NULL && nodoActual->datosCausa->ruc != NULL && 
+            strcmp(nodoActual->datosCausa->ruc, rucCausa) == 0) {
+            // Si encontramos la causa, cambiamos el estado
+            nodoActual->datosCausa->estadoCausa = nuevoEstado;
+            printf("Estado de la causa con RUC %s cambiado a %d.\n", rucCausa, nuevoEstado);
+            return;
+        }
+        nodoActual = nodoActual->siguiente;
+    } while (nodoActual != min->causas);  // Condición para volver al inicio en lista circular
+
+    printf("Causa con RUC %s no encontrada.\n", rucCausa);
+}
+
+int main() {
+    // Supón que ya has creado el ministerio y agregado algunas causas
+    struct ministerio min;
+    
+    // Llamamos a la función para cambiar el estado de una causa (esto es solo un ejemplo)
+    cambiarEstadoCausa(&min, "12345", EN_JUICIO);
+
+    return 0;
+}
 
