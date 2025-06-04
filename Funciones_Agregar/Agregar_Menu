@@ -5,6 +5,8 @@ void agregar(struct ministerio *ministerio){
     printf("Opcion 1: Agregar persona\n");
     printf("Opcion 2: Agregar denuncia\n");
     printf("Opcion 3: Agregar carpeta investigativa\n");
+    printf("Opcion 4: Agregar causa\n");
+    printf("Opcion 5: Agregar involucrados\n");
     scanf("%d", &opcion);
     /*El fiscal tendra que elegir la opcion a agregar, ya sea una persona, denuncia, carpeta investigativa*/
 
@@ -45,7 +47,7 @@ void agregar(struct ministerio *ministerio){
         while(1){
             scanf(" %[^\n]", palabra);
             if(strlen(palabra) == 0){
-                printf("El nombre no puede estar vacio, intente nuevamente");
+                printf("El nombre no puede estar vacio, intente nuevamente\n");
             } else if(strlen(palabra) > 100){
                 printf("El nombre no puede ser tan largo, intente nuevamente");
             } else {
@@ -59,9 +61,9 @@ void agregar(struct ministerio *ministerio){
         while(1){
             scanf(" %[^\n]", palabra);
             if(strlen(palabra) == 0){
-                printf("El apellido no puede estar vacio, intente nuevamente");
+                printf("El apellido no puede estar vacio, intente nuevamente\n");
             } else if(strlen(palabra) > 100){
-                printf("El apellido no puede ser tan largo, intente nuevamente");
+                printf("El apellido no puede ser tan largo, intente nuevamente\n");
             } else {
                 break;
             }
@@ -126,9 +128,9 @@ void agregar(struct ministerio *ministerio){
         while(1){
             scanf(" %[^\n]", rutDenunciante);
             if(strlen(rutDenunciante) == 0){
-                printf("El RUT no puede estar vacio, intente nuevamente");
+                printf("El RUT no puede estar vacio, intente nuevamente\n");
             } else if(strlen(rutDenunciante) > 20){
-                printf("El RUT es demasiado largo, intente nuevamente");
+                printf("El RUT es demasiado largo, intente nuevamente\n");
             } else {
                 break;
             }
@@ -138,9 +140,9 @@ void agregar(struct ministerio *ministerio){
         while(1){
             scanf(" %[^\n]", rutDenunciado);
             if(strlen(rutDenunciado) == 0){
-                printf("El RUT no puede estar vacio, intente nuevamente");
+                printf("El RUT no puede estar vacio, intente nuevamente\n");
             } else if(strlen(rutDenunciado) > 20){
-                printf("El RUT es demasiado largo, intente nuevamente");
+                printf("El RUT es demasiado largo, intente nuevamente\n");
             } else {
                 break;
             }
@@ -234,8 +236,10 @@ void agregar(struct ministerio *ministerio){
         
         char palabra[300];
         int tipoDato;
+        struct datosCarpeta *nuevaCarpeta;
         
-        struct datosCarpeta *nuevaCarpeta = (struct datosCarpeta *)malloc(sizeof(struct datosCarpeta));
+        
+        nuevaCarpeta = (struct datosCarpeta *)malloc(sizeof(struct datosCarpeta));
         
         if(nuevaCarpeta == NULL){
             printf("Error al asignar memoria");
@@ -290,7 +294,7 @@ void agregar(struct ministerio *ministerio){
             } else if (tipoDato >= 1 && tipoDato <= 4){
                 break;
             } else{
-                printf("Tipo de dato fuera de rango, intente nuevamente");
+                printf("Tipo de dato fuera de rango, intente nuevamente\n");
             }
         }
              
@@ -378,6 +382,165 @@ void agregar(struct ministerio *ministerio){
             printf("Causa agregada correctamente\n");
         }
         
+        else if(opcion == 5){
+            
+            char palabra[100];
+            int involucradosNuevos, i, tipo;
+            struct causa *causaDestinada;
+            struct involucrado *nuevoInvolucrado;
+            struct persona *personaEncontrada;
+            struct datosImputados *datosImp;
+            
+            printf("Ingrese el RUC de la causa a la que desea agregar el o los involucrados\n");
+            getchar();
+            
+            while(1){
+                scanf("%[^\n]", palabra);
+                getchar();
+                if(strlen(palabra) == 0){
+                    printf("El RUC no puede quedar vacio, intente nuevamente\n");
+                } else if(strlen(palabra) > 20){
+                    printf("El RUC es demasiado largo, intente nuevamente\n");
+                } else {
+                    break;
+                }
+            }
+            
+            causaDestinada = buscarCausaPorRuc(palabra);
+            if(causaDestinada == NULL){
+                printf("No se encontro una causa con ese RUC\n");
+                return;
+            }
+            
+            printf("Ingrese la cantidad de involucrados a agregar\n");
+            scanf("%i", &involucradosNuevos);
+            getchar();
+  
+  
+            for(i = 0; i < involucradosNuevos; i++){
+                
+                nuevoInvolucrado = (struct involucrado *)malloc(sizeof(struct involucrado));
+                if(nuevoInvolucrado == NULL){
+                    printf("Error al asignar memoria");
+                    return;
+                }
+                
+                printf("Ingrese el RUT del %i° involucrado\n", i + 1);
+                while(1){
+                    scanf(" %[^\n]", palabra);
+                    getchar();
+                    personaEncontrada = buscarPersonaPorRut(ministerio->personas, palabra);
+                    
+                    if(strlen(palabra) == 0){
+                        printf("El RUT no puede estar vacio, intente nuevamente\n");
+                    } else if(personaEncontrada == NULL){
+                        printf("No se encontro una persona con ese RUT, intente nuevamente\n");
+                    } else{
+                        break;
+                    }
+                }
+                
+                nuevoInvolucrado->persona = personaEncontrada;
+                
+                printf("Seleccione el tipo de involucrado:\n");
+                printf("1 = victima, 2 = imputado, 3 = fiscal, 4 = juez\n");
+                while(1){
+                    if(scanf("%i",&tipo) != 1){
+                        printf("Entrada invalida, ingrese numero entre 1 y 4\n");
+                        while(getchar() != '\n');
+                    } else if(tipo >= 1 && tipo <= 4){
+                        break;
+                    } else {
+                        printf("Entrada invalida, ingrese numero entre 1 y 4\n");
+                        while(getchar() != '\n');
+                    }
+                }
+                
+                nuevoInvolucrado->tipoInvolucrado = tipo;
+                
+                if(tipo == 2){
+                    datosImp = (struct datosImputados *)malloc(sizeof(struct datosImputados));
+                    if(datosImp == NULL){
+                        printf("Error al asignar memoria");
+                        return;
+                    }
+                    
+                    while (1) {
+                        printf("Ingrese la declaración del imputado:\n");
+                        scanf(" %[^\n]", palabra);
+                        if (strlen(palabra) == 0) {
+                            printf("La declaración no puede quedar vacía, intente nuevamente.\n");
+                        } else {
+                            break;
+                        }
+                    }
+                    datosImp->declaracion = (char *)malloc(strlen(palabra) + 1);
+                    strcpy(datosImp->declaracion, palabra);
+                    
+                    printf("Ingrese la medida cautelar (1=Prisión Preventiva, 2=Arraigo nacional, 3=Firma periódica, 4=Orden de alejamiento, 5=Arresto domiciliario, 6=Libertad bajo fianza, 7=Ninguna):\n");
+                    while (1) {
+                        if(scanf("%d", &datosImp->medidasCautelar) != 1){
+                            
+                            printf("Entrada inválida, ingrese un número entre 1 y 7\n");
+                            while(getchar() != '\n');
+                        } else if(datosImp->medidasCautelar >= 1 && datosImp->medidasCautelar <= 7){
+                            break;
+                        } else {
+                            printf("Numero fuera de rango, intente nuevamente:\n");
+                            while(getchar() != '\n');
+                        }
+                    }
+                
+
+                    while (1) {
+                        printf("Ingrese la fecha de inicio de la medida (formato: DD/MM/AAAA):\n");
+                        scanf(" %[^\n]", palabra);
+                        if (strlen(palabra) == 0) {
+                            printf("La fecha no puede quedar vacía, intente nuevamente.\n");
+                        } else {
+                            break;
+                        }
+                    }
+                    datosImp->fechaInicioMedida = (char *)malloc(strlen(palabra) + 1);
+                    strcpy(datosImp->fechaInicioMedida, palabra);
+                
+
+                    while (1) {
+                        printf("Ingrese la fecha de fin de la medida (formato: DD/MM/AAAA):\n");
+                        scanf(" %[^\n]", palabra);
+                        if (strlen(palabra) == 0) {
+                            printf("La fecha no puede quedar vacía, intente nuevamente.\n");
+                        } else {
+                            break;
+                        }
+                    }
+                    datosImp->fechaFinMedida = (char *)malloc(strlen(palabra) + 1);
+                    strcpy(datosImp->fechaFinMedida, palabra);
+                
+
+                    printf("Ingrese el estado procesal (1=Medida cautelar, 2=Formalizado, 3=Sobreseído):\n");
+                    while (1) {
+                        if (scanf("%d", &datosImp->estadoProcesal) != 1) {
+                            printf("Entrada inválida. Ingrese un número entre 1 y 3:\n");
+                            while (getchar() != '\n'); 
+                        } else if (datosImp->estadoProcesal >= 1 && datosImp->estadoProcesal <= 3) {
+                            while (getchar() != '\n'); 
+                            break;
+                        } else {
+                            printf("Número fuera de rango. Intente nuevamente:\n");
+                        }
+                    }
+                    nuevoInvolucrado->datosImputados = datosImp;
+                } else{
+                
+                nuevoInvolucrado->datosImputados = NULL;
+                
+                }
+                
+                agregarInvolucrado(causaDestinada, nuevoInvolucrado);
+                printf("Involucrado agregado correctamente\n");
+            } 
+        }
         else{
             printf("Opcion invalida, intente nuevamente.\n");
         }
