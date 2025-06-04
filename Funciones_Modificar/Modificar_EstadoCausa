@@ -1,7 +1,16 @@
-void cambiarEstadoCausa(struct ministerio *min, const char *rucCausa, int nuevoEstado) {
+void cambiarEstadoCausa(struct ministerio *ministerio, const char *rucCausa) {
+    int nuevoEstado;
+
+    // Pedir nuevo estado al usuario
+    printf("Ingrese el nuevo estado para la causa (1=Archivada, 2=En progreso, 3=Cerrada, 4=En juicio): ");
+    if (scanf("%d", &nuevoEstado) != 1) {
+        printf("Entrada inválida.\n");
+        while (getchar() != '\n'); // Limpiar buffer
+        return;
+    }
+
     if (nuevoEstado < 1 || nuevoEstado > 4) {
-        printf("Estado inválido. Los estados válidos son:\n");
-        printf("1 = Archivada, 2 = En progreso, 3 = Cerrada, 4 = En juicio\n");
+        printf("Estado inválido. Los estados válidos son 1 a 4.\n");
         return;
     }
 
@@ -23,7 +32,7 @@ void cambiarEstadoCausa(struct ministerio *min, const char *rucCausa, int nuevoE
         }
 
         nodoActual = nodoActual->siguiente;
-    } while (nodoActual != min->causas);  // Lista circular
+    } while (nodoActual != min->causas);
 
     printf("Causa con RUC %s no encontrada.\n", rucCausa);
 }
