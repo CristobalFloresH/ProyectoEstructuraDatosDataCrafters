@@ -1,29 +1,30 @@
 void modificarImputado(struct ministerio *ministerio, const char *rucCausa, const char *rutImputado) {
-    if (ministerio == NULL || rucCausa == NULL || rutImputado == NULL) {
+    if (ministerio == NULL || rucCausa == NULL || rutImputado == NULL) { // Validamos datos 
         return;
     }
 
-    struct causa *c = buscarCausaPorRUC(ministerio, rucCausa);
+    struct causa *c = buscarCausaPorRUC(ministerio, rucCausa); // Buscamos causa a trabajar 
     if (c == NULL) {
         printf("Causa con RUC %s no encontrada.\n", rucCausa);
         return;
     }
 
-    struct involucrados *imp = buscarImputadoEnCausa(c, rutImputado);
-    if (imp == NULL || imp->tipoInvolucrado != 2) {
+    struct involucrados *imp = buscarImputadoEnCausa(c, rutImputado); // Buscamos imputado dentro de la causa 
+    if (imp == NULL || imp->tipoInvolucrado != 2) { // Si es null o la persona no es imputado
         printf("Imputado con RUT %s no encontrado en la causa.\n", rutImputado);
         return;
     }
 
     if (imp->datosImputados == NULL) {
         imp->datosImputados = (struct datosImputados *) malloc(sizeof(struct datosImputados));
-        memset(imp->datosImputados, 0, sizeof(struct datosImputados)); // si el imputado es nulo lo incializamos en 0;
+        memset(imp->datosImputados, 0, sizeof(struct datosImputados)); // Si el imputado es nulo lo inicializamos en 0
     }
 
-    struct datosImputados *datos = imp->datosImputados;
+    struct datosImputados *datos = imp->datosImputados; // Declaramos un puntero local para trabajar mejor los datos  
 
     int opcion;
-    char palabras[300];
+    char palabras[300]; // Usamos la variable "palabras" para el buffer
+    // Ya no es necesario el buffer, ya que `palabras` se usa para almacenar tanto la declaración como las fechas.
 
     while (opcion != 0) {
         printf("\n--- Modificar Imputado ---\n");
@@ -35,12 +36,13 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
         printf("0. Salir\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
-        getchar(); 
+        getchar(); // Limpiamos el buffer después de la lectura de un número
+
         switch (opcion) {
             case 1:
                 printf("Ingrese nueva declaración: ");
-                fgets(palabras, sizeof(palabras), stdin); // lee hasta encontrar salto de linea o llenar el buffer de palabras
-                palabras[strcspn(palabras, "\n")] = '\0'; // cambia los salto de lineas por un espacio asi poder almacenar la declaracion sin interrupcion
+                fgets(palabras, sizeof(palabras), stdin);
+                palabras[strcspn(palabras, "\n")] = '\0'; // Eliminar el salto de línea
 
                 if (datos->declaracion != NULL) {
                     free(datos->declaracion);
@@ -50,33 +52,34 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
                 break;
 
             case 2:
-                printf("Ingrese nueva medida cautelar (1-7): ");
+                printf("Ingrese nueva medida cautelar (1 = Prisión Preventiva, 2 = Arraigo Nacional, 3 = Firma Periódica, "
+                       "4 = Orden de Alejamiento, 5 = Arresto Domiciliario, 6 = Libertad bajo Fianza, 7 = Ninguna): ");
                 scanf("%d", &datos->medidasCautelar);
                 getchar();
                 break;
 
             case 3:
                 printf("Ingrese nueva fecha de inicio (YYYY-MM-DD): ");
-                fgets(buffer, sizeof(buffer), stdin);
-                buffer[strcspn(buffer, "\n")] = '\0';
+                fgets(palabras, sizeof(palabras), stdin); // Usamos palabras también para la fecha de inicio
+                palabras[strcspn(palabras, "\n")] = '\0'; // Eliminar salto de línea
 
                 if (datos->fechaInicioMedida != NULL) {
                     free(datos->fechaInicioMedida);
                 }
 
-                datos->fechaInicioMedida = strdup(buffer);
+                datos->fechaInicioMedida = strdup(palabras);
                 break;
 
             case 4:
                 printf("Ingrese nueva fecha de fin (YYYY-MM-DD): ");
-                fgets(buffer, sizeof(buffer), stdin);
-                buffer[strcspn(buffer, "\n")] = '\0';
+                fgets(palabras, sizeof(palabras), stdin); // Usamos palabras también para la fecha de fin
+                palabras[strcspn(palabras, "\n")] = '\0'; // Eliminar salto de línea
 
                 if (datos->fechaFinMedida != NULL) {
                     free(datos->fechaFinMedida);
                 }
 
-                datos->fechaFinMedida = strdup(buffer);
+                datos->fechaFinMedida = strdup(palabras);
                 break;
 
             case 5:
