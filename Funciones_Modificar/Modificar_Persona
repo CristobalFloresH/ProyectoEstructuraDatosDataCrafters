@@ -10,35 +10,50 @@ void modificarPersona(struct persona *p) { // puntero simple ya que solo necesit
         printf("4. Cambiar rol (actual: %d)\n", p->rol);
         printf("0. Salir\n");
         printf("Seleccione una opción: ");
-        scanf("%d", &opcion);
+        if (scanf("%d", &opcion) != 1) {
+            printf("Entrada inválida.\n");
+            while (getchar() != '\n'); // Limpia el buffer
+            opcion = -1; // Para que no salga del menú
+            continue;
+        }
         getchar(); // limpia salto de línea pendiente
 
         switch(opcion) {
             case 1:
                 printf("Nuevo nombre: ");
-                scanf(" %[^\n]", palabra);
+                fgets(palabra, sizeof(palabra), stdin);
+                palabra[strcspn(palabra, "\n")] = '\0'; 
                 free(p->nombre); // Libera memoria pero no la borra la direccion de memoria
                 p->nombre = strdup(palabra); // strdup se encarga de reservar memoria necesaria 
                 break;
             case 2:
                 printf("Nuevo apellido: ");
-                scanf(" %[^\n]", palabra);
+                fgets(palabra, sizeof(palabra), stdin);
+                palabra[strcspn(palabra, "\n")] = '\0'; // quitar \n
                 free(p->apellido);
                 p->apellido = strdup(palabra);
                 break;
             case 3:
                 printf("Nueva contraseña: ");
-                scanf(" %[^\n]", palabra);
+                fgets(palabra, sizeof(palabra), stdin);
+                palabra[strcspn(palabra, "\n")] = '\0'; // quitar \n
                 free(p->contrasena);
                 p->contrasena = strdup(palabra);
                 break;
             case 4:
                 do {
                     printf("Nuevo rol (1 = usuario común, 2 = fiscal, 3 = juez): ");
-                    scanf("%d", &p->rol);
-                    if (p->rol < 1 || p->rol > 3)
+                    if (scanf("%d", &p->rol) != 1) {
+                        printf("Entrada inválida. Intente nuevamente.\n");
+                        while (getchar() != '\n'); // Limpiar el buffer
+                        p->rol = -1; // Forzamos la repetición del bucle
+                        continue;
+                    }
+                    if (p->rol < 1 || p->rol > 3) {
                         printf("Rol inválido. Intente nuevamente.\n");
+                    }
                 } while (p->rol < 1 || p->rol > 3);
+                getchar(); // Limpia el salto de línea restante
                 break;
             case 0:
                 break;
