@@ -68,14 +68,17 @@ void modificarPersona(struct persona *p) { // puntero simple ya que solo necesit
     } while (opcion != 0);
 }
 
-void modificarDatosPersona(struct ministerio *ministerio) { // puntero simple ya que solo necesitamos ingresar a los datos y modificarlos, no cambiarlos de dirrecion de memoria 
+oid modificarDatosPersona(struct ministerio *ministerio) {
     char rut[20];
     printf("Ingrese RUT de la persona a modificar: ");
     scanf(" %[^\n]", rut);
 
-    struct persona *p = buscarPersonaPorRut(ministerio->personas, rut);
-    if (p != NULL)
-        modificarPersona(p);
-    else
-        printf("Persona no encontrada.\n");
+    for (int i = 0; i < ministerio->totalPersonas; i++) {
+        if (strcmp(ministerio->personas[i]->rut, rut) == 0) {
+            modificarPersona(ministerio->personas[i]);
+            return; // Terminamos después de modificar
+        }
+    }
+
+    printf("Persona con RUT %s no encontrada.\n", rut);
 }
