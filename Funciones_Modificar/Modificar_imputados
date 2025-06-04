@@ -16,14 +16,14 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
     }
 
     if (imp->datosImputados == NULL) {
-    imp->datosImputados = (struct datosImputados *) malloc(sizeof(struct datosImputados));
-    if (imp->datosImputados != NULL) { // verificamos que el malloc se hizo correctamente 
-        memset(imp->datosImputados, 0, sizeof(struct datosImputados)); // Inicializa en 0 si se asignó memoria
-    } else {
-        printf("Error al crear datos del imputado.\n");
-        return;
-    }
-} 
+        imp->datosImputados = (struct datosImputados *) malloc(sizeof(struct datosImputados));
+        if (imp->datosImputados != NULL) { // verificamos que el malloc se hizo correctamente 
+            memset(imp->datosImputados, 0, sizeof(struct datosImputados)); // Inicializa en 0 si se asignó memoria
+        } else {
+            printf("Error al crear datos del imputado.\n");
+            return;
+        }
+    } 
 
     struct datosImputados *datos = imp->datosImputados; // Declaramos un puntero local para trabajar mejor los datos  
 
@@ -58,8 +58,15 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
             case 2:
                 printf("Ingrese nueva medida cautelar (1 = Prisión Preventiva, 2 = Arraigo Nacional, 3 = Firma Periódica, "
                        "4 = Orden de Alejamiento, 5 = Arresto Domiciliario, 6 = Libertad bajo Fianza, 7 = Ninguna): ");
-                scanf("%d", &datos->medidasCautelar);
-                getchar();
+
+                if (scanf("%d", &datos->medidasCautelar) != 1 || 
+                    datos->medidasCautelar < 1 || datos->medidasCautelar > 7) {
+                    printf("Medida cautelar no válida. Intente nuevamente.\n");
+                    while (getchar() != '\n'); // limpia el buffer 
+                    break;
+                }
+
+                getchar(); // limpiamos el salto de linea 
                 break;
 
             case 3:
@@ -105,3 +112,4 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
         }
     }
 }
+
