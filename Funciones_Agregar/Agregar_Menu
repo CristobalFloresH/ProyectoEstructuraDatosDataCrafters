@@ -30,7 +30,7 @@ void agregar(struct ministerio *ministerio){
                 printf("El RUT no puede estar vacio, intente nuevamente\n");
             } else if(strlen(palabra) > 99){
                 printf("El RUT ingresado es demasiado largo, intente nuevamente\n");
-            } else if (buscarPersona(ministerio->personas, palabra) != NULL) {
+            } else if (buscarPersonaPorRut(ministerio->personas, palabra) != NULL) {
                 printf("Ya existe una persona con ese RUT. No se puede agregar duplicado.\n");
                 free(nuevaPersona);
                 return;
@@ -146,8 +146,8 @@ void agregar(struct ministerio *ministerio){
             }
         }        
         
-        struct persona *nuevoDenunciante = buscarPersona(ministerio->personas, rutDenunciante);
-        struct persona *nuevoDenunciado = buscarPersona(ministerio->personas, rutDenunciado);
+        struct persona *nuevoDenunciante = buscarPersonaPorRut(ministerio->personas, rutDenunciante);
+        struct persona *nuevoDenunciado = buscarPersonaPorRut(ministerio->personas, rutDenunciado);
         /*Se pregunta y lee los ruts de denunciante y denunciado para asi copiar esta informacion en 2 strcut personas */
 
         if(nuevoDenunciante == NULL || nuevoDenunciado == NULL){
@@ -225,7 +225,7 @@ void agregar(struct ministerio *ministerio){
 
         agregarDenunciaAPersona(rutDenunciante, ministerio, nuevaDenuncia);
         agregarDenunciaAPersona(rutDenunciado, ministerio, nuevaDenuncia);
-        printf("Denuncua agregada correctamente. \n");
+        printf("Denuncia agregada correctamente. \n");
         /* recorrer ministerio->personas y validar que el rut sea el del denunciante o denunciado (en cada caso) si es el rut, agregar a la lista de denuncias  */
         /*buscar el rut y recorrer la lista de denuncias que tiene, agregar */
     } 
@@ -318,7 +318,7 @@ void agregar(struct ministerio *ministerio){
         
         while(actual != NULL){
             if(strcmp(actual->datosCausa->ruc, palabra) == 0){
-                agregarCarpetaInvestigativa(&actual->datosCausa->datosCarpeta, nuevaCarpeta);
+                agregarCarpetaInvestigativa(&actual->datosCausa->datosCarpetas, nuevaCarpeta);
                 printf("La carpeta investigativa fue agregada correctamente.\n");
                 encontrado = 1;
                 break;
@@ -384,6 +384,3 @@ void agregar(struct ministerio *ministerio){
     }
 
 /*Agregar buffers */
-
-
-
