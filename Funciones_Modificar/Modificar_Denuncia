@@ -1,7 +1,9 @@
 void modificarDenunciaMenu(struct ministerio *ministerio) {
     char ruc[20];
     printf("Ingrese el RUC de la denuncia que desea modificar: ");
-    scanf(" %[^\n]", ruc);
+    if (fgets(ruc, sizeof(ruc), stdin != NUll )) { // si la lectura erronea devuelve NULL
+        ruc[strcspn(ruc, "\n")] = '\0';  // Quitar salto de línea
+    }
 
     struct denuncia *denunciaMod = buscarDenunciaPorRUC(ministerio, ruc);
 
@@ -10,7 +12,7 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
         return;
     }
 
-    int opcion;
+    int opcion = -1;
     char palabras[300];
 
     do {
@@ -20,36 +22,61 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
         printf("3. Modificar Tipo de Denuncia (Actual: %s)\n", denunciaMod->tipoDeDenuncia);
         printf("4. Salir\n");
         printf("Seleccione una opción: ");
-        scanf("%d", &opcion);
-        getchar(); // limpia el salto de linea para que en cada case pueda leer bien los nuevos datos ingresados 
-         
+
+        if (scanf("%d", &opcion) != 1) {
+            printf("Entrada inválida. Intente de nuevo.\n");
+            while (getchar() != '\n'); // limpiar buffer
+            opcion = -1;
+            continue;
+        }
+        while (getchar() != '\n'); // limpiar buffer tras número
+
         switch (opcion) {
             case 1:
                 printf("Ingrese nueva fecha: ");
-                scanf(" %[^\n]", palabras);
-                free(denunciaMod->fecha);
-                denunciaMod->fecha = strdup(palabras);
-                printf("Fecha modificada.\n");
+                if (fgets(palabras, sizeof(palabras), stdin)) {
+                    palabras[strcspn(palabras, "\n")] = '\0';
+                    free(denunciaMod->fecha);
+                    denunciaMod->fecha = strdup(palabras);
+                    if (denunciaMod->fecha == NULL) {
+                        printf("Error al asignar memoria.\n");
+                        return;
+                    }
+                    printf("Fecha modificada.\n");
+                }
                 break;
             case 2:
                 printf("Ingrese nueva descripción: ");
-                scanf(" %[^\n]", palabras);
-                free(denunciaMod->descripcion);
-                denunciaMod->descripcion = strdup(palabras);
-                printf("Descripción modificada.\n");
+                if (fgets(palabras, sizeof(palabras), stdin)) {
+                    palabras[strcspn(palabras, "\n")] = '\0';
+                    free(denunciaMod->descripcion);
+                    denunciaMod->descripcion = strdup(palabras);
+                    if (denunciaMod->descripcion == NULL) {
+                        printf("Error al asignar memoria.\n");
+                        return;
+                    }
+                    printf("Descripción modificada.\n");
+                }
                 break;
             case 3:
                 printf("Ingrese nuevo tipo de denuncia: ");
-                scanf(" %[^\n]", palabras);
-                free(denunciaMod->tipoDeDenuncia);
-                denunciaMod->tipoDeDenuncia = strdup(palabras);
-                printf("Tipo de denuncia modificado.\n");
+                if (fgets(palabras, sizeof(palabras), stdin)) {
+                    palabras[strcspn(palabras, "\n")] = '\0';
+                    free(denunciaMod->tipoDeDenuncia);
+                    denunciaMod->tipoDeDenuncia = strdup(palabras);
+                    if (denunciaMod->tipoDeDenuncia == NULL) {
+                        printf("Error al asignar memoria.\n");
+                        return;
+                    }
+                    printf("Tipo de denuncia modificado.\n");
+                }
                 break;
             case 4:
                 printf("Saliendo del menú de modificación.\n");
                 break;
             default:
                 printf("Opción inválida. Intente de nuevo.\n");
+                break;
         }
 
     } while (opcion != 4);
