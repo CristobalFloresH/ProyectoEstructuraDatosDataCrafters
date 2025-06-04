@@ -1,7 +1,5 @@
 void cambiarEstadoCausa(struct ministerio *ministerio, const char *rucCausa) {
     int nuevoEstado;
-
-    // Pedir nuevo estado al usuario
     printf("Ingrese el nuevo estado para la causa (1=Archivada, 2=En progreso, 3=Cerrada, 4=En juicio): ");
     if (scanf("%d", &nuevoEstado) != 1) {
         printf("Entrada inválida.\n");
