@@ -25,6 +25,7 @@ void modificarPersona(struct persona *p) { // puntero simple ya que solo necesit
                 palabra[strcspn(palabra, "\n")] = '\0'; 
                 free(p->nombre); // Libera memoria pero no la borra la direccion de memoria
                 p->nombre = strdup(palabra); // strdup se encarga de reservar memoria necesaria 
+                printf("Nombre actualizado correctamente.\n");
                 break;
             case 2:
                 printf("Nuevo apellido: ");
@@ -32,6 +33,7 @@ void modificarPersona(struct persona *p) { // puntero simple ya que solo necesit
                 palabra[strcspn(palabra, "\n")] = '\0'; // quitar \n
                 free(p->apellido);
                 p->apellido = strdup(palabra);
+                printf("Apellido actualizado correctamente.\n");
                 break;
             case 3:
                 printf("Nueva contraseña: ");
@@ -39,6 +41,7 @@ void modificarPersona(struct persona *p) { // puntero simple ya que solo necesit
                 palabra[strcspn(palabra, "\n")] = '\0'; // quitar \n
                 free(p->contrasena);
                 p->contrasena = strdup(palabra);
+                printf("Contraseña actualizado correctamente.\n");
                 break;
             case 4:
                 do {
@@ -54,6 +57,7 @@ void modificarPersona(struct persona *p) { // puntero simple ya que solo necesit
                     }
                 } while (p->rol < 1 || p->rol > 3);
                 getchar(); // Limpia el salto de línea restante
+                printf("Rol actualizado correctamente.\n");
                 break;
             case 0:
                 break;
