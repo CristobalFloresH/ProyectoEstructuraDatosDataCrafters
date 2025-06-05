@@ -1,9 +1,13 @@
 void modificarDenunciaMenu(struct ministerio *ministerio) {
     char ruc[20];
     char buffer[300];
-    int opcion = -1;
+    int opcion;
     char *nuevaCadena;
     struct denuncia *denunciaMod;
+
+    opcion = -1;
+    nuevaCadena = NULL;
+    denunciaMod = NULL;
 
     printf("Ingrese el RUC de la denuncia que desea modificar: ");
     if (fgets(ruc, sizeof(ruc), stdin)) {
@@ -28,13 +32,13 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
         printf("Seleccione una opción: ");
 
         if (scanf("%d", &opcion) != 1) {
-            printf("Entrada inválida. Intente de nuevo.\n");
+            printf("Entrada inválida (debe ser un número del 1 al 4). Intente de nuevo.\n");
             while (getchar() != '\n');
             opcion = -1;
             continue;
         }
 
-        while (getchar() != '\n');
+        while (getchar() != '\n'); // Limpiar el buffer
 
         switch (opcion) {
             case 1:
@@ -42,7 +46,9 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    free(denunciaMod->fecha);
+                    if (denunciaMod->fecha != NULL) {
+                        free(denunciaMod->fecha);
+                    }
                     denunciaMod->fecha = nuevaCadena;
                     printf("Fecha modificada correctamente.\n");
                 }
@@ -53,7 +59,9 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    free(denunciaMod->descripcion);
+                    if (denunciaMod->descripcion != NULL) {
+                        free(denunciaMod->descripcion);
+                    }
                     denunciaMod->descripcion = nuevaCadena;
                     printf("Descripción modificada correctamente.\n");
                 }
@@ -64,7 +72,9 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    free(denunciaMod->tipoDeDenuncia);
+                    if (denunciaMod->tipoDeDenuncia != NULL) {
+                        free(denunciaMod->tipoDeDenuncia);
+                    }
                     denunciaMod->tipoDeDenuncia = nuevaCadena;
                     printf("Tipo de denuncia modificado correctamente.\n");
                 }
@@ -79,3 +89,4 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
         }
     }
 }
+
