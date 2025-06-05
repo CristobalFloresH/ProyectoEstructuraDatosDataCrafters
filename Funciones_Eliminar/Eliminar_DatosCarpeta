@@ -4,30 +4,20 @@ void eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) {
         return;
     }
 
-    struct nodoCausas *actual = *listaCausas;
+    struct nodoCausas *causa = buscarCausaPorRUC(*listaCausas, ruc);
+    if (causa == NULL) {
+        printf("No se encontró una causa con ese RUC.\n");
+        return;
+    }
 
-    do {
-        if (strcmp(actual->datosCausa->ruc, ruc) == 0) {
+    struct nodoDatosCarpetas *actualCarpeta = causa->datosCausa->datosCarpetas;
+    while (actualCarpeta != NULL) {
+        struct nodoDatosCarpetas *sig = actualCarpeta->siguiente;
+        liberarDatosCarpeta(actualCarpeta->datosCarpeta);
+        free(actualCarpeta);
+        actualCarpeta = sig;
+    }
 
-            if (actual->datosCausa->datosCarpetas != NULL) {
-                struct nodoDatosCarpetas *actualCarpeta = actual->datosCausa->datosCarpetas;
-
-                while (actualCarpeta != NULL) {
-                    struct nodoDatosCarpetas *sig = actualCarpeta->siguiente;
-                    liberarDatosCarpeta(actualCarpeta->datosCarpeta);
-                    free(actualCarpeta);
-                    actualCarpeta = sig;
-                }
-
-                actual->datosCausa->datosCarpetas = NULL;
-                printf("Carpetas eliminadas correctamente.\n");
-            } else {
-                printf("La causa no tiene carpetas asociadas.\n");
-            }
-            return;
-        }
-        actual = actual->siguiente;
-    } while (actual != *listaCausas);
-    
-    printf("No se encontró una causa con ese RUC.\n");
+    causa->datosCausa->datosCarpetas = NULL;
+    printf("Carpetas eliminadas correctamente.\n");
 }
