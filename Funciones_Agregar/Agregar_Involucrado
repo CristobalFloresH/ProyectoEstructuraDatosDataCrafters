@@ -1,0 +1,29 @@
+void agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevoInvolucrado){
+    
+    int i, nuevoTam = causaDestinada->tamInvolucrados + 1;
+    struct involucrados **nuevoArreglo;
+    
+    if (causaDestinada == NULL || nuevoInvolucrado == NULL) {
+        printf("Error: la causa o el involucrado están vacíos.\n");
+        return;
+    }
+    
+    nuevoArreglo = (struct involucrados **) malloc(sizeof(struct involucrados *) * nuevoTam);
+    if (nuevoArreglo == NULL) {
+        printf("Error al asignar memoria\n");
+        return;
+    }
+    
+    for(i = 0; i < causaDestinada->tamInvolucrados; i++){
+        nuevoArreglo[i] = causaDestinada->involucrados[i];
+    }
+    
+    nuevoArreglo[causaDestinada->tamInvolucrados] = nuevoInvolucrado;
+    
+    if(causaDestinada->involucrados != NULL){
+        free(causaDestinada->involucrados);
+    }
+    
+    causaDestinada->involucrados = nuevoArreglo;
+    causaDestinada->tamInvolucrados = nuevoTam;
+}
