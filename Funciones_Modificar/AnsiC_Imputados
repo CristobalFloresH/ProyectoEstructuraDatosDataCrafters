@@ -59,16 +59,28 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
                 break;
 
             case 2:
-                printf("Ingrese nueva medida cautelar (1 = Prisión Preventiva, 2 = Arraigo Nacional, 3 = Firma Periódica, "
-                       "4 = Orden de Alejamiento, 5 = Arresto Domiciliario, 6 = Libertad bajo Fianza, 7 = Ninguna): ");
-                if (scanf("%d", &datos->medidasCautelar) != 1 ||
-                    datos->medidasCautelar < 1 || datos->medidasCautelar > 7) {
-                    printf("Medida cautelar no válida. Intente nuevamente.\n");
-                    while (getchar() != '\n');
-                    break;
-                }
-                getchar();
-                break;
+                int nueva_medida;
+                do {
+                    printf("Ingrese nueva medida cautelar (1 = Prisión Preventiva, 2 = Arraigo Nacional, 3 = Firma Periódica, "
+                           "4 = Orden de Alejamiento, 5 = Arresto Domiciliario, 6 = Libertad bajo Fianza, 7 = Ninguna): ");
+    
+                    if (scanf("%d", &nueva_medida) != 1) {
+                        printf("Entrada inválida.\n");
+                        while (getchar() != '\n'); // limpiar caracteres no numéricos
+                        continue;
+                    }
+    
+                    while (getchar() != '\n'); // limpiar salto de línea restante
+    
+                    if (nueva_medida < 1 || nueva_medida > 7) {
+                        printf("Medida cautelar no válida. Intente nuevamente.\n");
+                        }        
+
+                } while (nueva_medida < 1 || nueva_medida > 7);
+
+                datos->medidasCautelar = nueva_medida;
+                printf("Medida cautelar actualizada correctamente.\n");
+
 
             case 3:
                 printf("Ingrese nueva fecha de inicio (YYYY-MM-DD): ");
@@ -99,15 +111,26 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
                 break;
 
             case 5:
-                printf("Ingrese nuevo estado procesal (1: Cautelar, 2: Formalizado, 3: Sobreseído): ");
-                if (scanf("%d", &datos->estadoProcesal) != 1 ||
-                    datos->estadoProcesal < 1 || datos->estadoProcesal > 3) {
+                int nuevo_estado;
+                do {
+                    printf("Ingrese nuevo estado procesal (1: Cautelar, 2: Formalizado, 3: Sobreseído): ");
+    
+                    if (scanf("%d", &nuevo_estado) != 1) {
+                        printf("Entrada inválida.\n");
+                        while (getchar() != '\n'); // limpiar caracteres incorrectos
+                        continue;
+                    }
+    
+                    while (getchar() != '\n'); // limpiar salto de línea restante
+    
+                    if (nuevo_estado < 1 || nuevo_estado > 3) {
                     printf("Estado procesal no válido. Intente nuevamente.\n");
-                    while (getchar() != '\n');
-                    break;
-                }
-                getchar();
-                break;
+                    }
+
+                } while (nuevo_estado < 1 || nuevo_estado > 3);
+
+                datos->estadoProcesal = nuevo_estado;
+                printf("Estado procesal actualizado correctamente.\n");
 
             case 0:
                 printf("Saliendo de modificación.\n");
