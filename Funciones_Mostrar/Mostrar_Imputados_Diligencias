@@ -1,0 +1,84 @@
+void mostrarDatosImputados(struct datosImputados *datosImputados) {
+    if (datosImputados == NULL)
+    {
+        printf("Este imputado no tiene datos específicos.\n");
+        return;
+    }
+    /**1 = Prision Preventiva, 2 = Arraígo nacional, 3 = firma periódica,
+    4 = orden de alejamiento, 5 = arresto domicilario, 6 = libertad bajo fianza, 7 = ninguna**/
+    printf("\n--- Datos Imputado Asociados ---\n");
+    printf("Declaración: %s\n", datosImputados->declaracion);
+
+    if (datosImputados->estadoProcesal == 1) {
+        printf("Estado procesal: Medida cautelar\n");
+        if (datosImputados->medidasCautelar == 1) {
+            printf("Medida cautelar: Prisión Preventiva\n");
+        }
+        else if (datosImputados->medidasCautelar == 2) {
+            printf("Medida cautelar: Arraigo nacional\n");
+        }
+        else if (datosImputados->medidasCautelar == 3) {
+            printf("Medida cautelar: Firma periódica\n");
+        }
+        else if (datosImputados->medidasCautelar == 4) {
+            printf("Medida cautelar: Orden de alejamiento\n");
+        }
+        else if (datosImputados->medidasCautelar == 5) {
+            printf("Medida cautelar: Arresto domiciliario\n");
+        }
+        else if (datosImputados->medidasCautelar == 6) {
+            printf("Medida cautelar: Libertad bajo fianza\n");
+        }
+        else if (datosImputados->medidasCautelar == 7) {
+            printf("Medida cautelar: Ninguna, Imputado aun no posee medida cautelar.\n");
+            return;
+        }
+
+        printf("Fecha inicio medida: %s\n", datosImputados->fechaInicioMedida);
+        printf("Fecha fin medida: %s\n", datosImputados->fechaFinMedida);
+    }
+    else if (datosImputados->estadoProcesal == 2) {
+        printf("Estado procesal: Formalizado\n");
+    }
+    else if (datosImputados->estadoProcesal == 3) {
+        printf("Estado procesal: Sobreseído\n");
+    }
+}
+
+void mostrarDatosDiligencia(struct datosDiligencias *diligencia)
+{
+    if (diligencia == NULL)
+    {
+        printf("No hay diligencia asociada.\n");
+        return;
+    }
+    printf("\n--- Diligencia Asociada ---\n");
+    printf("Prioridad      : %d\n", diligencia->prioridad);
+    printf("Fecha inicio   : %s\n", diligencia->fechaInicio);
+    printf("Fecha fin      : %s\n", diligencia->fechaFin);
+    printf("Estado         : %s\n", diligencia->estado);
+    printf("Tipo           : %s\n", diligencia->tipoDiligencia);
+    printf("Descripción    : %s\n", diligencia->descripcion);
+}
+
+void mostrarDatosDenunciaAdicionalEnCausa(struct denuncia *denuncia)
+{
+    if (denuncia == NULL)
+    {
+        printf("No hay denuncia adicional asociada.\n");
+        return;
+    }
+    printf("\n--- Denuncia Asociada ---\n");
+    printf("RUC            : %s\n", denuncia->ruc);
+    printf("Fecha          : %s\n", denuncia->fecha);
+    printf("Descripción    : %s\n", denuncia->descripcion);
+    printf("Delito         : %s\n", denuncia->tipoDeDenuncia);
+    if (denuncia->denunciante != NULL)
+        printf("Denunciante    : %s %s (RUT: %s)\n", denuncia->denunciante->nombre,
+            denuncia->denunciante->apellido,
+            denuncia->denunciante->rut);
+    if (denuncia->denunciado != NULL)
+        printf("Denunciado     : %s %s (RUT: %s)\n", denuncia->denunciado->nombre,
+            denuncia->denunciado->apellido,
+            denuncia->denunciado->rut);
+}
