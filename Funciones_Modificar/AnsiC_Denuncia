@@ -1,13 +1,13 @@
 void modificarDenunciaMenu(struct ministerio *ministerio) {
     char ruc[20];
-    char palabras[300];
+    char buffer[300];
     int opcion = -1;
     char *nuevaCadena;
     struct denuncia *denunciaMod;
 
     printf("Ingrese el RUC de la denuncia que desea modificar: ");
     if (fgets(ruc, sizeof(ruc), stdin)) {
-        ruc[strcspn(ruc, "\n")] = '\0';  // Quitar salto de línea
+        removerSaltoLinea(ruc);
     } else {
         printf("Error al leer el RUC.\n");
         return;
@@ -21,36 +21,28 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
 
     while (opcion != 4) {
         printf("\n--- MODIFICAR DENUNCIA ---\n");
-        printf("1. Modificar Fecha (Actual: %s)\n", 
-               denunciaMod->fecha ? denunciaMod->fecha : "(no asignada)");
-        printf("2. Modificar Descripción (Actual: %s)\n", 
-               denunciaMod->descripcion ? denunciaMod->descripcion : "(no asignada)");
-        printf("3. Modificar Tipo de Denuncia (Actual: %s)\n", 
-               denunciaMod->tipoDeDenuncia ? denunciaMod->tipoDeDenuncia : "(no asignada)");
+        printf("1. Modificar Fecha (Actual: %s)\n", denunciaMod->fecha);
+        printf("2. Modificar Descripción (Actual: %s)\n", denunciaMod->descripcion);
+        printf("3. Modificar Tipo de Denuncia (Actual: %s)\n", denunciaMod->tipoDeDenuncia);
         printf("4. Salir\n");
         printf("Seleccione una opción: ");
 
         if (scanf("%d", &opcion) != 1) {
             printf("Entrada inválida. Intente de nuevo.\n");
-            while (getchar() != '\n'); // Limpiar buffer
+            while (getchar() != '\n');
             opcion = -1;
             continue;
         }
-        while (getchar() != '\n'); // Limpiar salto de línea tras scanf
+
+        while (getchar() != '\n');
 
         switch (opcion) {
             case 1:
                 printf("Ingrese nueva fecha: ");
-                if (fgets(palabras, sizeof(palabras), stdin)) {
-                    removerSaltoLinea(palabras);
-                    nuevaCadena = duplicarCadena(palabras);
-                    if (nuevaCadena == NULL) {
-                        printf("Error al asignar memoria para la fecha.\n");
-                        break;
-                    }
-                    if (denunciaMod->fecha) {
-                        free(denunciaMod->fecha);
-                    }
+                if (fgets(buffer, sizeof(buffer), stdin)) {
+                    removerSaltoLinea(buffer);
+                    nuevaCadena = duplicarCadena(buffer);
+                    free(denunciaMod->fecha);
                     denunciaMod->fecha = nuevaCadena;
                     printf("Fecha modificada correctamente.\n");
                 }
@@ -58,16 +50,10 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
 
             case 2:
                 printf("Ingrese nueva descripción: ");
-                if (fgets(palabras, sizeof(palabras), stdin)) {
-                    removerSaltoLinea(palabras);
-                    nuevaCadena = duplicarCadena(palabras);
-                    if (nuevaCadena == NULL) {
-                        printf("Error al asignar memoria para la descripción.\n");
-                        break;
-                    }
-                    if (denunciaMod->descripcion) {
-                        free(denunciaMod->descripcion);
-                    }
+                if (fgets(buffer, sizeof(buffer), stdin)) {
+                    removerSaltoLinea(buffer);
+                    nuevaCadena = duplicarCadena(buffer);
+                    free(denunciaMod->descripcion);
                     denunciaMod->descripcion = nuevaCadena;
                     printf("Descripción modificada correctamente.\n");
                 }
@@ -75,16 +61,10 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
 
             case 3:
                 printf("Ingrese nuevo tipo de denuncia: ");
-                if (fgets(palabras, sizeof(palabras), stdin)) {
-                    removerSaltoLinea(palabras);
-                    nuevaCadena = duplicarCadena(palabras);
-                    if (nuevaCadena == NULL) {
-                        printf("Error al asignar memoria para el tipo de denuncia.\n");
-                        break;
-                    }
-                    if (denunciaMod->tipoDeDenuncia) {
-                        free(denunciaMod->tipoDeDenuncia);
-                    }
+                if (fgets(buffer, sizeof(buffer), stdin)) {
+                    removerSaltoLinea(buffer);
+                    nuevaCadena = duplicarCadena(buffer);
+                    free(denunciaMod->tipoDeDenuncia);
                     denunciaMod->tipoDeDenuncia = nuevaCadena;
                     printf("Tipo de denuncia modificado correctamente.\n");
                 }
@@ -96,7 +76,6 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
 
             default:
                 printf("Opción inválida. Intente de nuevo.\n");
-                break;
         }
     }
 }
