@@ -1,11 +1,26 @@
 void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
+    if (personas == NULL) {
+        printf("No hay personas registradas en el sistema.\n");
+        return;
+    }
+    if (rutBuscado == NULL) {
+        printf("Por favor, ingrese un RUT válido para buscar denuncias.\n");
+        return;
+    }
+
     //se busca a la persona indicada
     struct persona *personaBuscada = buscarPersonaPorRut(personas, rutBuscado);
 
     //si no se encuentra o algun dato es invalido, retorna mensaje de error
     if (personaBuscada == NULL)
     {
-        printf("Se genero un error al buscar el usuario o este no existe\n");
+        printf("No se encontró ningún usuario con el RUT ingresado.\n\n");
+        return;
+    }
+
+    if (personaBuscada->denuncias == NULL)
+    {
+        printf("Este usuario no tiene denuncias asociadas.\n");
         return;
     }
     struct nodoDenuncias *actual = personaBuscada->denuncias;
@@ -39,8 +54,14 @@ void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
         }
         actual = actual->siguiente;
     }
-    if (contadorDenuncias == 0)
-    {
-        printf("No se encontraron denuncias asociadas a este usuario.\n");
-    }
+}
+
+void mostrarTodasLasDenunciasDePersonas(struct nodoPersonasABB *arbolPersonas)
+{
+    if (arbolPersonas == NULL)
+        return;
+    mostrarTodasLasDenunciasDePersonas(arbolPersonas->izquierda);
+    mostrarDenunciaPorRut(arbolPersonas, arbolPersonas->datosPersona->rut); // Mostrar denuncias de este usuario
+    printf("\n"); // Separador visual
+    mostrarTodasLasDenunciasDePersonas(arbolPersonas->derecha);
 }
