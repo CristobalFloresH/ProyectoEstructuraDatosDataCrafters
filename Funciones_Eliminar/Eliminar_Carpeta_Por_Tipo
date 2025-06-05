@@ -1,10 +1,10 @@
 void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, int tipoDeDato) {
-    if (listaCausas == NULL) {
+    if (listaCausas == NULL) { //Comprobamos existencia de causa.
         printf("No hay causas registradas.\n");
         return;
     }
 
-    struct nodoCausas *causa = buscarCausaPorRUC(*listaCausas, ruc);
+    struct nodoCausas *causa = buscarCausaPorRUC(*listaCausas, ruc); //Llamamos funcion para encontrar causa.
     if (causa == NULL) {
         printf("No se encontró una causa con ese RUC.\n");
         return;
