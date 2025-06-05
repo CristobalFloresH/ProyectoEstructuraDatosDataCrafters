@@ -1,2 +1,31 @@
-Sub menu para eliminar datos especificos de carpeta (por hacer) 
-me gustaria dentro del menu dar la opcion de elimintar TODA la carpeta de golpe y aparte modularmente. 
+void eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) { // recordemos que no hay ruc dentro de carpeta, por lo cual debemos indexar desde causa.
+    if (listaCausas == NULL) {
+        printf("No hay causas registradas.");
+        return;
+    }
+    struct nodoCausas *actual = *listaCausas;
+
+    do {
+        if (strcmp(actual->datosCausa->ruc, ruc) == 0) {
+            if (actual->datosCausa->datosCarpetas != NULL) {
+
+                struct nodoDatosCarpetas *actualCarpeta = actual->datosCausa->datosCarpetas; // usamos AUX para recorrer toda la lista de carpetas
+                while (actualCarpeta != NULL) {
+                    struct nodoDatosCarpetas *sig = actualCarpeta->siguiente;
+
+                    liberarDatosCarpeta(actualCarpeta->datosCarpeta);
+                    free(actualCarpeta);
+
+                    actualCarpeta = sig;
+                }
+                actual->datosCausa->datosCarpetas = NULL;
+                printf("Carpeta eliminada correctamente.\n");
+            }
+            else
+                printf("Carpeta no encontrada.\n");
+            return;
+        }
+        actual = actual->siguiente;
+    }while (actual != *listaCausas);
+
+}
