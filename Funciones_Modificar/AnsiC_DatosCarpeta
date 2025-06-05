@@ -26,7 +26,9 @@ void modificarDatosCarpeta(struct datosCarpeta *carpeta) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    free(carpeta->fecha);
+                    if(carpeta->fecha != NULL) {
+                        free(carpeta->fecha);
+                    }
                     carpeta->fecha = nuevaCadena;
                     printf("Fecha actualizada correctamente.\n");
                 }
