@@ -1,0 +1,51 @@
+void mostrarTodoDatoDeCausaPorRuc(struct nodoCausas *causas, char *rucBuscado) {
+    if (causas == NULL)
+    {
+        printf("No hay causas registradas en el sistema.\n");
+        return;
+    }
+    if (rucBuscado == NULL)
+    {
+        printf("Ruc ingresado invalido.\n");
+        return;
+    }
+
+    //se busca a la carpeta indicada
+    struct causa *causaBuscada = buscarCausaPorRuc(causas, rucBuscado);
+
+    //si no se encuentra o algun dato es invalido, retorna mensaje de error
+    if (causaBuscada == NULL)
+    {
+        printf("Se genero un error al buscar la carpeta o esta no existe\n");
+        return;
+    }
+
+    printf("\n========================================\n");
+    printf("Causa con Ruc: %s\n", causaBuscada->ruc);
+    printf("========================================\n");
+
+    // Sección de denuncias
+    printf("\n>> DENUNCIA REGISTRADA:\n");
+    mostrarDenunciaDeCausa(causaBuscada);
+
+    // Sección de involucrados
+    printf("\n>> INVOLUCRADOS:\n");
+    mostrarTodosInvolucradosCausa(causaBuscada);
+
+    // Sección de datos de la carpeta
+    printf("\n>> DATOS CARPETA INVESTIGATIVA:\n");
+    mostrarTodosDatosCarpetaCausa(causaBuscada);
+
+    printf("========================================\n\n");
+}
+
+void mostrarTodasLasCausas(struct nodoCausas *causas)
+{
+    struct nodoCausas *actual = causas;
+    while (actual != NULL)
+    {
+        mostrarTodoDatoDeCausaPorRuc(causas, actual->datosCausa->ruc);
+        printf("\n"); // Separador visual
+        actual = actual->siguiente;
+    }
+}
