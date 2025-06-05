@@ -37,9 +37,13 @@ void modificarDatosCarpeta(struct datosCarpeta *carpeta) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    free(carpeta->descripcion);
-                    carpeta->descripcion = nuevaCadena;
-                    printf("Descripción actualizada correctamente.\n");
+                    if(nuevaCadena != NULL) {
+                        free(carpeta->descripcion);
+                        carpeta->descripcion = nuevaCadena;
+                        printf("Descripción actualizada correctamente.\n");
+                    } else {
+                        printf("Error al asginar memoria")
+                     }
                 }
                 break;
 
