@@ -1,0 +1,38 @@
+void mostrarDenunciaDeCausa(struct causa *causaActual) {
+    if (causaActual == NULL) {
+        printf("No se encontró la causa seleccionada.\n");
+        return;
+    }
+    if (causaActual->denuncia == NULL) {
+        printf("Esta causa no tiene denuncias asociadas.\n");
+        return;
+    }
+
+    struct denuncia *denuncia = causaActual->denuncia;
+    printf("========================================\n");
+    printf("DENUNCIA EN LA CAUSA RUC: %s\n", causaActual->ruc);
+    printf("========================================\n");
+    printf("RUC           : %s\n", denuncia->ruc);
+    printf("Fecha         : %s\n", denuncia->fecha);
+    printf("Descripción   : %s\n", denuncia->descripcion);
+    printf("Delito        : %s\n", denuncia->tipoDeDenuncia);
+    if (denuncia->denunciante != NULL && denuncia->denunciado != NULL)
+    {
+        printf("Denunciante   : %s %s (RUT: %s)\n", denuncia->denunciante->nombre,
+               denuncia->denunciante->apellido, denuncia->denunciante->rut);
+        printf("Denunciado    : %s %s (RUT: %s)\n", denuncia->denunciado->nombre,
+               denuncia->denunciado->apellido, denuncia->denunciado->rut);
+    }
+    else if (denuncia->denunciante == NULL && denuncia->denunciado != NULL)
+    {
+        printf("Denunciante   : Anonimo\n");
+        printf("Denunciado    : %s %s (RUT: %s)\n", denuncia->denunciado->nombre,
+                 denuncia->denunciado->apellido, denuncia->denunciado->rut);
+    }
+    else if (denuncia->denunciante != NULL && denuncia->denunciado == NULL)
+    {
+        printf("Denunciante   : %s %s (RUT: %s)\n", denuncia->denunciante->nombre,
+                 denuncia->denunciante->apellido, denuncia->denunciante->rut);
+        printf("Denunciado    : Contra los que resulten culpables\n");
+    }
+}
