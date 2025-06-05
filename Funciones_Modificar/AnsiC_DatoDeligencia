@@ -21,22 +21,29 @@ void modificarDatosDiligencia(struct datosDiligencias *diligencia) {
 
         if (scanf("%d", &opcion) != 1) {
             printf("Entrada inválida.\n");
-            while (getchar() != '\n');
+            while (getchar() != '\n'); // limpiar buffer
             opcion = -1;
             continue;
         }
 
-        getchar(); // limpiar salto de línea pendiente
+        while (getchar() != '\n');  // limpiar buffer tras scanf
 
         switch (opcion) {
             case 1:
-                printf("Ingrese nueva prioridad (1 = muy baja, ..., 5 = muy alta): ");
-                if (scanf("%d", &diligencia->prioridad) != 1 || diligencia->prioridad < 1 || diligencia->prioridad > 5) {
-                    printf("Prioridad inválida.\n");
-                    diligencia->prioridad = 1;
-                    while (getchar() != '\n');
-                }
-                getchar();
+                do {
+                    printf("Ingrese nueva prioridad (1 = muy baja, ..., 5 = muy alta): ");
+                    if (scanf("%d", &diligencia->prioridad) != 1) {
+                        printf("Entrada inválida.\n");
+                        while (getchar() != '\n');
+                        diligencia->prioridad = -1;
+                        continue;
+                    }
+                    while (getchar() != '\n'); // limpiar buffer tras scanf
+                    if (diligencia->prioridad < 1 || diligencia->prioridad > 5) {
+                        printf("Prioridad inválida. Intente nuevamente.\n");
+                    }
+                } while (diligencia->prioridad < 1 || diligencia->prioridad > 5);
+                printf("Prioridad actualizada correctamente.\n");
                 break;
 
             case 2:
@@ -44,8 +51,13 @@ void modificarDatosDiligencia(struct datosDiligencias *diligencia) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    free(diligencia->fechaInicio);
-                    diligencia->fechaInicio = nuevaCadena;
+                    if (nuevaCadena != NULL) {
+                        free(diligencia->fechaInicio);
+                        diligencia->fechaInicio = nuevaCadena;
+                        printf("Fecha inicio actualizada correctamente.\n");
+                    } else {
+                        printf("Error al asignar memoria.\n");
+                    }
                 }
                 break;
 
@@ -54,8 +66,13 @@ void modificarDatosDiligencia(struct datosDiligencias *diligencia) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    free(diligencia->fechaFin);
-                    diligencia->fechaFin = nuevaCadena;
+                    if (nuevaCadena != NULL) {
+                        free(diligencia->fechaFin);
+                        diligencia->fechaFin = nuevaCadena;
+                        printf("Fecha fin actualizada correctamente.\n");
+                    } else {
+                        printf("Error al asignar memoria.\n");
+                    }
                 }
                 break;
 
@@ -64,8 +81,13 @@ void modificarDatosDiligencia(struct datosDiligencias *diligencia) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    free(diligencia->descripcion);
-                    diligencia->descripcion = nuevaCadena;
+                    if (nuevaCadena != NULL) {
+                        free(diligencia->descripcion);
+                        diligencia->descripcion = nuevaCadena;
+                        printf("Descripción actualizada correctamente.\n");
+                    } else {
+                        printf("Error al asignar memoria.\n");
+                    }
                 }
                 break;
 
@@ -74,8 +96,13 @@ void modificarDatosDiligencia(struct datosDiligencias *diligencia) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    free(diligencia->estado);
-                    diligencia->estado = nuevaCadena;
+                    if (nuevaCadena != NULL) {
+                        free(diligencia->estado);
+                        diligencia->estado = nuevaCadena;
+                        printf("Estado actualizado correctamente.\n");
+                    } else {
+                        printf("Error al asignar memoria.\n");
+                    }
                 }
                 break;
 
@@ -84,8 +111,13 @@ void modificarDatosDiligencia(struct datosDiligencias *diligencia) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    free(diligencia->tipoDiligencia);
-                    diligencia->tipoDiligencia = nuevaCadena;
+                    if (nuevaCadena != NULL) {
+                        free(diligencia->tipoDiligencia);
+                        diligencia->tipoDiligencia = nuevaCadena;
+                        printf("Tipo de diligencia actualizado correctamente.\n");
+                    } else {
+                        printf("Error al asignar memoria.\n");
+                    }
                 }
                 break;
 
