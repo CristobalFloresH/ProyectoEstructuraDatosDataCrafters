@@ -1,11 +1,10 @@
 void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, int tipoDeDato) {
-    if (listaCausas == NULL) {
+    if (listaCausas == NULL || *listaCausas == NULL) {
         printf("No hay causas registradas.\n");
         return;
     }
 
     struct nodoCausas *actual = *listaCausas;
-    int encontrada = 0;
 
     do {
         if (strcmp(actual->datosCausa->ruc, ruc) == 0) {
@@ -13,14 +12,8 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
 
             while (carpeta != NULL) {
                 if (carpeta->datosCarpeta != NULL && carpeta->datosCarpeta->tipoDeDato == tipoDeDato) {
-
                     switch (tipoDeDato) {
-
                         case 1: // declaraciones
-                            free(carpeta->datosCarpeta->descripcion);
-                            free(carpeta->datosCarpeta->fecha);
-                            break;
-
                         case 2: // pruebas
                             free(carpeta->datosCarpeta->descripcion);
                             free(carpeta->datosCarpeta->fecha);
@@ -46,19 +39,16 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                             printf("Tipo de dato no válido.\n");
                             return;
                     }
-                    encontrada = 1;
+                    printf("Dato eliminado correctamente.\n");
+                    return; 
                 }
                 carpeta = carpeta->siguiente;
             }
-            break;
+            printf("No se encontraro el dato en especifico en carpetas.\n");
+            return;
         }
-
         actual = actual->siguiente;
     } while (actual != *listaCausas);
 
-    if (!encontrada) {
-        printf("No se encontraron datos del tipo especificado en carpetas.\n");
-    } else {
-        printf("Dato eliminado correctamente.\n");
-    }
+    printf("No se encontró una Carpeta con ese RUC.\n");
 }
