@@ -1,24 +1,22 @@
-hice esta funcion pero se me ocurrio manejarlo como menu directamente, con la opcion de eliminar TODA la causa, y tambien modularmente dato por dato. 
-
-
-
 
 void eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
-    if (listaCausa == NULL) {
+    if (listaCausa == NULL) { //Comprobamos la existencia de causas.
         printf("No se han encontrado causas");
         return;
     }
 
-    struct nodoCausas *actual = *listaCausa;
+    struct nodoCausas *actual = *listaCausa; //Creamos auxiliar para recorrer 
 
     do {
-        if (strcmp(actual->datosCausa->ruc, ruc) == 0) {
-            reenlazarNodoCircularDoble(listaCausa, actual);
-            liberarCausa(actual->datosCausa);
+        if (strcmp(actual->datosCausa->ruc, ruc) == 0) { 
+            reenlazarNodoCircularDoble(listaCausa, actual); //Llamamos funcion para reenlazar nodo.
+            liberarCausa(actual->datosCausa); //Llamamos funcion para liberar cada dato dentro de 
             free(actual);
-            printf("Causa eliminada correctamente.\n");
+            actual = NULL;
+            printf("Causa eliminada correctamente.\n"); //Luego de liberar y reenlazar dejamos nodo en NULL
             return;
         }
         actual = actual->siguiente;
-    }while (actual != *listaCausa);
+    }while (actual != *listaCausa); //Ciclo do while para recorrer lista circular
+    printf("No se encontró una causa con ese RUC.\n");
 };
