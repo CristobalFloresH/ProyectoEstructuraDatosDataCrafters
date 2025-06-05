@@ -42,7 +42,7 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
 
         switch (opcion) {
             case 1:
-                printf("Ingrese nueva fecha: ");
+                printf("Ingrese nueva fecha (YYY-MM-DD): ");
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
