@@ -20,7 +20,7 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                     free(carpeta->datosCarpeta->fecha);
                     break;
 
-                case 2: //
+                case 2: // pruebas
                     free(carpeta->datosCarpeta->descripcion);
                     free(carpeta->datosCarpeta->fecha);
                     break;
