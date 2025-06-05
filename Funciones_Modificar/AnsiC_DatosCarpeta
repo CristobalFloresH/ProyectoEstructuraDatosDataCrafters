@@ -48,16 +48,22 @@ void modificarDatosCarpeta(struct datosCarpeta *carpeta) {
                 break;
 
             case 3:
-                printf("Ingrese nuevo tipo de dato (1=declaraciones, 2=pruebas generales, 3=diligencias, 4=denuncia): ");
-                if (scanf("%d", &carpeta->tipoDeDato) != 1) {
-                    printf("Tipo de dato inválido.\n");
-                    while (getchar() != '\n'); // limpiar buffer
-                    carpeta->tipoDeDato = 1; // valor por defecto
-                } else {
-                    printf("Tipo de dato actualizado correctamente.\n");
+                int nuevo_tipo;
+                do {
+                    printf("Ingrese nuevo tipo de dato (1=declaraciones, 2=pruebas generales, 3=diligencias, 4=denuncia): ");
+                    if (scanf("%d", &nuevo_tipo) != 1) {
+                        printf("Entrada inválida.\n");
+                        while (getchar() != '\n'); // limpiar caracteres no numéricos
+                        continue;
                 }
-                getchar(); // limpiar salto de línea
-                break;
+                    while (getchar() != '\n'); // limpiar el salto de línea restante
+                    if (nuevo_tipo < 1 || nuevo_tipo > 4) {
+                        printf("Tipo de dato inválido. Intente nuevamente.\n");
+                    }
+                } while (nuevo_tipo < 1 || nuevo_tipo > 4);
+
+                carpeta->tipoDeDato = nuevo_tipo;
+                printf("Tipo de dato actualizado correctamente.\n");
 
             case 0:
                 printf("Saliendo...\n");
