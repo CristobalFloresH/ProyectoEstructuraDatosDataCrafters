@@ -1,5 +1,5 @@
 void eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) {
-    if (listaCausas == NULL || *listaCausas == NULL) {
+    if (listaCausas == NULL) {
         printf("No hay causas registradas.\n");
         return;
     }
