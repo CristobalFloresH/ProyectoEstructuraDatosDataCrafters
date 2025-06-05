@@ -1,31 +1,33 @@
-void eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) { // recordemos que no hay ruc dentro de carpeta, por lo cual debemos indexar desde causa.
-    if (listaCausas == NULL) {
-        printf("No hay causas registradas.");
+void eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) {
+    if (listaCausas == NULL || *listaCausas == NULL) {
+        printf("No hay causas registradas.\n");
         return;
     }
+
     struct nodoCausas *actual = *listaCausas;
 
     do {
         if (strcmp(actual->datosCausa->ruc, ruc) == 0) {
-            if (actual->datosCausa->datosCarpetas != NULL) {
 
-                struct nodoDatosCarpetas *actualCarpeta = actual->datosCausa->datosCarpetas; // usamos AUX para recorrer toda la lista de carpetas
+            if (actual->datosCausa->datosCarpetas != NULL) {
+                struct nodoDatosCarpetas *actualCarpeta = actual->datosCausa->datosCarpetas;
+
                 while (actualCarpeta != NULL) {
                     struct nodoDatosCarpetas *sig = actualCarpeta->siguiente;
-
                     liberarDatosCarpeta(actualCarpeta->datosCarpeta);
                     free(actualCarpeta);
-
                     actualCarpeta = sig;
                 }
+
                 actual->datosCausa->datosCarpetas = NULL;
-                printf("Carpeta eliminada correctamente.\n");
+                printf("Carpetas eliminadas correctamente.\n");
+            } else {
+                printf("La causa no tiene carpetas asociadas.\n");
             }
-            else
-                printf("Carpeta no encontrada.\n");
             return;
         }
         actual = actual->siguiente;
-    }while (actual != *listaCausas);
-
+    } while (actual != *listaCausas);
+    
+    printf("No se encontró una causa con ese RUC.\n");
 }
