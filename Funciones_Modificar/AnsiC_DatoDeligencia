@@ -24,28 +24,30 @@ void modificarDatosDiligencia(struct datosDiligencias *diligencia) {
             while (getchar() != '\n'); // limpiar buffer
             opcion = -1;
             continue;
-        }
+        } // aseguramos la entrada de la opcion, para que no sea invalida 
 
-        while (getchar() != '\n');  // limpiar buffer tras scanf
+        while (getchar() != '\n');  // limpiar buffer tras scanf, evita datos reciduales 
 
         switch (opcion) {
             case 1:
+                int nueva_prioridad;
                 do {
                     printf("Ingrese nueva prioridad (1 = muy baja, ..., 5 = muy alta): ");
-                    if (scanf("%d", &diligencia->prioridad) != 1) {
+                    if (scanf("%d", &nueva_prioridad) != 1) {
                         printf("Entrada inválida.\n");
                         while (getchar() != '\n');
-                        diligencia->prioridad = -1;
                         continue;
                     }
-                    while (getchar() != '\n'); // limpiar buffer tras scanf
-                    if (diligencia->prioridad < 1 || diligencia->prioridad > 5) {
-                        printf("Prioridad inválida. Intente nuevamente.\n");
-                    }
-                } while (diligencia->prioridad < 1 || diligencia->prioridad > 5);
-                printf("Prioridad actualizada correctamente.\n");
-                break;
+                    while (getchar() != '\n');
+                    if (nueva_prioridad < 1 || nueva_prioridad > 5) {
+                    printf("Prioridad inválida. Intente nuevamente.\n");
+                }
+                } while (nueva_prioridad < 1 || nueva_prioridad > 5);
 
+                diligencia->prioridad = nueva_prioridad;
+                printf("Prioridad actualizada correctamente.\n");
+
+                
             case 2:
                 printf("Ingrese nueva fecha inicio (YYYY-MM-DD): ");
                 if (fgets(buffer, sizeof(buffer), stdin)) {
