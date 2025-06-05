@@ -1,1 +1,100 @@
+void modificarPersonaPorRUT(struct ministerio *ministerio) {
+    char rut[20];
+    char palabra[300];
+    int opcion = -1;
+    struct persona *p = NULL;
+    char *nuevaCadena = NULL;
 
+    printf("Ingrese RUT de la persona a modificar: ");
+    scanf(" %[^\n]", rut);
+    getchar(); // Limpia el salto de línea
+
+    p = buscarPersonaPorRUT(ministerio, rut);
+    if (p == NULL) {
+        printf("Persona con RUT %s no encontrada.\n", rut);
+        return;
+    }
+
+    do {
+        printf("\n--- Modificar Persona (%s %s) ---\n", p->nombre, p->apellido);
+        printf("1. Cambiar nombre\n");
+        printf("2. Cambiar apellido\n");
+        printf("3. Cambiar contraseña\n");
+        printf("4. Cambiar rol (actual: %d)\n", p->rol);
+        printf("0. Salir\n");
+        printf("Seleccione una opción: ");
+
+        if (scanf("%d", &opcion) != 1) {
+            printf("Entrada inválida.\n");
+            while (getchar() != '\n');
+            opcion = -1;
+            continue;
+        }
+        getchar(); // Limpiar '\n'
+
+        switch (opcion) {
+            case 1:
+                printf("Nuevo nombre: ");
+                if (fgets(palabra, sizeof(palabra), stdin)) {
+                    palabra[strcspn(palabra, "\n")] = '\0';
+                    nuevaCadena = duplicarCadena(palabra);
+                    if (nuevaCadena != NULL) {
+                        free(p->nombre);
+                        p->nombre = nuevaCadena;
+                        printf("Nombre actualizado correctamente.\n");
+                    }
+                }
+                break;
+
+            case 2:
+                printf("Nuevo apellido: ");
+                if (fgets(palabra, sizeof(palabra), stdin)) {
+                    palabra[strcspn(palabra, "\n")] = '\0';
+                    nuevaCadena = duplicarCadena(palabra);
+                    if (nuevaCadena != NULL) {
+                        free(p->apellido);
+                        p->apellido = nuevaCadena;
+                        printf("Apellido actualizado correctamente.\n");
+                    }
+                }
+                break;
+
+            case 3:
+                printf("Nueva contraseña: ");
+                if (fgets(palabra, sizeof(palabra), stdin)) {
+                    palabra[strcspn(palabra, "\n")] = '\0';
+                    nuevaCadena = duplicarCadena(palabra);
+                    if (nuevaCadena != NULL) {
+                        free(p->contrasena);
+                        p->contrasena = nuevaCadena;
+                        printf("Contraseña actualizada correctamente.\n");
+                    }
+                }
+                break;
+
+            case 4:
+                do {
+                    printf("Nuevo rol (1 = usuario común, 2 = fiscal, 3 = juez): ");
+                    if (scanf("%d", &p->rol) != 1) {
+                        printf("Entrada inválida. Intente nuevamente.\n");
+                        while (getchar() != '\n');
+                        p->rol = -1;
+                        continue;
+                    }
+                    if (p->rol < 1 || p->rol > 3) {
+                        printf("Rol inválido. Intente nuevamente.\n");
+                    }
+                    while (getchar() != '\n'); // Limpiar el buffer
+                } while (p->rol < 1 || p->rol > 3);
+                printf("Rol actualizado correctamente.\n");
+                break;
+
+            case 0:
+                printf("Modificación finalizada.\n");
+                break;
+
+            default:
+                printf("Opción inválida. Intente nuevamente.\n");
+        }
+    } while (opcion != 0);
+}
