@@ -42,6 +42,7 @@ void menuEliminarCarpeta(struct ministerio *ministerio) {
         
     default:
         printf("Opcion no valida\n");
+        break;
 
     }
 
