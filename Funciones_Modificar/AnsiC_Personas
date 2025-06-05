@@ -73,21 +73,27 @@ void modificarPersonaPorRUT(struct ministerio *ministerio) {
                 break;
 
             case 4:
+                int nuevo_rol;
                 do {
                     printf("Nuevo rol (1 = usuario común, 2 = fiscal, 3 = juez): ");
-                    if (scanf("%d", &p->rol) != 1) {
+    
+                    if (scanf("%d", &nuevo_rol) != 1) {
                         printf("Entrada inválida. Intente nuevamente.\n");
-                        while (getchar() != '\n');
-                        p->rol = -1;
+                        while (getchar() != '\n'); // limpiar caracteres incorrectos
                         continue;
-                    }
-                    if (p->rol < 1 || p->rol > 3) {
+                     }
+    
+                    while (getchar() != '\n'); // limpiar el salto de línea
+    
+                    if (nuevo_rol < 1 || nuevo_rol > 3) {
                         printf("Rol inválido. Intente nuevamente.\n");
                     }
-                    while (getchar() != '\n'); // Limpiar el buffer
-                } while (p->rol < 1 || p->rol > 3);
+
+                } while (nuevo_rol < 1 || nuevo_rol > 3);
+
+                p->rol = nuevo_rol;
                 printf("Rol actualizado correctamente.\n");
-                break;
+
 
             case 0:
                 printf("Modificación finalizada.\n");
