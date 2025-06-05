@@ -1,0 +1,64 @@
+void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, int tipoDeDato) {
+    if (listaCausas == NULL) {
+        printf("No hay causas registradas.\n");
+        return;
+    }
+
+    struct nodoCausas *actual = *listaCausas;
+    int encontrada = 0;
+
+    do {
+        if (strcmp(actual->datosCausa->ruc, ruc) == 0) {
+            struct nodoDatosCarpetas *carpeta = actual->datosCausa->datosCarpetas;
+
+            while (carpeta != NULL) {
+                if (carpeta->datosCarpeta != NULL && carpeta->datosCarpeta->tipoDeDato == tipoDeDato) {
+
+                    switch (tipoDeDato) {
+
+                        case 1: // declaraciones
+                            free(carpeta->datosCarpeta->descripcion);
+                            free(carpeta->datosCarpeta->fecha);
+                            break;
+
+                        case 2: // pruebas
+                            free(carpeta->datosCarpeta->descripcion);
+                            free(carpeta->datosCarpeta->fecha);
+                            break;
+
+                        case 3: // diligencias
+                            if (carpeta->datosCarpeta->datosDiligencias != NULL) {
+                                liberarDatosDiligencias(carpeta->datosCarpeta->datosDiligencias);
+                                free(carpeta->datosCarpeta->datosDiligencias);
+                                carpeta->datosCarpeta->datosDiligencias = NULL;
+                            }
+                            break;
+
+                        case 4: // denuncia
+                            if (carpeta->datosCarpeta->datosDenuncia != NULL) {
+                                liberarDenuncia(carpeta->datosCarpeta->datosDenuncia);
+                                free(carpeta->datosCarpeta->datosDenuncia);
+                                carpeta->datosCarpeta->datosDenuncia = NULL;
+                            }
+                            break;
+
+                        default:
+                            printf("Tipo de dato no válido.\n");
+                            return;
+                    }
+                    encontrada = 1;
+                }
+                carpeta = carpeta->siguiente;
+            }
+            break;
+        }
+
+        actual = actual->siguiente;
+    } while (actual != *listaCausas);
+
+    if (!encontrada) {
+        printf("No se encontraron datos del tipo especificado en carpetas.\n");
+    } else {
+        printf("Dato eliminado correctamente.\n");
+    }
+}
