@@ -4,51 +4,51 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
         return;
     }
 
-    struct nodoCausas *actual = *listaCausas;
+    struct nodoCausas *causa = buscarCausaPorRUC(*listaCausas, ruc);
+    if (causa == NULL) {
+        printf("No se encontró una causa con ese RUC.\n");
+        return;
+    }
 
-    do {
-        if (strcmp(actual->datosCausa->ruc, ruc) == 0) {
-            struct nodoDatosCarpetas *carpeta = actual->datosCausa->datosCarpetas;
+    struct nodoDatosCarpetas *carpeta = causa->datosCausa->datosCarpetas;
 
-            while (carpeta != NULL) {
-                if (carpeta->datosCarpeta != NULL && carpeta->datosCarpeta->tipoDeDato == tipoDeDato) {
-                    switch (tipoDeDato) {
-                        case 1: // declaraciones
-                        case 2: // pruebas
-                            free(carpeta->datosCarpeta->descripcion);
-                            free(carpeta->datosCarpeta->fecha);
-                            break;
+    while (carpeta != NULL) {
+        if (carpeta->datosCarpeta != NULL && carpeta->datosCarpeta->tipoDeDato == tipoDeDato) {
+            switch (tipoDeDato) {
+                case 1: //declaraciones
+                    free(carpeta->datosCarpeta->descripcion);
+                    free(carpeta->datosCarpeta->fecha);
+                    break;
 
-                        case 3: // diligencias
-                            if (carpeta->datosCarpeta->datosDiligencias != NULL) {
-                                liberarDatosDiligencias(carpeta->datosCarpeta->datosDiligencias);
-                                free(carpeta->datosCarpeta->datosDiligencias);
-                                carpeta->datosCarpeta->datosDiligencias = NULL;
-                            }
-                            break;
-
-                        case 4: // denuncia
-                            if (carpeta->datosCarpeta->datosDenuncia != NULL) {
-                                liberarDenuncia(carpeta->datosCarpeta->datosDenuncia);
-                                free(carpeta->datosCarpeta->datosDenuncia);
-                                carpeta->datosCarpeta->datosDenuncia = NULL;
-                            }
-                            break;
-
-                        default:
-                            printf("Tipo de dato no válido.\n");
-                            return;
+                case 2: //
+                    free(carpeta->datosCarpeta->descripcion);
+                    free(carpeta->datosCarpeta->fecha);
+                    break;
+                    
+                case 3: //digligencias
+                    if (carpeta->datosCarpeta->datosDiligencias) {
+                        liberarDatosDiligencias(carpeta->datosCarpeta->datosDiligencias);
+                        free(carpeta->datosCarpeta->datosDiligencias);
+                        carpeta->datosCarpeta->datosDiligencias = NULL;
                     }
-                    printf("Dato eliminado correctamente.\n");
-                    return; 
-                }
-                carpeta = carpeta->siguiente;
+                break;
+                
+                case 4: //denuncia
+                    if (carpeta->datosCarpeta->datosDenuncia) {
+                        liberarDenuncia(carpeta->datosCarpeta->datosDenuncia);
+                        free(carpeta->datosCarpeta->datosDenuncia);
+                        carpeta->datosCarpeta->datosDenuncia = NULL;
+                    }
+                break;
+                default:
+                    printf("Tipo de dato no válido.\n");
+                return;
             }
-            printf("No se encontraro el dato en especifico en carpetas.\n");
-            return;
+            printf("Dato eliminado correctamente.\n");
+            return;  
         }
-        actual = actual->siguiente;
-    } while (actual != *listaCausas);
+        carpeta = carpeta->siguiente;
+    }
 
-    printf("No se encontró una Carpeta con ese RUC.\n");
+    printf("No se encontraron datos del tipo especificado en carpetas.\n");
 }
