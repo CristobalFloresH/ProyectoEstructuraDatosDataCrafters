@@ -1,1 +1,47 @@
+void eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, const char *rut) {
+    struct involucrados *involucrado = buscarInvolucradoPorRut(involucrados, tam, rut);
+    if (involucrado == NULL) {
+        printf("No se encontró involucrado con RUT %s.\n", rut);
+        return;
+    }
 
+    // Liberar datos imputados si es imputado (tipoInvolucrado == 2)
+    if (involucrado->tipoInvolucrado == 2 && involucrado->datosImputados != NULL) {
+        liberarDatosImputados(involucrado->datosImputados);
+        involucrado->datosImputados = NULL;
+    }
+
+    // Liberar datos persona
+    liberarPersona(involucrado->persona);
+    involucrado->persona = NULL;
+
+    // Buscar índice para liberar memoria y poner NULL en el arreglo
+    for (int i = 0; i < tam; i++) {
+        if (involucrados[i] == involucrado) {
+            free(involucrados[i]);
+            involucrados[i] = NULL;
+            break;
+        }
+    }
+
+    printf("Involucrado con RUT %s eliminado correctamente.\n", rut);
+}
+
+void eliminarInvolucrado(struct nodoCausas **listaCausas, const char *rut) {
+    if (listaCausas == NULL || *listaCausas == NULL) {
+        printf("No hay causas registradas.\n");
+        return;
+    }
+
+    struct nodoCausas *actual = *listaCausas;
+
+    while (actual != NULL) {
+        if (actual->datosCausa != NULL && actual->datosCausa->involucrados != NULL) {
+            eliminarInvolucradoPorRut(actual->datosCausa->involucrados, actual->datosCausa->tamInvolucrados, rut);
+            return; // Sale tras eliminar la primera coincidencia
+        }
+        actual = actual->siguiente;
+    }
+
+    printf("No se encontró involucrado con RUT %s en ninguna causa.\n", rut);
+}
