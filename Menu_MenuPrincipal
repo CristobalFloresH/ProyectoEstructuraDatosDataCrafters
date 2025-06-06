@@ -1,6 +1,8 @@
-void menuPrincipal(struct nodoPersonasABB **arbolPersonas, struct nodoCausas **listaCausas) {
+void menuPrincipal(struct ministerio *ministerio) {
     int opcion = -1;
+
     while(opcion != 0) {
+        // Imprime las opciones principales del sistema
         printf("\n=========== MENÚ PRINCIPAL ===========\n");
         printf("1. Agregar\n");
         printf("2. Eliminar\n");
@@ -13,19 +15,19 @@ void menuPrincipal(struct nodoPersonasABB **arbolPersonas, struct nodoCausas **l
 
         switch(opcion) {
             case 1:
-                //Menu agregar
+                agregar(ministerio);
                 break;
             case 2:
-                //menuEliminar
+                menuEliminar(ministerio);
                 break;
             case 3:
-               // menuModificar
+                // menuModificar(ministerio);
                 break;
             case 4:
-                //menuBuscar
+                menuBuscar(ministerio);
                 break;
             case 5:
-                //menuMostrar
+                menuMostrar(ministerio); 
                 break;
             case 0:
                 printf("Saliendo del sistema.\n");
