@@ -25,13 +25,16 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 1: // declaraciones
                 case 2: // pruebas
                     free(aEliminar->datosCarpeta->descripcion);
+                    aEliminar->datosCarpeta->descripcion = NULL;
                     free(aEliminar->datosCarpeta->fecha);
+                    aEliminar->datosCarpeta->fecha = NULL;
                     break;
 
                 case 3: // diligencias
                     if (aEliminar->datosCarpeta->datosDiligencias) {
                         liberarDatosDiligencias(aEliminar->datosCarpeta->datosDiligencias);
                         free(aEliminar->datosCarpeta->datosDiligencias);
+                        aEliminar->datosCarpeta->datosDiligencias = NULL;
                     }
                     break;
 
@@ -39,6 +42,7 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                     if (aEliminar->datosCarpeta->datosDenuncia) {
                         liberarDenuncia(aEliminar->datosCarpeta->datosDenuncia);
                         free(aEliminar->datosCarpeta->datosDenuncia);
+                        aEliminar->datosCarpeta->datosDenuncia = NULL;
                     }
                     break;
 
@@ -48,7 +52,10 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
             }
 
             free(aEliminar->datosCarpeta);
+            aEliminar->datosCarpeta = NULL;
+
             free(aEliminar);
+            aEliminar = NULL;
 
             printf("Dato eliminado correctamente.\n");
             return; // Salimos tras eliminar la primera coincidencia
