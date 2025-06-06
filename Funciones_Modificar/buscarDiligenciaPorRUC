@@ -1,5 +1,5 @@
-struct datosDiligencias* buscarDiligenciaPorFechaYTipo(struct ministerio *ministerio, const char *ruc, const char *fechaFin, const char *tipoDiligencia) {
-    if (ministerio == NULL || ruc == NULL || fechaFin == NULL || tipoDiligencia == NULL) {
+struct datosDiligencias* buscarDiligencia(struct ministerio *ministerio, const char *ruc, const char *fechaInicio, const char *tipoDiligencia) {
+    if (ministerio == NULL || ruc == NULL || fechaInicio == NULL || tipoDiligencia == NULL) {
         printf("Parámetros inválidos.\n");
         return NULL;
     }
@@ -19,15 +19,13 @@ struct datosDiligencias* buscarDiligenciaPorFechaYTipo(struct ministerio *minist
 
     struct datosCarpeta *carpeta = c->datosCarpetas->datosCarpeta;
 
-    // Verificar si es tipo diligencia
     if (carpeta->tipoDeDato == 3 && carpeta->datosDiligencias != NULL) {
         struct datosDiligencias *d = carpeta->datosDiligencias;
-        if (strcmp(d->fechaFin, fechaFin) == 0 && strcmp(d->tipoDiligencia, tipoDiligencia) == 0) {
+        if (strcmp(d->fechaInicio, fechaInicio) == 0 && strcmp(d->tipoDiligencia, tipoDiligencia) == 0) {
             return d;
         }
     }
 
-    printf("No se encontró una diligencia que coincida con fecha de término '%s' y tipo '%s'.\n", fechaFin, tipoDiligencia);
+    printf("No se encontró una diligencia que coincida con fecha de inicio '%s' y tipo '%s'.\n", fechaInicio, tipoDiligencia);
     return NULL;
 }
-
