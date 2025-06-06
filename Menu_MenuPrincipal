@@ -8,6 +8,7 @@ void menuPrincipal(struct ministerio *ministerio) {
         printf("3. Modificar\n");
         printf("4. Buscar\n");
         printf("5. Mostrar\n");
+        printf("6. Otras Funciones\n");
         printf("0. Salir\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
@@ -34,6 +35,9 @@ void menuPrincipal(struct ministerio *ministerio) {
                 // Llama al menú para mostrar elementos
                 menuMostrar(ministerio);
                 break;
+            case 6:
+                //Añadir aqui funciones adicionales, como las que hablamos de imprimir ruc de causas donde esta X usuario 
+                //y el reporte de denuncias anonimas o reporte de todas la causas con X estado
             case 0:
                 printf("Saliendo del sistema.\n");
                 break;
