@@ -1,8 +1,7 @@
 void menuPrincipal(struct ministerio *ministerio) {
     int opcion = -1;
-
     while(opcion != 0) {
-        // Imprime las opciones principales del sistema
+        // Imprime el menú principal de opciones CRUD
         printf("\n=========== MENÚ PRINCIPAL ===========\n");
         printf("1. Agregar\n");
         printf("2. Eliminar\n");
@@ -12,22 +11,28 @@ void menuPrincipal(struct ministerio *ministerio) {
         printf("0. Salir\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
+        getchar(); // Limpia el salto de línea después de scanf
 
         switch(opcion) {
             case 1:
-                menuAgregar(ministerio);
+                // Llama al menú para agregar elementos
+                agregar(ministerio);
                 break;
             case 2:
+                // Llama al menú para eliminar elementos
                 menuEliminar(ministerio);
                 break;
             case 3:
-                // menuModificar(ministerio);
+                // Llama al menú para modificar elementos
+                menuModificar(ministerio);
                 break;
             case 4:
+                // Llama al menú para buscar elementos
                 menuBuscar(ministerio);
                 break;
             case 5:
-                menuMostrar(ministerio); 
+                // Llama al menú para mostrar elementos
+                menuMostrar(ministerio);
                 break;
             case 0:
                 printf("Saliendo del sistema.\n");
