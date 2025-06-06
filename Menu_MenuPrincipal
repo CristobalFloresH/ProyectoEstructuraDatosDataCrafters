@@ -6,7 +6,7 @@ void menuPrincipal(struct nodoPersonasABB **arbolPersonas, struct nodoCausas **l
         printf("2. Eliminar\n");
         printf("3. Modificar\n");
         printf("4. Buscar\n");
-        printf("5. Listar\n");
+        printf("5. Mostrar\n");
         printf("0. Salir\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
