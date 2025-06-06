@@ -1,4 +1,4 @@
-struct datosDiligencias* buscarDiligenciaPorRUC(struct ministerio *ministerio, const char *ruc) {
+struct datosDiligencias* buscarDiligenciaEnCausa(struct ministerio *ministerio, const char *ruc) {
     if (ministerio == NULL || ruc == NULL) {
         printf("Error: ministerio o RUC inválido.\n");
         return NULL;
