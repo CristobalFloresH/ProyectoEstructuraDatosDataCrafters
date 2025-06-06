@@ -23,7 +23,7 @@ void menuMostrar(struct nodoPersonasABB *arbolPersonas, struct nodoCausas *lista
         /** Se usa un switch para determinar la acción según la opción ingresada **/
         switch (opcion) {
             case 1: /** Mostrar personas **/
-                printf("\n1. Mostrar TODOS las personas\n");
+                printf("\n1. Mostrar TODAS las personas\n");
                 printf("2. Mostrar persona por RUT\n");
                 printf("Seleccione una opción: ");
                 scanf("%d", &segundaOpcion);
