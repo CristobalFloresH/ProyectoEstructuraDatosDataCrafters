@@ -1,82 +1,4 @@
 
-void modificarDatosCarpeta(struct datosCarpeta *carpeta) {
-    int opcion = -1;
-    char buffer[300];
-    char* nuevaCadena;
-
-    while (opcion != 0) {
-        printf("\n--- Modificar Datos de Carpeta ---\n");
-        printf("1. Modificar fecha (Actual: %s)\n", carpeta->fecha);
-        printf("2. Modificar descripción (Actual: %s)\n", carpeta->descripcion);
-        printf("3. Modificar tipo de dato (Actual: %d)\n", carpeta->tipoDeDato);
-        printf("0. Salir\n");
-        printf("Seleccione una opción: ");
-
-        if (scanf("%d", &opcion) != 1) {
-            printf("Entrada inválida.\n");
-            while (getchar() != '\n'); // limpiar buffer
-            opcion = -1;
-            continue;
-        }
-        getchar(); // limpiar salto de línea
-
-        switch (opcion) {
-            case 1:
-                printf("Ingrese nueva fecha (YYYY-MM-DD): ");
-                if (fgets(buffer, sizeof(buffer), stdin)) {
-                    removerSaltoLinea(buffer);
-                    nuevaCadena = duplicarCadena(buffer);
-                    if(carpeta->fecha != NULL) {
-                        free(carpeta->fecha);
-                    }
-                    carpeta->fecha = nuevaCadena;
-                    printf("Fecha actualizada correctamente.\n");
-                }
-                break;
-
-            case 2:
-                printf("Ingrese nueva descripción: ");
-                if (fgets(buffer, sizeof(buffer), stdin)) {
-                    removerSaltoLinea(buffer);
-                    nuevaCadena = duplicarCadena(buffer);
-                    if(nuevaCadena != NULL) {
-                        free(carpeta->descripcion);
-                        carpeta->descripcion = nuevaCadena;
-                        printf("Descripción actualizada correctamente.\n");
-                    } else {
-                        printf("Error al asginar memoria")
-                     }
-                }
-                break;
-
-            case 3:
-                int nuevo_tipo;
-                do {
-                    printf("Ingrese nuevo tipo de dato (1=declaraciones, 2=pruebas generales, 3=diligencias, 4=denuncia): ");
-                    if (scanf("%d", &nuevo_tipo) != 1) {
-                        printf("Entrada inválida.\n");
-                        while (getchar() != '\n'); // limpiar caracteres no numéricos
-                        continue;
-                }
-                    while (getchar() != '\n'); // limpiar el salto de línea restante
-                    if (nuevo_tipo < 1 || nuevo_tipo > 4) {
-                        printf("Tipo de dato inválido. Intente nuevamente.\n");
-                    }
-                } while (nuevo_tipo < 1 || nuevo_tipo > 4);
-
-                carpeta->tipoDeDato = nuevo_tipo;
-                printf("Tipo de dato actualizado correctamente.\n");
-
-            case 0:
-                printf("Saliendo...\n");
-                break;
-
-            default:
-                printf("Opción inválida. Intente nuevamente.\n");
-                break;
-        }
-    }
-}
 void modificarDatosCarpetaDesdeMinisterio(struct ministerio *ministerio) {
     if (ministerio == NULL) {
         printf("Ministerio no válido.\n");
@@ -88,14 +10,12 @@ void modificarDatosCarpetaDesdeMinisterio(struct ministerio *ministerio) {
     fgets(ruc, sizeof(ruc), stdin);
     removerSaltoLinea(ruc);
 
-    // Se asume que ya tienes esta función implementada:
     struct datosCarpeta *carpeta = buscarCarpetaPorRUC(ministerio, ruc);
     if (carpeta == NULL) {
         printf("No se encontró la carpeta.\n");
         return;
     }
 
-    // --- Comienza la modificación directamente aquí ---
     int opcion = -1;
     char buffer[300];
     char* nuevaCadena;
