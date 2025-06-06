@@ -13,7 +13,5 @@ struct involucrados* buscarImputadoEnCausa(struct causa *c, const char *rutImput
             return inv;
         }
     }
-
-    // Si no se encuentra
     return NULL;
 }
