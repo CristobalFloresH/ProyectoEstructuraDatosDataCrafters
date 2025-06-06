@@ -1,5 +1,5 @@
 
-void modificarDatosCarpetaDesdeMinisterio(struct ministerio *ministerio) {
+void modificarDatosCarpeta(struct ministerio *ministerio) {
     if (ministerio == NULL) {
         printf("Ministerio no válido.\n");
         return;
