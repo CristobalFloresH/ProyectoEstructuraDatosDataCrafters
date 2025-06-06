@@ -5,7 +5,7 @@ struct nodoPersonasABB* minimo(struct nodoPersonasABB *arbol) { // esta funcion 
 }
 
 void eliminarPersona(struct nodoPersonasABB **personas, char *rut) {
-    if (personas == NULL || *personas == NULL) {
+    if (personas == NULL) {
         printf("No se encontraron personas\n");
         return;
     }
@@ -16,7 +16,7 @@ void eliminarPersona(struct nodoPersonasABB **personas, char *rut) {
         eliminarPersonasPorRut(&((*personas)->izquierda), rut);
     }
     else if (comparar > 0) {
-        eliminarPersonasPorRut(&((*personas)->derecha), rut);
+        eliminarPersona(&((*personas)->derecha), rut);
     }
     else {
         // Nodo a eliminar encontrado
@@ -42,7 +42,7 @@ void eliminarPersona(struct nodoPersonasABB **personas, char *rut) {
             minNodo->datosPersona = aux;
 
             // Eliminar el sucesor mínimo recursivamente
-            eliminarPersonasPorRut(&(nodoEliminar->derecha), aux->rut);
+            eliminarPersonas(&(nodoEliminar->derecha), aux->rut);
         }
     }
 }
