@@ -1,4 +1,4 @@
-void cambiarTipoInvolucradoDesdeMinisterio(struct ministerio *ministerio) {
+void cambiarTipoInvolucrado(struct ministerio *ministerio) {
     if (ministerio == NULL) {
         printf("Ministerio no válido.\n");
         return;
