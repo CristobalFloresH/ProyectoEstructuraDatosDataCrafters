@@ -5,21 +5,31 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
         return;
     }
 
-    char ruc[100];
-    printf("Ingrese el RUC de la causa que contiene la carpeta con la diligencia: ");
+    char ruc[20], fechaFin[50], tipoDiligencia[20];
+    char buffer[300];
+    char *nuevaCadena;
+    int opcion = -1;
+
+    printf("Ingrese el RUC de la causa: ");
     fgets(ruc, sizeof(ruc), stdin);
     removerSaltoLinea(ruc);
 
-    struct datosDiligencias *diligencia = buscarDiligenciaEnCausa(ministerio, ruc);
+    printf("Ingrese la fecha de término de la diligencia (YYYY-MM-DD): ");
+    fgets(fechaFin, sizeof(fechaFin), stdin);
+    removerSaltoLinea(fechaFin);
+
+    printf("Ingrese el tipo de diligencia: ");
+    fgets(tipoDiligencia, sizeof(tipoDiligencia), stdin);
+    removerSaltoLinea(tipoDiligencia);
+
+    // Buscar diligencia específica a modificar 
+    struct datosDiligencias *diligencia = buscarDiligenciaPorFechaYTipo(ministerio, ruc, fechaFin, tipoDiligencia);
     if (diligencia == NULL) {
-        printf("No se encontró la diligencia.\n");
+        printf("No se encontró la diligencia con esos datos.\n");
         return;
     }
 
-    int opcion = -1;
-    char buffer[300];
-    char *nuevaCadena;
-
+    
     while (opcion != 0) {
         printf("\n--- Modificar Datos de Diligencia ---\n");
         printf("1. Modificar prioridad (Actual: %d)\n", diligencia->prioridad);
@@ -38,7 +48,7 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
             continue;
         }
 
-        while (getchar() != '\n');
+        while (getchar() != '\n'); // limpiar buffer
 
         switch (opcion) {
             case 1: {
@@ -65,12 +75,10 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    if (nuevaCadena != NULL) {
+                    if (nuevaCadena) {
                         free(diligencia->fechaInicio);
                         diligencia->fechaInicio = nuevaCadena;
                         printf("Fecha inicio actualizada correctamente.\n");
-                    } else {
-                        printf("Error al asignar memoria.\n");
                     }
                 }
                 break;
@@ -80,12 +88,10 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    if (nuevaCadena != NULL) {
+                    if (nuevaCadena) {
                         free(diligencia->fechaFin);
                         diligencia->fechaFin = nuevaCadena;
                         printf("Fecha fin actualizada correctamente.\n");
-                    } else {
-                        printf("Error al asignar memoria.\n");
                     }
                 }
                 break;
@@ -95,12 +101,10 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    if (nuevaCadena != NULL) {
+                    if (nuevaCadena) {
                         free(diligencia->descripcion);
                         diligencia->descripcion = nuevaCadena;
                         printf("Descripción actualizada correctamente.\n");
-                    } else {
-                        printf("Error al asignar memoria.\n");
                     }
                 }
                 break;
@@ -110,12 +114,10 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    if (nuevaCadena != NULL) {
+                    if (nuevaCadena) {
                         free(diligencia->estado);
                         diligencia->estado = nuevaCadena;
                         printf("Estado actualizado correctamente.\n");
-                    } else {
-                        printf("Error al asignar memoria.\n");
                     }
                 }
                 break;
@@ -125,18 +127,16 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    if (nuevaCadena != NULL) {
+                    if (nuevaCadena) {
                         free(diligencia->tipoDiligencia);
                         diligencia->tipoDiligencia = nuevaCadena;
                         printf("Tipo de diligencia actualizado correctamente.\n");
-                    } else {
-                        printf("Error al asignar memoria.\n");
                     }
                 }
                 break;
 
             case 0:
-                printf("Saliendo...\n");
+                printf("Saliendo del menú de modificación.\n");
                 break;
 
             default:
