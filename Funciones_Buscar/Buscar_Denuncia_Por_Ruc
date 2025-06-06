@@ -1,6 +1,4 @@
 struct denuncia *buscarDenunciaPorRuc(struct nodoDenuncias *listaDenuncias, char *rucBuscado){
-
-    //se declara puntero para recorrer
     struct nodoDenuncias *actual = listaDenuncias;
     
     //se recorre la lista mientras queden nodos por revisar 
