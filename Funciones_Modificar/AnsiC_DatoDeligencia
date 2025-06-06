@@ -1,5 +1,5 @@
 
-void modificarDatosDiligenciaDesdeMinisterio(struct ministerio *ministerio) {
+void modificarDatosDiligencia(struct ministerio *ministerio) {
     if (ministerio == NULL) {
         printf("Ministerio no válido.\n");
         return;
