@@ -5,6 +5,7 @@ struct causa *buscarCausaPorRuc(struct nodoCausas *causas, char *rucBuscado) {
 
     struct nodoCausas *actual = causas;
 
+    //se recorre lista circular hasta encontrar el ruc igual, si no se encuentra retorna null
     do {
         if (strcmp(actual->datosCausa->ruc, rucBuscado) == 0)
         {
