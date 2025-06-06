@@ -5,7 +5,7 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
         return;
     }
 
-    char ruc[20], fechaFin[50], tipoDiligencia[20];
+    char ruc[20], fechaInicio[50], tipoDiligencia[20];
     char buffer[300];
     char *nuevaCadena;
     int opcion = -1;
@@ -14,22 +14,21 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
     fgets(ruc, sizeof(ruc), stdin);
     removerSaltoLinea(ruc);
 
-    printf("Ingrese la fecha de término de la diligencia (YYYY-MM-DD): ");
-    fgets(fechaFin, sizeof(fechaFin), stdin);
-    removerSaltoLinea(fechaFin);
+    printf("Ingrese la fecha de inicio de la diligencia (YYYY-MM-DD): ");
+    fgets(fechaInicio, sizeof(fechaInicio), stdin);
+    removerSaltoLinea(fechaInicio);
 
     printf("Ingrese el tipo de diligencia: ");
     fgets(tipoDiligencia, sizeof(tipoDiligencia), stdin);
     removerSaltoLinea(tipoDiligencia);
 
     // Buscar diligencia específica a modificar 
-    struct datosDiligencias *diligencia = buscarDiligenciaPorFechaYTipo(ministerio, ruc, fechaFin, tipoDiligencia);
+    struct datosDiligencias *diligencia = buscarDiligenciaPorFechaYTipo(ministerio, ruc, fechaInicio, tipoDiligencia);
     if (diligencia == NULL) {
         printf("No se encontró la diligencia con esos datos.\n");
         return;
     }
 
-    
     while (opcion != 0) {
         printf("\n--- Modificar Datos de Diligencia ---\n");
         printf("1. Modificar prioridad (Actual: %d)\n", diligencia->prioridad);
@@ -144,3 +143,4 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
         }
     }
 }
+
