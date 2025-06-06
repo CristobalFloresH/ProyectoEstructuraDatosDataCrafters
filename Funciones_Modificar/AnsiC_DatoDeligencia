@@ -10,7 +10,7 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
     fgets(ruc, sizeof(ruc), stdin);
     removerSaltoLinea(ruc);
 
-    struct datosDiligencias *diligencia = buscarDiligenciaPorRUC(ministerio, ruc);
+    struct datosDiligencias *diligencia = buscarDiligenciaEnCausa(ministerio, ruc);
     if (diligencia == NULL) {
         printf("No se encontró la diligencia.\n");
         return;
