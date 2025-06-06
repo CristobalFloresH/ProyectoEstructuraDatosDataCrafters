@@ -50,10 +50,10 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
                 inv->datosImputados = NULL;
             }
 
-            // Cambiar tipo
+            // Cambiamos tipo
             inv->tipoInvolucrado = nuevoTipo;
 
-            // Si ahora es imputado y no tiene datosImputados, inicializarlos
+            // Si ahora es imputado y no tiene datosImputados, inicializamos
             if (nuevoTipo == 2 && inv->datosImputados == NULL) {
                 inv->datosImputados = malloc(sizeof(struct datosImputados));
                 if (inv->datosImputados == NULL) {
@@ -61,7 +61,7 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
                     return;
                 }
 
-                // Inicializar campos
+                // Inicializamos campos
                 inv->datosImputados->declaracion = NULL;
                 inv->datosImputados->medidasCautelar = 7;
                 inv->datosImputados->fechaInicioMedida = NULL;
