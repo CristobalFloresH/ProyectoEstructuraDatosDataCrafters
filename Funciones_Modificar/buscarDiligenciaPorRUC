@@ -30,5 +30,5 @@ struct datosDiligencias* buscarDiligenciaPorRUC(struct ministerio *ministerio, c
         actualCausa = actualCausa->siguiente;
     } while (actualCausa != inicio);
 
-    return NULL; // No se encontró diligencia con ese RUC
+    return NULL; 
 }
