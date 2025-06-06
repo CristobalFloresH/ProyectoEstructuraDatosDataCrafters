@@ -1,0 +1,32 @@
+void crearYagregarCausaNueva(struct ministerioPublico *ministerio){
+    char ruc[30]; 
+            
+            
+    printf("Ingrese RUC de la causa.\n");
+    scanf(" %[^\n]", ruc);
+            
+    struct denuncia *denunciaAsociada = buscarDenunciaPorRuc(ruc);
+            
+    if(denunciaAsociada == NULL){
+        printf("No se encontro denuncia con ese RUC\n");
+        return;
+    }
+            
+    struct causa *nuevaCausa = (struct causa *)malloc(sizeof(struct causa));
+    if(nuevaCausa == NULL){
+        printf("Error al asignar memoria\n");
+        return;
+    }
+            
+    nuevaCausa->ruc = malloc(strlen(ruc) + 1);
+    strcpy(nuevaCausa->ruc, ruc);
+    nuevaCausa->denuncia = denunciaAsociada;
+    nuevaCausa->datosCarpetas = NULL;
+    nuevaCausa->involucrados = NULL;
+    nuevaCausa->tamInvolucrados = 0;
+    nuevaCausa->estadoCausa = 2;
+    nuevaCausa->sentencia = NULL;
+        
+    agregarCausa(&ministerio->causas, nuevaCausa);
+    printf("Causa agregada correctamente\n");
+}    
