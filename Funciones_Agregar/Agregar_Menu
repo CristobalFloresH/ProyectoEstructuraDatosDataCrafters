@@ -1,4 +1,4 @@
-void agregar(struct ministerio *ministerio){
+void menuAgregar(struct ministerio *ministerio){
     int opcion;
 
     printf("Marque una opcion: \n\n");
