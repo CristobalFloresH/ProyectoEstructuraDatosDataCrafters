@@ -1,1 +1,25 @@
+struct datosDiligencias* buscarDiligenciaPorRUC(struct ministerio *ministerio, const char *ruc) {
+    if (ministerio == NULL || ruc == NULL) {
+        printf("Error: ministerio o RUC inválido.\n");
+        return NULL;
+    }
+
+    struct causa *c = buscarCausaConRUC(ministerio, ruc);
+    if (c == NULL) {
+        printf("No se encontró la causa con RUC: %s\n", ruc);
+        return NULL;
+    }
+
+    struct nodoDatosCarpetas *carpetaNodo = c->datosCarpetas;
+    while (carpetaNodo != NULL) {
+        struct datosCarpeta *carpeta = carpetaNodo->datosCarpeta;
+        if (carpeta != NULL && carpeta->tipoDeDato == 3 && carpeta->datosDiligencias != NULL) {
+            return carpeta->datosDiligencias;  
+        }
+        carpetaNodo = carpetaNodo->siguiente;
+    }
+
+    printf("No se encontró ninguna diligencia en la causa con RUC: %s\n", ruc);
+    return NULL;
+}
 
