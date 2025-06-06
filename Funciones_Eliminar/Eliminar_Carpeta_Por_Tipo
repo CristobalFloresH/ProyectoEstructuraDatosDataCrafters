@@ -1,10 +1,10 @@
 void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, int tipoDeDato) {
-    if (listaCausas == NULL) { //Comprobamos existencia de causa.
+    if (listaCausas == NULL || *listaCausas == NULL) { // Comprobamos existencia de causa.
         printf("No hay causas registradas.\n");
         return;
     }
 
-    struct nodoCausas *causa = buscarCausaPorRUC(*listaCausas, ruc); //Llamamos funcion para encontrar causa.
+    struct nodoCausas *causa = buscarCausaPorRUC(*listaCausas, ruc); // Encontramos causa.
     if (causa == NULL) {
         printf("No se encontró una causa con ese RUC.\n");
         return;
@@ -14,40 +14,48 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
 
     while (carpeta != NULL) {
         if (carpeta->datosCarpeta != NULL && carpeta->datosCarpeta->tipoDeDato == tipoDeDato) {
+            struct nodoDatosCarpetas *aEliminar = carpeta;
+            carpeta = carpeta->siguiente; // Guardamos siguiente antes de eliminar
+
+            // Reenlazamos para sacar nodo de la lista doble
+            reenlazarDatosCarpeta(&(causa->datosCausa->datosCarpetas), aEliminar);
+
+            // Liberamos según tipo
             switch (tipoDeDato) {
-                case 1: //declaraciones
-                    free(carpeta->datosCarpeta->descripcion);
-                    free(carpeta->datosCarpeta->fecha);
+                case 1: // declaraciones
+                case 2: // pruebas
+                    free(aEliminar->datosCarpeta->descripcion);
+                    free(aEliminar->datosCarpeta->fecha);
                     break;
 
-                case 2: // pruebas
-                    free(carpeta->datosCarpeta->descripcion);
-                    free(carpeta->datosCarpeta->fecha);
+                case 3: // diligencias
+                    if (aEliminar->datosCarpeta->datosDiligencias) {
+                        liberarDatosDiligencias(aEliminar->datosCarpeta->datosDiligencias);
+                        free(aEliminar->datosCarpeta->datosDiligencias);
+                    }
                     break;
-                    
-                case 3: //digligencias
-                    if (carpeta->datosCarpeta->datosDiligencias) {
-                        liberarDatosDiligencias(carpeta->datosCarpeta->datosDiligencias);
-                        free(carpeta->datosCarpeta->datosDiligencias);
-                        carpeta->datosCarpeta->datosDiligencias = NULL;
+
+                case 4: // denuncia
+                    if (aEliminar->datosCarpeta->datosDenuncia) {
+                        liberarDenuncia(aEliminar->datosCarpeta->datosDenuncia);
+                        free(aEliminar->datosCarpeta->datosDenuncia);
                     }
-                break;
-                
-                case 4: //denuncia
-                    if (carpeta->datosCarpeta->datosDenuncia) {
-                        liberarDenuncia(carpeta->datosCarpeta->datosDenuncia);
-                        free(carpeta->datosCarpeta->datosDenuncia);
-                        carpeta->datosCarpeta->datosDenuncia = NULL;
-                    }
-                break;
+                    break;
+
                 default:
                     printf("Tipo de dato no válido.\n");
-                return;
+                    return;
             }
+
+            free(aEliminar->datosCarpeta);
+            free(aEliminar);
+
             printf("Dato eliminado correctamente.\n");
-            return;  
+            return; // Salimos tras eliminar la primera coincidencia
         }
-        carpeta = carpeta->siguiente;
+        else {
+            carpeta = carpeta->siguiente;
+        }
     }
 
     printf("No se encontraron datos del tipo especificado en carpetas.\n");
