@@ -15,7 +15,7 @@ void menuPrincipal(struct ministerio *ministerio) {
 
         switch(opcion) {
             case 1:
-                agregar(ministerio);
+                menuAgregar(ministerio);
                 break;
             case 2:
                 menuEliminar(ministerio);
