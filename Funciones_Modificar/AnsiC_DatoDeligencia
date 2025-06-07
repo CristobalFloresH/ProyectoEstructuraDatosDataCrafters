@@ -23,7 +23,7 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
     removerSaltoLinea(tipoDiligencia);
 
     // Buscar diligencia específica a modificar 
-    struct datosDiligencias *diligencia = buscarDiligenciaPorFechaYTipo(ministerio, ruc, fechaInicio, tipoDiligencia);
+    struct datosDiligencias *diligencia = buscarDiligencia(ministerio, ruc, fechaInicio, tipoDiligencia);
     if (diligencia == NULL) {
         printf("No se encontró la diligencia con esos datos.\n");
         return;
