@@ -17,7 +17,7 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
         return;
     }
 
-    denunciaMod = buscarDenunciaPorRUC(ministerio, ruc);
+    denunciaMod = buscarDenunciaPorRuc(ministerio, ruc);
     if (denunciaMod == NULL) {
         printf("No se encontró una denuncia con el RUC ingresado.\n");
         return;
