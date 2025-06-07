@@ -1,4 +1,4 @@
-void menuPrincipal(struct ministerio *ministerio) {
+void menuModificar(struct ministerio *ministerio) {
     int opcion;
     char bufferRUC[100];
     char bufferRUT[100];
@@ -62,7 +62,7 @@ void menuPrincipal(struct ministerio *ministerio) {
                 break;
 
             case 7:
-                modificarPersonaPorRUT(ministerio);
+                modificarPersonaPorRut(ministerio);
                 break;
 
             case 0:
