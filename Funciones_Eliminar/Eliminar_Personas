@@ -13,7 +13,7 @@ void eliminarPersona(struct nodoPersonasABB **personas, char *rut) {
     int comparar = strcmp(rut, (*personas)->datosPersona->rut);
 
     if (comparar < 0) {
-        eliminarPersonasPorRut(&((*personas)->izquierda), rut);
+        eliminarPersona(&((*personas)->izquierda), rut);
     }
     else if (comparar > 0) {
         eliminarPersona(&((*personas)->derecha), rut);
