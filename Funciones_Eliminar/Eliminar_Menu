@@ -1,12 +1,14 @@
 void menuEliminar(struct ministerio *ministerio) {
     int opcion;
     char rut[30], ruc[30];
-
-    printf("Ingrese una opcion:\n");
+    printf("\n========================================\n");
+    printf("MENU ELIMINAR\n");
+    printf("\n========================================\n");
     printf("1. Eliminar persona\n");
     printf("2. Eliminar causa\n");
     printf("3. Eliminar denuncia\n");
     printf("4. Eliminar datos de carpeta\n");
+    printf("Ingrese una opcion.");
     scanf("%d", &opcion);
 
     switch (opcion) {
