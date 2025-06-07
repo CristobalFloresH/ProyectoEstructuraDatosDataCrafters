@@ -1,4 +1,9 @@
 void menuEliminarCausa(struct ministerio *ministerio) {
+    if (ministerio == NULL) {
+        printf("Ministerio no inicializado.\n");
+        return;
+    }
+
     int opcion;
     char rut[30], ruc[30];
 
@@ -7,7 +12,9 @@ void menuEliminarCausa(struct ministerio *ministerio) {
     printf("2. Eliminar Carpeta\n");
     printf("3. Eliminar Involucrado\n");
     printf("4. Eliminar Sentencia\n");
+    printf("Ingrese opción: ");
     scanf("%d", &opcion);
+    printf("\n");
 
     switch (opcion) {
         case 1:
@@ -17,7 +24,7 @@ void menuEliminarCausa(struct ministerio *ministerio) {
             break;
 
         case 2:
-            menuEliminarCarpeta(ministerio); // Asume que dentro se pregunta por el RUC
+            menuEliminarCarpeta(ministerio);
             break;
 
         case 3:
@@ -26,12 +33,12 @@ void menuEliminarCausa(struct ministerio *ministerio) {
             eliminarInvolucrado(&(ministerio->causas), rut);
             break;
 
-        case 4:
+        case 4: {
             printf("Ingrese RUC de la sentencia a eliminar:\n");
             scanf("%s", ruc);
             struct nodoCausas *encontrado = buscarCausaPorRUC(ministerio->causas, ruc);
 
-            if (encontrado != NULL && encontrado->datosCausa->sentencia != NULL) {
+            if (encontrado != NULL && encontrado->datosCausa != NULL && encontrado->datosCausa->sentencia != NULL) {
                 free(encontrado->datosCausa->sentencia);
                 encontrado->datosCausa->sentencia = NULL;
                 printf("Sentencia eliminada correctamente.\n");
@@ -39,6 +46,7 @@ void menuEliminarCausa(struct ministerio *ministerio) {
                 printf("No se encontró sentencia para eliminar.\n");
             }
             break;
+        }
 
         default:
             printf("Opción no válida.\n");
