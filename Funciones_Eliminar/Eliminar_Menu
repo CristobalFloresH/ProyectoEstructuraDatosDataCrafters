@@ -19,37 +19,34 @@ void menuEliminar(struct ministerio *ministerio) {
         switch (opcion) {
             case 1:
                 printf("Ingrese RUT de la persona a eliminar:\n");
-            scanf("%s", rut);
-            getchar();
-            eliminarPersona(&(ministerio->personas), rut);
-            break;
+                scanf("%s", rut);
+                getchar();
+                eliminarPersona(&(ministerio->personas), rut);
+                break;
 
             case 2:
-                printf("Ingrese RUC de la causa a eliminar:\n");
-            scanf("%s", ruc);
-            getchar();
-            eliminarCausa(&(ministerio->causas), ruc);
-            break;
+                menuEliminarCausa(ministerio);
+                break;
 
             case 3:
                 printf("Ingrese RUT del denunciante:\n");
-            scanf("%s", rut);
-            getchar();
-
-            struct persona *persona = buscarPersonaPorRut(ministerio->personas, rut);
-            if (persona == NULL)
-                printf("Persona no encontrada.\n");
-            else {
-                printf("Ingrese RUC de la denuncia a eliminar:\n");
-                scanf("%s", ruc);
+                scanf("%s", rut);
                 getchar();
-                eliminarDenuncia(&(persona->denuncias), ruc);
-            }
-            break;
+
+                struct persona *persona = buscarPersonaPorRut(ministerio->personas, rut);
+                if (persona == NULL)
+                    printf("Persona no encontrada.\n");
+                else {
+                    printf("Ingrese RUC de la denuncia a eliminar:\n");
+                    scanf("%s", ruc);
+                    getchar();
+                    eliminarDenuncia(&(persona->denuncias), ruc);
+                }
+                break;
 
             case 4:
                 menuEliminarCarpeta(&(ministerio->causas));
-            break;
+                break;
 
             case 5:
                 printf("Ingrese RUC de la causa y RUT del involucrado a eliminar.\n");
@@ -58,14 +55,16 @@ void menuEliminar(struct ministerio *ministerio) {
                 scanf("%s", rut);
                 getchar();
                 eliminarInvolucrado(&(ministerio->causas), ruc, rut);
+                break;
 
             case 0:
                 printf("Volver al menu principal\n");
                 menuPrincipal(ministerio);
                 break;
-            
+
             default:
                 printf("Opcion no valida.\n");
-            break;
+                break;
         }
- 
+    }
+}
