@@ -1,4 +1,4 @@
-void modificarPersonaPorRUT(struct ministerio *ministerio) {
+void modificarPersonaPorRut(struct ministerio *ministerio) {
     char rut[20];
     char palabra[300];
     int opcion = -1;
