@@ -11,6 +11,7 @@ void menuEliminar(struct ministerio *ministerio) {
         printf("3. Eliminar denuncia.\n");
         printf("4. Eliminar datos de carpeta.\n");
         printf("5. Eliminar Involucrados.\n");
+        printf("0. Cerrar menu.\n");
         printf("Ingrese una opcion.");
         scanf("%d", &opcion);
         getchar();
