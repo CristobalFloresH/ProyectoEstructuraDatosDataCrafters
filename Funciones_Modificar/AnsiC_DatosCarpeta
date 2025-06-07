@@ -11,7 +11,7 @@ void modificarDatosCarpeta(struct ministerio *ministerio) {
     removerSaltoLinea(ruc);
 
     // Buscar causa
-    struct causa* causa = buscarCausaPorRUC(ministerio, ruc);
+    struct causa* causa = buscarCausaPorRuc(ministerio, ruc);
     if (causa == NULL) {
         printf("No se encontró una causa con ese RUC.\n");
         return;
