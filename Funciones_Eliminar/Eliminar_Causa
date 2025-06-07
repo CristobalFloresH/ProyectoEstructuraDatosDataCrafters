@@ -4,7 +4,7 @@ void eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
         return;
     }
 
-    struct nodoCausas *aEliminar = buscarCausaPorRUC(*listaCausa, ruc);
+    struct nodoCausas *aEliminar = buscarNodoCausa(*listaCausa, ruc);
     if (aEliminar != NULL) {
         reenlazarNodoCircularDoble(listaCausa, aEliminar);
         liberarCausa(aEliminar->datosCausa);
