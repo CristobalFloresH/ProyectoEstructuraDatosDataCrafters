@@ -6,15 +6,24 @@ void modificarDatosCarpeta(struct ministerio *ministerio) {
     }
 
     char ruc[100];
-    printf("Ingrese el RUC de la causa para buscar la carpeta: ");
+    printf("Ingrese el RUC de la causa: ");
     fgets(ruc, sizeof(ruc), stdin);
     removerSaltoLinea(ruc);
 
-    struct datosCarpeta *carpeta = buscarCarpetaPorRUC(ministerio, ruc);
-    if (carpeta == NULL) {
-        printf("No se encontró la carpeta.\n");
+    // Buscar causa
+    struct causa* causa = buscarCausaPorRUC(ministerio, ruc);
+    if (causa == NULL) {
+        printf("No se encontró una causa con ese RUC.\n");
         return;
     }
+
+    // Obtener la única carpeta
+    if (causa->datosCarpetas == NULL || causa->datosCarpetas->datosCarpeta == NULL) {
+        printf("No hay carpeta investigativa asociada a esta causa.\n");
+        return;
+    }
+
+    struct datosCarpeta *carpeta = causa->datosCarpetas->datosCarpeta;
 
     int opcion = -1;
     char buffer[300];
@@ -30,7 +39,7 @@ void modificarDatosCarpeta(struct ministerio *ministerio) {
 
         if (scanf("%d", &opcion) != 1) {
             printf("Entrada inválida.\n");
-            while (getchar() != '\n'); // limpiar buffer
+            while (getchar() != '\n');
             opcion = -1;
             continue;
         }
@@ -42,9 +51,7 @@ void modificarDatosCarpeta(struct ministerio *ministerio) {
                 if (fgets(buffer, sizeof(buffer), stdin)) {
                     removerSaltoLinea(buffer);
                     nuevaCadena = duplicarCadena(buffer);
-                    if (carpeta->fecha != NULL) {
-                        free(carpeta->fecha);
-                    }
+                    free(carpeta->fecha);
                     carpeta->fecha = nuevaCadena;
                     printf("Fecha actualizada correctamente.\n");
                 }
@@ -71,10 +78,10 @@ void modificarDatosCarpeta(struct ministerio *ministerio) {
                     printf("Ingrese nuevo tipo de dato (1=declaraciones, 2=pruebas generales, 3=diligencias, 4=denuncia): ");
                     if (scanf("%d", &nuevo_tipo) != 1) {
                         printf("Entrada inválida.\n");
-                        while (getchar() != '\n'); // limpiar caracteres no numéricos
+                        while (getchar() != '\n');
                         continue;
                     }
-                    while (getchar() != '\n'); // limpiar salto de línea
+                    while (getchar() != '\n');
                     if (nuevo_tipo < 1 || nuevo_tipo > 4) {
                         printf("Tipo de dato inválido. Intente nuevamente.\n");
                     }
