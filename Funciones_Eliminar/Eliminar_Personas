@@ -4,12 +4,6 @@ struct nodoPersonasABB* minimo(struct nodoPersonasABB *arbol) { // esta funcion 
     return arbol;
 }
 
-struct nodoPersonasABB* minimo(struct nodoPersonasABB *arbol) {
-    while (arbol != NULL && arbol->izquierda != NULL)
-        arbol = arbol->izquierda;
-    return arbol;
-}
-
 void eliminarPersona(struct nodoPersonasABB **personas, char *rut) {
     if (personas == NULL || *personas == NULL) {
         printf("No se encontraron personas\n");
