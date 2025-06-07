@@ -2,7 +2,9 @@ void menuEliminarCarpeta(struct ministerio *ministerio) {
     int opcion;
     char rut[30], ruc[30];
 
-    printf("Selecciona opcion:\n");
+    printf("\n========================================\n");
+    printf("MENU ELIMINAR CAUSA\n");
+    printf("\n========================================\n");
     printf("1. Eliminar Carpeta Completa.\n");
     printf("2. Eliminar Declaraciones.\n");
     printf("3. Eliminar Pruebas.\n");
@@ -10,7 +12,7 @@ void menuEliminarCarpeta(struct ministerio *ministerio) {
     printf("5. Eliminar Denuncias.\n");
     printf("Ingrese opcion: ");
     scanf("%d", &opcion);
-    printf("\n");
+    getchar();
 
     switch (opcion) {
         case 1:
