@@ -33,15 +33,16 @@ void eliminarInvolucrado(struct nodoCausas **listaCausas, const char *rut) {
         return;
     }
 
-    struct nodoCausas *actual = *listaCausas;
+    struct nodoCausas *inicio = *listaCausas;
+    struct nodoCausas *actual = inicio;
 
-    while (actual != NULL) {
+    do {
         if (actual->datosCausa != NULL && actual->datosCausa->involucrados != NULL) {
             eliminarInvolucradoPorRut(actual->datosCausa->involucrados, actual->datosCausa->tamInvolucrados, rut);
             return; // Sale tras eliminar la primera coincidencia
         }
         actual = actual->siguiente;
-    }
+    } while (actual != inicio);
 
     printf("No se encontró involucrado con RUT %s en ninguna causa.\n", rut);
 }
