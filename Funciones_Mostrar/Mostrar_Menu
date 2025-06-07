@@ -1,5 +1,4 @@
-void menuMostrar(struct nodoPersonasABB *arbolPersonas, struct nodoCausas *listaCausas) {
-    /** Variables para las opciones de menú, rut/ruc y tipo **/
+void menuMostrar(struct ministerio *ministerio) {
     int opcion = -1;
     int segundaOpcion = -1;
     char rut[32];
@@ -7,9 +6,8 @@ void menuMostrar(struct nodoPersonasABB *arbolPersonas, struct nodoCausas *lista
     int tipo;
     struct causa *causaActual;
 
-    /** El menú principal de mostrar se ejecuta mientras el persona no seleccione "volver" **/
     while (opcion != 0) {
-        /** Se imprime el menú principal de opciones de mostrar **/
+        // Imprime el menú principal de mostrar
         printf("\n--- MENÚ MOSTRAR ---\n");
         printf("1. Personas\n");
         printf("2. Denuncias de personas\n");
@@ -20,155 +18,126 @@ void menuMostrar(struct nodoPersonasABB *arbolPersonas, struct nodoCausas *lista
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
 
-        /** Se usa un switch para determinar la acción según la opción ingresada **/
         switch (opcion) {
-            case 1: /** Mostrar personas **/
+            case 1: // Mostrar personas
                 printf("\n1. Mostrar TODAS las personas\n");
                 printf("2. Mostrar persona por RUT\n");
                 printf("Seleccione una opción: ");
                 scanf("%d", &segundaOpcion);
-                /** Se evalúa la opción elegida en el submenú de personas **/
                 switch (segundaOpcion) {
                     case 1:
-                        /** Llama a la función que muestra todos los personas del ABB **/
-                        mostrarTodasLasPersonas(arbolPersonas);
+                        mostrarTodosLosUsuarios(ministerio->personas);
                         break;
                     case 2:
-                        /** Pide a el usuario el RUT y muestra la persona correspondiente **/
                         printf("Ingrese RUT: ");
                         scanf("%s", rut);
-                        mostrarPersonaPorRut(arbolPersonas, rut);
+                        mostrarUsuarioPorRut(ministerio->personas, rut);
                         break;
                     default:
-                        /** Opción inválida en submenú de personas **/
                         printf("Opción inválida.\n");
                         break;
                 }
                 break;
 
-            case 2: /** Mostrar denuncias de personas **/
+            case 2: // Mostrar denuncias de personas
                 printf("\n1. Mostrar TODAS las denuncias de todas las personas\n");
                 printf("2. Mostrar denuncias de una persona por RUT\n");
                 printf("Seleccione una opción: ");
                 scanf("%d", &segundaOpcion);
-                /** Se evalúa la opción elegida en el submenú de denuncias **/
                 switch (segundaOpcion) {
                     case 1:
-                        /** Muestra todas las denuncias de todas las personas del ABB **/
-                        mostrarTodasLasDenunciasDePersonas(arbolPersonas);
+                        mostrarTodasLasDenunciasDePersonas(ministerio->personas);
                         break;
                     case 2:
-                        /** Pide RUT y muestra las denuncias de la persona correspondiente **/
                         printf("Ingrese RUT: ");
                         scanf("%s", rut);
-                        mostrarDenunciaPorRut(arbolPersonas, rut);
+                        mostrarDenunciaPorRut(ministerio->personas, rut);
                         break;
                     default:
-                        /** Opción inválida en submenú de denuncias **/
                         printf("Opción inválida.\n");
                         break;
                 }
                 break;
 
-            case 3: /** Mostrar causas **/
+            case 3: // Mostrar causas
                 printf("\n1. Mostrar TODAS las causas\n");
                 printf("2. Mostrar una causa por RUC\n");
                 printf("Seleccione una opción: ");
                 scanf("%d", &segundaOpcion);
-                /** Se evalúa la opción elegida en el submenú de causas **/
                 switch (segundaOpcion) {
                     case 1:
-                        /** Muestra todas las causas recorriendo la lista **/
-                        mostrarTodasLasCausas(listaCausas);
+                        mostrarTodasLasCausas(ministerio->causas);
                         break;
                     case 2:
-                        /** Pide el RUC de la causa y la muestra si existe **/
                         printf("Ingrese RUC de la causa: ");
                         scanf("%s", ruc);
-                        mostrarTodoDatoDeCausaPorRuc(listaCausas, ruc);
+                        mostrarTodoDatoDeCausaPorRuc(ministerio->causas, ruc);
                         break;
                     default:
-                        /** Opción inválida en submenú de causas **/
                         printf("Opción inválida.\n");
                         break;
                 }
                 break;
 
-            case 4: /** Mostrar involucrados de una causa **/
+            case 4: // Mostrar involucrados de una causa
                 printf("\n1. Mostrar TODOS los involucrados de una causa\n");
                 printf("2. Mostrar involucrados de un TIPO en una causa\n");
                 printf("Seleccione una opción: ");
                 scanf("%d", &segundaOpcion);
-                /** Solicita el RUC de la causa para mostrar los involucrados **/
                 printf("Ingrese RUC de la causa: ");
                 scanf("%s", ruc);
-                /** Busca la causa correspondiente por RUC **/
-                causaActual = buscarCausaPorRuc(listaCausas, ruc);
+                causaActual = buscarCausaPorRuc(ministerio->causas, ruc);
                 if (causaActual == NULL) {
-                    /** Informa si no se encuentra la causa **/
                     printf("No se encontró la causa seleccionada.\n");
                     break;
                 }
-                /** Evalúa la opción del submenú de involucrados **/
                 switch (segundaOpcion) {
                     case 1:
-                        /** Muestra todos los involucrados de la causa encontrada **/
                         mostrarTodosInvolucradosCausa(causaActual);
                         break;
                     case 2:
-                        /** Solicita el tipo de involucrado y muestra solo esos **/
                         printf("Ingrese tipo de involucrado (1=Victima, 2=Imputado, 3=Fiscal, 4=Juez): ");
                         scanf("%d", &tipo);
                         mostrarInvolucradosCausaPorTipo(causaActual, tipo);
                         break;
                     default:
-                        /** Opción inválida en submenú de involucrados **/
                         printf("Opción inválida.\n");
                         break;
                 }
                 break;
 
-            case 5: /** Mostrar datos de carpeta investigativa **/
+            case 5: // Mostrar datos de carpeta investigativa
                 printf("\n1. Mostrar TODOS los datos de carpeta de una causa\n");
                 printf("2. Mostrar datos de carpeta por tipo en una causa\n");
                 printf("Seleccione una opción: ");
                 scanf("%d", &segundaOpcion);
-                /** Solicita el RUC de la causa para mostrar datos de carpeta **/
                 printf("Ingrese RUC de la causa: ");
                 scanf("%s", ruc);
-                /** Busca la causa correspondiente por RUC **/
-                causaActual = buscarCausaPorRuc(listaCausas, ruc);
+                causaActual = buscarCausaPorRuc(ministerio->causas, ruc);
                 if (causaActual == NULL) {
-                    /** Informa si no se encuentra la causa **/
                     printf("No se encontró la causa seleccionada.\n");
                     break;
                 }
-                /** Evalúa la opción del submenú de carpeta investigativa **/
                 switch (segundaOpcion) {
                     case 1:
-                        /** Muestra todos los datos de carpeta de la causa encontrada **/
                         mostrarTodosDatosCarpetaCausa(causaActual);
                         break;
                     case 2:
-                        /** Solicita el tipo de dato investigativo y muestra solo esos **/
                         printf("Ingrese tipo de dato (1=Declaración, 2=Prueba, 3=Diligencia, 4=Denuncia): ");
                         scanf("%d", &tipo);
                         mostrarDatosCarpetaCausaPorTipo(causaActual, tipo);
                         break;
                     default:
-                        /** Opción inválida en submenú de carpeta investigativa **/
                         printf("Opción inválida.\n");
                         break;
                 }
                 break;
 
             case 0:
-                /** Sale del menú mostrar **/
                 printf("Saliendo del menú mostrar.\n");
                 break;
 
             default:
-                /** Informa al usuario que la opción seleccionada no es válida **/
                 printf("Opción no válida. Intente de nuevo.\n");
                 break;
         }
