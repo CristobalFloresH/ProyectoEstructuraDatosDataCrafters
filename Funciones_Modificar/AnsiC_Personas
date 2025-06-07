@@ -9,7 +9,7 @@ void modificarPersonaPorRUT(struct ministerio *ministerio) {
     scanf(" %[^\n]", rut);
     getchar(); // Limpia el salto de línea
 
-    p = buscarPersonaPorRUT(ministerio, rut);
+    p = buscarPersonaPorRut(ministerio, rut);
     if (p == NULL) {
         printf("Persona con RUT %s no encontrada.\n", rut);
         return;
