@@ -42,14 +42,16 @@ void liberarInvolucrados(struct involucrados **involucrados, int tam) {
         if (involucrados[i] != NULL) {
             if (involucrados[i]->datosImputados != NULL) {
                 liberarDatosImputados(involucrados[i]->datosImputados);
-                {
-                    free(involucrados[i]);
-                }
+                involucrados[i]->datosImputados = NULL;
             }
+            // No liberamos persona, asumiendo que es compartida
+            free(involucrados[i]);
+            involucrados[i] = NULL;
         }
     }
+
     free(involucrados);
-};
+}
 
 void liberarDatosDiligencias(struct datosDiligencias *degligencias) {
     if (degligencias == NULL)
@@ -91,10 +93,24 @@ void liberarCausa(struct causa *causa) {
 
     if (causa->denuncia != NULL) {
         liberarDenuncia(causa->denuncia);
+        causa->denuncia = NULL;
     }
 
-    liberarDatosCarpeta(causa->datosCarpetas->datosCarpeta);
+    struct nodoDatosCarpetas *actual = causa->datosCarpetas;
+    while (actual != NULL) {
+        struct nodoDatosCarpetas *sig = actual->siguiente;
+        if (actual->datosCarpeta != NULL) {
+            liberarDatosCarpeta(actual->datosCarpeta);
+            actual->datosCarpeta = NULL;
+        }
+        free(actual);
+        actual = sig;
+    }
+    causa->datosCarpetas = NULL;
+
     liberarInvolucrados(causa->involucrados, causa->tamInvolucrados);
+    causa->involucrados = NULL;
 
     free(causa);
-};
+}
+
