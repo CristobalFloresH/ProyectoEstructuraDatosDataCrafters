@@ -3,7 +3,7 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
         return;
     }
 
-    struct causa *c = buscarCausaPorRUC(ministerio, rucCausa);
+    struct causa *c = buscarCausaPorRuc(ministerio, rucCausa);
     if (c == NULL) {
         printf("Causa con RUC %s no encontrada.\n", rucCausa);
         return;
