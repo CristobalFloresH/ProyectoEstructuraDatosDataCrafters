@@ -1,57 +1,63 @@
 void menuEliminarCarpeta(struct ministerio *ministerio) {
-    int opcion;
+    int opcion = -1;
     char rut[30], ruc[30];
 
-    printf("\n========================================\n");
-    printf("MENU ELIMINAR CAUSA\n");
-    printf("\n========================================\n");
-    printf("1. Eliminar Carpeta Completa.\n");
-    printf("2. Eliminar Declaraciones.\n");
-    printf("3. Eliminar Pruebas.\n");
-    printf("4. Eliminar Diligencias.\n");
-    printf("5. Eliminar Denuncias.\n");
-    printf("Ingrese opcion: ");
-    scanf("%d", &opcion);
-    getchar();
+    while (opcion != 0) {
+        printf("\n========================================\n");
+        printf("MENU ELIMINAR CAUSA\n");
+        printf("\n========================================\n");
+        printf("1. Eliminar Carpeta Completa.\n");
+        printf("2. Eliminar Declaraciones.\n");
+        printf("3. Eliminar Pruebas.\n");
+        printf("4. Eliminar Diligencias.\n");
+        printf("5. Eliminar Denuncias.\n");
+        printf("Ingrese opcion: ");
+        scanf("%d", &opcion);
+        getchar();
 
-    switch (opcion) {
-        case 1:
-            printf("Ingrese RUC de carpeta a eliminar:\n");
+        switch (opcion) {
+            case 1:
+                printf("Ingrese RUC de carpeta a eliminar:\n");
             scanf("%s", ruc);
             getchar();
             eliminarCarpetaDeCausa(&(ministerio->causas), ruc);
             break;
 
-        case 2:
-            printf("Ingrese RUC de declaracion a eliminar:\n");
+            case 2:
+                printf("Ingrese RUC de declaracion a eliminar:\n");
             scanf("%s", ruc);
             getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 1);
             break;
 
-        case 3:
-            printf("Ingrese RUC de prueba a eliminar:\n");
+            case 3:
+                printf("Ingrese RUC de prueba a eliminar:\n");
             scanf("%s", ruc);
             getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 2);
             break;
 
-        case 4:
-            printf("Ingrese RUC de diligencia a eliminar:\n");
+            case 4:
+                printf("Ingrese RUC de diligencia a eliminar:\n");
             scanf("%s", ruc);
             getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 3);
             break;
 
-        case 5:
-            printf("Ingrese RUC de denuncia a eliminar:\n");
+            case 5:
+                printf("Ingrese RUC de denuncia a eliminar:\n");
             scanf("%s", ruc);
             getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 4);
             break;
 
-        default:
-            printf("Opcion no valida\n");
+            case 0:
+                printf("Volver al menu eliminar.\n");
+            menuEliminar(ministerio);
+
+            default:
+                printf("Opcion no valida\n");
             break;
-    }
+        }
+    }    
 }
