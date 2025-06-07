@@ -6,15 +6,16 @@ void menuEliminarCausa(struct ministerio *ministerio) {
 
     int opcion;
     char rut[30], ruc[30];
-
-    printf("Selecciona opción:\n");
+    printf("\n========================================\n");
+    printf("MENU ELIMINAR CAUSA:\n");
+    printf("\n========================================\n");
     printf("1. Eliminar Causa\n");
     printf("2. Eliminar Carpeta\n");
     printf("3. Eliminar Involucrado\n");
     printf("4. Eliminar Sentencia\n");
-    printf("Ingrese opción: ");
+    printf("Ingrese opción:");
     scanf("%d", &opcion);
-    printf("\n");
+    getchar();
 
     switch (opcion) {
         case 1:
