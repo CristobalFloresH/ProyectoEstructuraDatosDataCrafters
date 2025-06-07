@@ -16,18 +16,21 @@ void menuEliminar(struct ministerio *ministerio) {
         case 1:
             printf("Ingrese RUT de la persona a eliminar:\n");
             scanf("%s", rut);
+            getchar();
             eliminarPersona(&(ministerio->personas), rut);
             break;
 
         case 2:
             printf("Ingrese RUC de la causa a eliminar:\n");
             scanf("%s", ruc);
+            getchar();
             eliminarCausa(&(ministerio->causas), ruc);
             break;
 
         case 3:
             printf("Ingrese RUT del denunciante:\n");
             scanf("%s", rut);
+            getchar();
 
             struct persona *persona = buscarPersonaPorRut(ministerio->personas, rut);
             if (persona == NULL)
@@ -35,6 +38,7 @@ void menuEliminar(struct ministerio *ministerio) {
             else {
                 printf("Ingrese RUC de la denuncia a eliminar:\n");
                 scanf("%s", ruc);
+                getchar();
                 eliminarDenuncia(&(persona->denuncias), ruc);
             }
             break;
