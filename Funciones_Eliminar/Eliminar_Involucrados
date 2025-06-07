@@ -27,22 +27,25 @@ void eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, cons
     printf("Involucrado con RUT %s eliminado correctamente.\n", rut);
 }
 
-void eliminarInvolucrado(struct nodoCausas **listaCausas, const char *rut) {
+void eliminarInvolucrado(struct nodoCausas **listaCausas, char *ruc, char *rut) {
     if (listaCausas == NULL || *listaCausas == NULL) {
         printf("No hay causas registradas.\n");
         return;
     }
 
+    struct nodoCausas *actual = *listaCausas;
     struct nodoCausas *inicio = *listaCausas;
-    struct nodoCausas *actual = inicio;
 
     do {
-        if (actual->datosCausa != NULL && actual->datosCausa->involucrados != NULL) {
+        if (actual->datosCausa != NULL &&
+            strcmp(actual->datosCausa->ruc, ruc) == 0 && actual->datosCausa->involucrados != NULL) {
+
             eliminarInvolucradoPorRut(actual->datosCausa->involucrados, actual->datosCausa->tamInvolucrados, rut);
-            return; // Sale tras eliminar la primera coincidencia
+            return;
         }
+
         actual = actual->siguiente;
     } while (actual != inicio);
 
-    printf("No se encontró involucrado con RUT %s en ninguna causa.\n", rut);
+    printf("No se encontró la causa con RUC %s.\n", ruc);
 }
