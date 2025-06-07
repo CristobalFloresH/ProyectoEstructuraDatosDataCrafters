@@ -5,7 +5,7 @@ struct datosDiligencias* buscarDiligencia(struct ministerio *ministerio, const c
     }
 
     // Buscar causa por RUC
-    struct causa *c = buscarCausaConRUC(ministerio, ruc);
+    struct causa *c = buscarCausaConRuc(ministerio, ruc);
     if (c == NULL) {
         printf("No se encontró la causa con RUC: %s\n", ruc);
         return NULL;
