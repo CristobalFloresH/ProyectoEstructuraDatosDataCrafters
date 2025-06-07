@@ -11,7 +11,7 @@ void menuEliminar(struct ministerio *ministerio) {
         printf("3. Eliminar denuncia.\n");
         printf("4. Eliminar datos de carpeta.\n");
         printf("5. Eliminar Involucrados.\n");
-        printf("0. Cerrar menu.\n");
+        printf("0. Volver a menu principal.\n");
         printf("Ingrese una opcion.");
         scanf("%d", &opcion);
         getchar();
@@ -60,7 +60,8 @@ void menuEliminar(struct ministerio *ministerio) {
                 eliminarInvolucrado(&(ministerio->causas), ruc, rut);
 
             case 0:
-                printf("Salir\n");
+                printf("Volver al menu principal\n");
+                menuPrincipal(&(ministerio));
                 break;
             
             default:
