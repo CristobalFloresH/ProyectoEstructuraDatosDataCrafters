@@ -1,6 +1,5 @@
-void reenlazarNodoCircularDoble(struct nodoCausas **listaCausas, struct nodoCausas *nodoEliminar) {
-    if (*listaCausas == NULL || nodoEliminar == NULL)
-        return;
+void reenlazarCausas(struct nodoCausas **listaCausas, struct nodoCausas *nodoEliminar) {
+    if (*listaCausas == NULL || nodoEliminar == NULL) return;
 
     // Si solo hay un nodo en la lista
     if (nodoEliminar->siguiente == nodoEliminar && nodoEliminar->anterior == nodoEliminar) {
@@ -18,9 +17,8 @@ void reenlazarNodoCircularDoble(struct nodoCausas **listaCausas, struct nodoCaus
     }
 };
 
-void reenlazarNodoSimpleDoble(struct nodoDenuncias **listaDenuncias, struct nodoDenuncias *nodoEliminar) {
-    if (*listaDenuncias == NULL || nodoEliminar == NULL)
-        return;
+void reenlazarDenuncias(struct nodoDenuncias **listaDenuncias, struct nodoDenuncias *nodoEliminar) {
+    if (*listaDenuncias == NULL || nodoEliminar == NULL) return;
 
     // Si el nodo a eliminar es el primero
     if (*listaDenuncias == nodoEliminar) {
@@ -38,3 +36,23 @@ void reenlazarNodoSimpleDoble(struct nodoDenuncias **listaDenuncias, struct nodo
         }
     }
 };
+
+void reenlazarDatosCarpeta(struct nodoDatosCarpetas **listaCarpetas, struct nodoDatosCarpetas *nodoEliminar) {
+    if (*listaCarpetas == NULL || nodoEliminar == NULL) return;
+
+    // Si el nodo a eliminar es el primero
+    if (*listaCarpetas == nodoEliminar) {
+        *listaCarpetas = nodoEliminar->siguiente;
+        if (*listaCarpetas != NULL) {
+            (*listaCarpetas)->anterior = NULL;
+        }
+    } else {
+        // Enlazamos
+        if (nodoEliminar->anterior != NULL) {
+            nodoEliminar->anterior->siguiente = nodoEliminar->siguiente;
+        }
+        if (nodoEliminar->siguiente != NULL) {
+            nodoEliminar->siguiente->anterior = nodoEliminar->anterior;
+        }
+    }
+}
