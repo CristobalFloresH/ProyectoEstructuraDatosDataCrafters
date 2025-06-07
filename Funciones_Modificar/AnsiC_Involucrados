@@ -12,7 +12,7 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
     fgets(ruc, sizeof(ruc), stdin);
     removerSaltoLinea(ruc);
 
-    struct causa *c = buscarCausaPorRUC(ministerio, ruc);
+    struct causa *c = buscarCausaPorRuc(ministerio, ruc);
     if (c == NULL || c->involucrados == NULL) {
         printf("No se encontró la causa o no tiene involucrados.\n");
         return;
