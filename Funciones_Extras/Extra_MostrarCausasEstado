@@ -1,0 +1,59 @@
+void mostrarCausasEstado(struct ministerio *ministerio) {
+    int opcion = -1;
+    int estadoFiltrado;
+    int contador = 1;
+
+    if (ministerio == NULL || ministerio->causas == NULL) {
+        printf("No hay causas registradas.\n");
+        return;
+    }
+
+    printf("\n========== MENÚ ESTADO DE CAUSAS ==========\n");
+    printf("1. Mostrar todas las causas con su estado\n");
+    printf("2. Mostrar causas de un estado específico\n");
+    printf("Seleccione una opción: ");
+    scanf("%d", &opcion);
+    getchar(); // Limpiar buffer
+
+    switch (opcion) {
+        case 1:
+            // Recorre la lista circular mostrando todas las causas y su estado
+            struct nodoCausas *actual = ministerio->causas;
+            printf("\n========================================\n");
+            printf("REPORTE DE TODAS LAS CAUSAS CON ESTADO ACTUAL\n");
+            printf("========================================\n");
+            do {
+                printf("Causa N°%d: RUC: %s | Estado de causa: %d\n", contador, actual->datosCausa->ruc, actual->datosCausa->estadoCausa);
+                contador++;
+                actual = actual->siguiente;
+            } while (actual != ministerio->causas);
+            break;
+
+        case 2:
+            // Pide estado a filtrar y muestra solo esas causas
+            printf("Ingrese el estado de causa a mostrar (1=Archivada, 2=En progreso, 3=Cerrada, 4=En juicio): ");
+            scanf("%d", &estadoFiltrado);
+            getchar();
+
+            actual = ministerio->causas;
+            printf("\n========================================\n");
+            printf("REPORTE DE CAUSAS CON ESTADO %d\n", estadoFiltrado);
+            printf("========================================\n");
+            do {
+                if (actual->datosCausa->estadoCausa == estadoFiltrado) {
+                    printf("Causa N°%d: RUC: %s | Estado de causa: %d\n", contador, actual->datosCausa->ruc, actual->datosCausa->estadoCausa);
+                }
+                contador++;
+                actual = actual->siguiente;
+            } while (actual != ministerio->causas);
+
+            if (contador == 0) {
+                printf("No se encontraron causas con ese estado.\n");
+            }
+            break;
+
+        default:
+            printf("Opción inválida.\n");
+            break;
+    }
+}
