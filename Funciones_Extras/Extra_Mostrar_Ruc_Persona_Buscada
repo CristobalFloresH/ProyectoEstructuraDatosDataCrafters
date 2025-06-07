@@ -1,0 +1,34 @@
+void mostrarRucDePersonaBuscada(struct ministerio *ministerio, char *rutBuscado){
+    
+    if(ministerio == NULL || ministerio->causas ==NULL){
+        printf("No se encontraron causas en el sistema");
+        return;
+    }
+    char rucEncontrado[30];
+    int i, encontrado = 0;
+    struct nodoCausas *actual = ministerio->causas;
+    
+    
+    do{
+        for(i = 0; i < actual->datosCausa->tamInvolucrados; i++){
+            if(strcmp(actual->datosCausa->involucrados[i]->persona->rut, rutBuscado) == 0){
+                encontrado = 1;
+                strcpy(rucEncontrado, actual->datosCausa->ruc);
+                break;
+            }
+        }
+        actual = actual->siguiente;
+    }while(actual != ministerio->causas && encontrado == 0);
+    
+    if(encontrado == 1){
+        printf("La persona con RUT %s fue encontrada en la causa con RUC : %s\n", rutBuscado,rucEncontrado);
+    }
+    if(encontrado == 0){
+        printf("La persona con RUT %s no fue encontrado en el sistema.\n", rutBuscado);
+    }
+}
+
+
+
+
+
