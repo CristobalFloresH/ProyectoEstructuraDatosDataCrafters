@@ -61,7 +61,7 @@ void menuEliminar(struct ministerio *ministerio) {
 
             case 0:
                 printf("Volver al menu principal\n");
-                menuPrincipal(&(ministerio));
+                menuPrincipal(ministerio);
                 break;
             
             default:
