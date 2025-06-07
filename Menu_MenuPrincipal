@@ -1,7 +1,7 @@
 void menuPrincipal(struct ministerio *ministerio) {
     int opcion = -1;
     while(opcion != 0) {
-        // Imprime el menú principal de opciones CRUD
+        // Imprime el menú principal de opciones 
         printf("\n=========== MENÚ PRINCIPAL ===========\n");
         printf("1. Agregar\n");
         printf("2. Eliminar\n");
