@@ -1,5 +1,5 @@
 struct causa *buscarCausaPorRuc(struct nodoCausas *causas, char *rucBuscado) {
-    
+
     //si la lista de causas o el ruc buscado es null, retorna null ya que no hay nada que buscar
     if (causas == NULL || rucBuscado == NULL) return NULL;
 
