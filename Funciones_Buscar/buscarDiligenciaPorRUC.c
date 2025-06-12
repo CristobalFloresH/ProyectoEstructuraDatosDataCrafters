@@ -1,11 +1,11 @@
-struct datosDiligencias* buscarDiligencia(struct ministerio *ministerio, const char *ruc, const char *fechaInicio, const char *tipoDiligencia) {
+struct datosDiligencias* buscarDiligencia(struct ministerio *ministerio, char *ruc, char *fechaInicio, char *tipoDiligencia) {
     if (ministerio == NULL || ruc == NULL || fechaInicio == NULL || tipoDiligencia == NULL) {
         printf("Parámetros inválidos.\n");
         return NULL;
     }
 
     // Buscar causa por RUC
-    struct causa *c = buscarCausaConRuc(ministerio, ruc);
+    struct causa *c = buscarCausaPorRuc(ministerio->causas, ruc);
     if (c == NULL) {
         printf("No se encontró la causa con RUC: %s\n", ruc);
         return NULL;
