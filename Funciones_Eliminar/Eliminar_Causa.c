@@ -5,8 +5,13 @@ void eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
     }
 
     struct nodoCausas *aEliminar = buscarNodoCausa(*listaCausa, ruc);
+    if (aEliminar == NULL) {
+        printf("No se han encontrado causas.\n");
+        return;
+    }
+
     if (aEliminar != NULL) {
-        reenlazarNodoCircularDoble(listaCausa, aEliminar);
+        reenlazarCausas(listaCausa, aEliminar);
         liberarCausa(aEliminar->datosCausa);
         free(aEliminar);
         aEliminar = NULL;
