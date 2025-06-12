@@ -1,6 +1,6 @@
 void mostrarTodosInvolucradosCausa(struct causa *causa) {
     if (causa == NULL) {
-        printf("No se encontró la causa seleccionada.\n");
+        printf("No se encontro la causa seleccionada.\n");
         return;
     }
     if (causa->involucrados == NULL) {
@@ -42,7 +42,7 @@ void mostrarTodosInvolucradosCausa(struct causa *causa) {
 void mostrarInvolucradosCausaPorTipo(struct causa *causa, int tipoInvolucrado)
 {
     if (causa == NULL) {
-        printf("No se encontró la causa seleccionada.\n");
+        printf("No se encontro la causa seleccionada.\n");
         return;
     }
     if (causa->involucrados == NULL || causa->tamInvolucrados == 0) {
@@ -51,8 +51,9 @@ void mostrarInvolucradosCausaPorTipo(struct causa *causa, int tipoInvolucrado)
     }
 
     int contador = 0;
+    int i;
 
-    for (int i = 0; i < causa->tamInvolucrados; i++)
+    for (i = 0; i < causa->tamInvolucrados; i++)
     {
         if (causa->involucrados[i] != NULL && causa->involucrados[i]->tipoInvolucrado == tipoInvolucrado)
         {
@@ -64,7 +65,7 @@ void mostrarInvolucradosCausaPorTipo(struct causa *causa, int tipoInvolucrado)
             printf("Nombre        : %s\n", causa->involucrados[i]->persona->nombre);
             printf("Apellido      : %s\n", causa->involucrados[i]->persona->apellido);
 
-            // Imprime rol textual según el tipo solicitado
+            // Imprime rol textual segun el tipo solicitado
             if (tipoInvolucrado == 1)
                 printf("Rol dentro de la causa: Victima\n");
             else if (tipoInvolucrado == 2) {
@@ -82,7 +83,7 @@ void mostrarInvolucradosCausaPorTipo(struct causa *causa, int tipoInvolucrado)
 
     if (contador == 0) {
         if (tipoInvolucrado == 1)
-            printf("No hay víctimas en esta causa.\n");
+            printf("No hay victimas en esta causa.\n");
         else if (tipoInvolucrado == 2)
             printf("No hay imputados en esta causa.\n");
         else if (tipoInvolucrado == 3)
