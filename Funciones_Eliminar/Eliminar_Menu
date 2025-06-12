@@ -3,16 +3,14 @@ void menuEliminar(struct ministerio *ministerio) {
     char rut[30], ruc[30];
 
     while (opcion != 0) {
-        printf("\n========================================\n");
-        printf("MENU ELIMINAR\n");
-        printf("\n========================================\n");
+        printf("\n=========== MENU ELIMINAR ===========\n");
         printf("1. Eliminar persona.\n");
         printf("2. Eliminar causa.\n");
         printf("3. Eliminar denuncia.\n");
         printf("4. Eliminar datos de carpeta.\n");
         printf("5. Eliminar Involucrados.\n");
-        printf("0. Volver a menu principal.\n");
-        printf("Ingrese una opcion.");
+        printf("0. Volver.\n");
+        printf("Ingrese una opcion:");
         scanf("%d", &opcion);
         getchar();
 
@@ -45,7 +43,7 @@ void menuEliminar(struct ministerio *ministerio) {
                 break;
 
             case 4:
-                menuEliminarCarpeta(&(ministerio->causas));
+                menuEliminarCarpeta(ministerio); //antes usaba &
                 break;
 
             case 5:
@@ -58,8 +56,7 @@ void menuEliminar(struct ministerio *ministerio) {
                 break;
 
             case 0:
-                printf("Volver al menu principal\n");
-                menuPrincipal(ministerio);
+                //Volver. al menu anterior
                 break;
 
             default:
