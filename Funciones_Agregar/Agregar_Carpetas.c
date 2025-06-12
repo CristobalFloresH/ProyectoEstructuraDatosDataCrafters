@@ -21,7 +21,7 @@ void agregarCarpetaInvestigativa(struct nodoDatosCarpetas **carpetas, struct dat
         *carpetas = nuevoNodo;
     } else {
 
-        // Recorre struct datos carpetas hasta el final de la lista 
+        // Recorre struct datos carpetas hasta el final de la lista
         struct nodoDatosCarpetas *actual = *carpetas;
         while(actual->siguiente != NULL) {
             actual = actual->siguiente;
@@ -31,4 +31,5 @@ void agregarCarpetaInvestigativa(struct nodoDatosCarpetas **carpetas, struct dat
         actual->siguiente = nuevoNodo;
         nuevoNodo->anterior = actual;
     }
+    printf("Carpeta agregada exitosamente.\n");
 }
