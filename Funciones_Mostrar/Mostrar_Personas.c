@@ -5,7 +5,7 @@ void mostrarUsuarioPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
         return;
     }
     if (rutBuscado == NULL) {
-        printf("Por favor, ingrese un RUT válido para buscar.\n");
+        printf("Por favor, ingrese un RUT valido para buscar.\n");
         return;
     }
 
@@ -14,19 +14,19 @@ void mostrarUsuarioPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
     //si no se encuentra o algun dato es invalido, retorna mensaje de error
     if (personaBuscada == NULL)
     {
-        printf("No se encontró ningún usuario con el RUT ingresado.\n");
+        printf("No se encontro ningun usuario con el RUT ingresado.\n");
         return;
     }
 
     //si se encuentra y no es null (paso el if anterior), muestra los datos de la persona
-
+    printf("\n--- INFORMACION DE PERSONA ---\n");
     printf("Nombre      : %s\n", personaBuscada->nombre);
     printf("Apellido    : %s\n", personaBuscada->apellido);
     printf("Rut         : %s\n", personaBuscada->rut);
 
     /** 1 = usuario comun, 2 = fiscal, 3 = juez**/
     if (personaBuscada->rol == 1)
-        printf("Rol         : Usuario Común\n");
+        printf("Rol         : Usuario Comun\n");
     else if(personaBuscada->rol == 2)
         printf("Rol         : Fiscal\n");
     else if(personaBuscada->rol == 3)
