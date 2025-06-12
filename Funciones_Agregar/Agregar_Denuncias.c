@@ -7,14 +7,14 @@ void agregarDenunciaAPersona(char *rut ,struct nodoPersonasABB *nodoPersonasABB,
         printf("No se encontraron personas\n");
         return;
     }
-    
+
     // se asigna memoria y se verifica que haya sido exitoso
     struct nodoDenuncias *nuevoNodo = (struct nodoDenuncias*)malloc(sizeof(struct nodoDenuncias));
     if(nuevoNodo == NULL){
         printf("Error al asignar memoria");
         return;
     }
-    
+
     // se asignan valores a nuevo nodo
     nuevoNodo->datosDenuncia = nuevaDenuncia;
     nuevoNodo->siguiente = NULL;
