@@ -4,9 +4,9 @@ void eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) {
         return;
     }
 
-    struct nodoCausas *causa = buscarCausaPorRUC(*listaCausas, ruc);
+    struct nodoCausas *causa = buscarNodoCausa(*listaCausas, ruc);
     if (causa == NULL) {
-        printf("No se encontró una causa con ese RUC.\n");
+        printf("No se encontro una causas con ese RUC.\n");
         return;
     }
 
