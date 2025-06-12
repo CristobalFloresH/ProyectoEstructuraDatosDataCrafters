@@ -9,10 +9,10 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
     int nuevoTipo;
 
     printf("Ingrese el RUC de la causa: ");
-    fgets(ruc, sizeof(ruc), stdin);
+    fgets(ruc, sizeof(ruc), stdin); // fgets
     removerSaltoLinea(ruc);
 
-    struct causa *c = buscarCausaPorRuc(ministerio, ruc);
+    struct causa *c = buscarCausaPorRuc(ministerio->causas, ruc);
     if (c == NULL || c->involucrados == NULL) {
         printf("No se encontró la causa o no tiene involucrados.\n");
         return;
@@ -24,36 +24,27 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
 
     do {
         printf("Ingrese nuevo tipo de involucrado (1=Víctima, 2=Imputado, 3=Testigo, 4=Otro): ");
-        if (scanf("%d", &nuevoTipo) != 1) {
-            printf("Entrada inválida.\n");
-            while (getchar() != '\n');
-            nuevoTipo = -1;
-            continue;
-        }
-        while (getchar() != '\n');
+        scanf("%d", &nuevoTipo);
+        getchar(); // Limpia buffer para evitar problemas con fgets si se usa después
         if (nuevoTipo < 1 || nuevoTipo > 4) {
             printf("Tipo inválido. Intente nuevamente.\n");
         }
     } while (nuevoTipo < 1 || nuevoTipo > 4);
 
-    // Buscar involucrado y modificar tipo
-    int encontrado = 0;
-    for (int i = 0; i < c->tamInvolucrados; i++) {
+    int encontrado = 0, i;
+    for (i = 0; i < c->tamInvolucrados; i++) {
         struct involucrados *inv = c->involucrados[i];
 
         if (inv != NULL && inv->persona != NULL && strcmp(inv->persona->rut, rut) == 0) {
             encontrado = 1;
 
-            // Si era imputado y ya no lo será, liberar datosImputados
             if (inv->tipoInvolucrado == 2 && nuevoTipo != 2 && inv->datosImputados != NULL) {
                 free(inv->datosImputados);
                 inv->datosImputados = NULL;
             }
 
-            // Cambiamos tipo
             inv->tipoInvolucrado = nuevoTipo;
 
-            // Si ahora es imputado y no tiene datosImputados, inicializamos
             if (nuevoTipo == 2 && inv->datosImputados == NULL) {
                 inv->datosImputados = malloc(sizeof(struct datosImputados));
                 if (inv->datosImputados == NULL) {
@@ -61,7 +52,6 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
                     return;
                 }
 
-                // Inicializamos campos
                 inv->datosImputados->declaracion = NULL;
                 inv->datosImputados->medidasCautelar = 7;
                 inv->datosImputados->fechaInicioMedida = NULL;
