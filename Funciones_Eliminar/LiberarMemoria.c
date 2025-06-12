@@ -1,3 +1,4 @@
+
 void liberarPersona(struct persona *persona) {
     if (persona == NULL)
         return;
@@ -5,7 +6,6 @@ void liberarPersona(struct persona *persona) {
     free(persona->nombre);
     free(persona->apellido);
     free(persona->rut);
-    free(persona->ocupacion);
     free(persona->contrasena);
 
     free(persona);
@@ -38,7 +38,8 @@ void liberarInvolucrados(struct involucrados **involucrados, int tam) {
     if (involucrados == NULL)
         return;
 
-    for (int i = 0; i < tam; i++) {
+    int i;
+    for (i = 0; i < tam; i++) {
         if (involucrados[i] != NULL) {
             if (involucrados[i]->datosImputados != NULL) {
                 liberarDatosImputados(involucrados[i]->datosImputados);
@@ -75,12 +76,18 @@ void liberarDatosCarpeta(struct datosCarpeta *datosCarpeta) {
 
     if (datosCarpeta->datosDiligencias != NULL) {
         liberarDatosDiligencias(datosCarpeta->datosDiligencias);
+        datosCarpeta->datosDiligencias = NULL;
     }
 
     if (datosCarpeta->datosDenuncia != NULL) {
         liberarDenuncia(datosCarpeta->datosDenuncia);
+        datosCarpeta->datosDenuncia = NULL;
     }
+    if (datosCarpeta->datosPersona != NULL) {
+        liberarPersona(datosCarpeta->datosPersona);
+        datosCarpeta->datosPersona = NULL;
 
+    }
     free(datosCarpeta);
 };
 
@@ -89,7 +96,9 @@ void liberarCausa(struct causa *causa) {
         return;
 
     free(causa->ruc);
-    free(causa->sentencia);
+
+    if (causa->sentencia != NULL)
+        free(causa->sentencia);
 
     if (causa->denuncia != NULL) {
         liberarDenuncia(causa->denuncia);
@@ -97,20 +106,22 @@ void liberarCausa(struct causa *causa) {
     }
 
     struct nodoDatosCarpetas *actual = causa->datosCarpetas;
-    while (actual != NULL) {
-        struct nodoDatosCarpetas *sig = actual->siguiente;
-        if (actual->datosCarpeta != NULL) {
-            liberarDatosCarpeta(actual->datosCarpeta);
-            actual->datosCarpeta = NULL;
+
+    if (actual != NULL) {
+        while (actual != NULL) {
+            struct nodoDatosCarpetas *sig = actual->siguiente;
+            if (actual->datosCarpeta != NULL) {
+                liberarDatosCarpeta(actual->datosCarpeta);
+                actual->datosCarpeta = NULL;
+            }
+            free(actual);
+            actual = sig;
         }
-        free(actual);
-        actual = sig;
     }
     causa->datosCarpetas = NULL;
-
-    liberarInvolucrados(causa->involucrados, causa->tamInvolucrados);
-    causa->involucrados = NULL;
-
+    if (causa->involucrados != NULL){
+        liberarInvolucrados(causa->involucrados, causa->tamInvolucrados);
+        causa->involucrados = NULL;
+    }
     free(causa);
 }
-
