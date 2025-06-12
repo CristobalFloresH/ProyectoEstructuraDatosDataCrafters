@@ -1,37 +1,33 @@
-void modificarPersonaPorRut(struct ministerio *ministerio) {
+void modificarPersonaPorRUT(struct ministerio *ministerio) { // Agregue cambiar rut
     char rut[20];
     char palabra[300];
     int opcion = -1;
-    struct persona *p = NULL;
+    struct persona *persona = NULL;
     char *nuevaCadena = NULL;
+    int nuevo_rol;
 
     printf("Ingrese RUT de la persona a modificar: ");
     scanf(" %[^\n]", rut);
     getchar(); // Limpia el salto de línea
 
-    p = buscarPersonaPorRut(ministerio, rut);
-    if (p == NULL) {
+    persona = buscarPersonaPorRut(ministerio->personas, rut);
+    if (persona == NULL) {
         printf("Persona con RUT %s no encontrada.\n", rut);
         return;
     }
 
     do {
-        printf("\n--- Modificar Persona (%s %s) ---\n", p->nombre, p->apellido);
+        printf("\n--- Modificar Persona (%s %s) ---\n", persona->nombre, persona->apellido);
         printf("1. Cambiar nombre\n");
         printf("2. Cambiar apellido\n");
         printf("3. Cambiar contraseña\n");
-        printf("4. Cambiar rol (actual: %d)\n", p->rol);
+        printf("4. Cambiar rol (actual: %d)\n", persona->rol);
+        printf("5. Cambiar Rut\n");
         printf("0. Salir\n");
         printf("Seleccione una opción: ");
 
-        if (scanf("%d", &opcion) != 1) {
-            printf("Entrada inválida.\n");
-            while (getchar() != '\n');
-            opcion = -1;
-            continue;
-        }
+        scanf("%d", &opcion);
         getchar(); // Limpiar '\n'
-
         switch (opcion) {
             case 1:
                 printf("Nuevo nombre: ");
@@ -39,8 +35,8 @@ void modificarPersonaPorRut(struct ministerio *ministerio) {
                     palabra[strcspn(palabra, "\n")] = '\0';
                     nuevaCadena = duplicarCadena(palabra);
                     if (nuevaCadena != NULL) {
-                        free(p->nombre);
-                        p->nombre = nuevaCadena;
+                        free(persona->nombre);
+                        persona->nombre = nuevaCadena;
                         printf("Nombre actualizado correctamente.\n");
                     }
                 }
@@ -52,8 +48,8 @@ void modificarPersonaPorRut(struct ministerio *ministerio) {
                     palabra[strcspn(palabra, "\n")] = '\0';
                     nuevaCadena = duplicarCadena(palabra);
                     if (nuevaCadena != NULL) {
-                        free(p->apellido);
-                        p->apellido = nuevaCadena;
+                        free(persona->apellido);
+                        persona->apellido = nuevaCadena;
                         printf("Apellido actualizado correctamente.\n");
                     }
                 }
@@ -65,36 +61,42 @@ void modificarPersonaPorRut(struct ministerio *ministerio) {
                     palabra[strcspn(palabra, "\n")] = '\0';
                     nuevaCadena = duplicarCadena(palabra);
                     if (nuevaCadena != NULL) {
-                        free(p->contrasena);
-                        p->contrasena = nuevaCadena;
+                        free(persona->contrasena);
+                        persona->contrasena = nuevaCadena;
                         printf("Contraseña actualizada correctamente.\n");
                     }
                 }
                 break;
 
             case 4:
-                int nuevo_rol;
                 do {
                     printf("Nuevo rol (1 = usuario común, 2 = fiscal, 3 = juez): ");
-    
-                    if (scanf("%d", &nuevo_rol) != 1) {
-                        printf("Entrada inválida. Intente nuevamente.\n");
-                        while (getchar() != '\n'); // limpiar caracteres incorrectos
-                        continue;
-                     }
-    
-                    while (getchar() != '\n'); // limpiar el salto de línea
-    
+
+
+                    scanf("%d", &nuevo_rol);
+                    getchar();
+
                     if (nuevo_rol < 1 || nuevo_rol > 3) {
                         printf("Rol inválido. Intente nuevamente.\n");
                     }
 
                 } while (nuevo_rol < 1 || nuevo_rol > 3);
 
-                p->rol = nuevo_rol;
+                persona->rol = nuevo_rol;
                 printf("Rol actualizado correctamente.\n");
 
-
+            case 5:
+                printf("Nuevo rut: ");
+            if (fgets(palabra, sizeof(palabra), stdin)) {
+                palabra[strcspn(palabra, "\n")] = '\0';
+                nuevaCadena = duplicarCadena(palabra);
+                if (nuevaCadena != NULL) {
+                    free(persona->rut);
+                    persona->rut = nuevaCadena;
+                    printf("Rut actualizada correctamente.\n");
+                }
+            }
+            break;
             case 0:
                 printf("Modificación finalizada.\n");
                 break;
