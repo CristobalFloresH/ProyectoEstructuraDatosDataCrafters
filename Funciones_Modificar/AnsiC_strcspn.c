@@ -1,5 +1,5 @@
 /* Función auxiliar para encontrar el primer salto de línea */
-int encontrarSaltoLinea(const char* cadena) {
+int encontrarSaltoLinea(char* cadena) {
     int i = 0;
     while (cadena[i] != '\0') {
         if (cadena[i] == '\n') {
