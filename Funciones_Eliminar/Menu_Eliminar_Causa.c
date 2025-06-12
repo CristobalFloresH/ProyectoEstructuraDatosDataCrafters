@@ -8,15 +8,13 @@ void menuEliminarCausa(struct ministerio *ministerio) {
 
     while (opcion != 0) {
         char rut[30], ruc[30];
-        printf("\n========================================\n");
-        printf("MENU ELIMINAR CAUSA:\n");
-        printf("\n========================================\n");
+        printf("\n=========== MENU ELIMINAR CAUSA ===========\n");
         printf("1. Eliminar Causa\n");
         printf("2. Eliminar Carpeta\n");
         printf("3. Eliminar Involucrado\n");
         printf("4. Eliminar Sentencia\n");
-        printf("0. Volver a menu eliminar.\n");
-        printf("Ingrese opción:");
+        printf("0. Volver.\n");
+        printf("Ingrese opcion:");
         scanf("%d", &opcion);
         getchar();
 
@@ -43,25 +41,24 @@ void menuEliminarCausa(struct ministerio *ministerio) {
             case 4: {
                 printf("Ingrese RUC de la sentencia a eliminar:\n");
                 scanf("%s", ruc);
-                struct nodoCausas *encontrado = buscarCausaPorRUC(ministerio->causas, ruc);
+                struct nodoCausas *encontrado = buscarNodoCausa(ministerio->causas, ruc);
 
                 if (encontrado != NULL && encontrado->datosCausa != NULL && encontrado->datosCausa->sentencia != NULL) {
                     free(encontrado->datosCausa->sentencia);
                     encontrado->datosCausa->sentencia = NULL;
                     printf("Sentencia eliminada correctamente.\n");
                 } else {
-                    printf("No se encontró sentencia para eliminar.\n");
+                    printf("No se encontro sentencia para eliminar.\n");
                 }
                 break;
             }
 
             case 0: {
-                printf("Volver a menu eliminar.\n");
-                menuEliminar(&(ministerio));
-                break;
+                //Volver. al menu anterior
+                return;
             }
             default:
-                printf("Opción no válida.\n");
+                printf("Opcion no valida.\n");
                 break;
         }
     }
