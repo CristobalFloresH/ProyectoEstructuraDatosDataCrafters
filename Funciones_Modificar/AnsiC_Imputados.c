@@ -1,9 +1,9 @@
-void modificarImputado(struct ministerio *ministerio, const char *rucCausa, const char *rutImputado) {
+void modificarImputado(struct ministerio *ministerio, char *rucCausa, char *rutImputado) {
     if (ministerio == NULL || rucCausa == NULL || rutImputado == NULL) {
         return;
     }
 
-    struct causa *c = buscarCausaPorRuc(ministerio, rucCausa);
+    struct causa *c = buscarCausaPorRuc(ministerio->causas, rucCausa);
     if (c == NULL) {
         printf("Causa con RUC %s no encontrada.\n", rucCausa);
         return;
@@ -33,19 +33,19 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
 
     while (opcion != 0) {
         printf("\n--- Modificar Imputado ---\n");
-        printf("1. Declaración\n");
+        printf("1. Declaracion\n");
         printf("2. Medida Cautelar\n");
         printf("3. Fecha Inicio Medida\n");
         printf("4. Fecha Fin Medida\n");
         printf("5. Estado Procesal\n");
-        printf("0. Salir\n");
-        printf("Seleccione una opción: ");
+        printf("0. Volver.\n");
+        printf("Seleccione una opcion: ");
         scanf("%d", &opcion);
         getchar();
 
         switch (opcion) {
             case 1:
-                printf("Ingrese nueva declaración: ");
+                printf("Ingrese nueva declaracion: ");
                 if (fgets(palabras, sizeof(palabras), stdin)) {
                     palabras[strcspn(palabras, "\n")] = '\0';
                     nuevaCadena = duplicarCadena(palabras);
@@ -61,20 +61,16 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
             case 2:
                 int nueva_medida;
                 do {
-                    printf("Ingrese nueva medida cautelar (1 = Prisión Preventiva, 2 = Arraigo Nacional, 3 = Firma Periódica, "
+                    printf("Ingrese nueva medida cautelar (1 = Prision Preventiva, 2 = Arraigo Nacional, 3 = Firma Periodica, "
                            "4 = Orden de Alejamiento, 5 = Arresto Domiciliario, 6 = Libertad bajo Fianza, 7 = Ninguna): ");
-    
-                    if (scanf("%d", &nueva_medida) != 1) {
-                        printf("Entrada inválida.\n");
-                        while (getchar() != '\n'); // limpiar caracteres no numéricos
-                        continue;
-                    }
-    
-                    while (getchar() != '\n'); // limpiar salto de línea restante
-    
+
+                    scanf("%d", &nueva_medida);
+                    getchar();
+
+
                     if (nueva_medida < 1 || nueva_medida > 7) {
-                        printf("Medida cautelar no válida. Intente nuevamente.\n");
-                        }        
+                        printf("Medida cautelar no valida. Intente nuevamente.\n");
+                        }
 
                 } while (nueva_medida < 1 || nueva_medida > 7);
 
@@ -113,18 +109,13 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
             case 5:
                 int nuevo_estado;
                 do {
-                    printf("Ingrese nuevo estado procesal (1: Cautelar, 2: Formalizado, 3: Sobreseído): ");
-    
-                    if (scanf("%d", &nuevo_estado) != 1) {
-                        printf("Entrada inválida.\n");
-                        while (getchar() != '\n'); // limpiar caracteres incorrectos
-                        continue;
-                    }
-    
-                    while (getchar() != '\n'); // limpiar salto de línea restante
-    
+                    printf("Ingrese nuevo estado procesal (1: Cautelar, 2: Formalizado, 3: Sobreseido): ");
+
+                    scanf("%d", &nuevo_estado);
+                    getchar();
+
                     if (nuevo_estado < 1 || nuevo_estado > 3) {
-                    printf("Estado procesal no válido. Intente nuevamente.\n");
+                    printf("Estado procesal no valido. Intente nuevamente.\n");
                     }
 
                 } while (nuevo_estado < 1 || nuevo_estado > 3);
@@ -133,13 +124,12 @@ void modificarImputado(struct ministerio *ministerio, const char *rucCausa, cons
                 printf("Estado procesal actualizado correctamente.\n");
 
             case 0:
-                printf("Saliendo de modificación.\n");
+                //Volver.
                 break;
 
             default:
-                printf("Opción no válida.\n");
+                printf("Opcion no valida.\n");
                 break;
         }
     }
 }
-
