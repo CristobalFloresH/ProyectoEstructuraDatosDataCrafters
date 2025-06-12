@@ -12,4 +12,3 @@ struct nodoCausas *buscarNodoCausa(struct nodoCausas *causas, char *rucBuscado) 
 
     return NULL;
 }
-
