@@ -1,6 +1,6 @@
 void mostrarDenunciaDeCausa(struct causa *causaActual) {
     if (causaActual == NULL) {
-        printf("No se encontró la causa seleccionada.\n");
+        printf("No se encontro la causa seleccionada.\n");
         return;
     }
     if (causaActual->denuncia == NULL) {
@@ -14,7 +14,7 @@ void mostrarDenunciaDeCausa(struct causa *causaActual) {
     printf("========================================\n");
     printf("RUC           : %s\n", denuncia->ruc);
     printf("Fecha         : %s\n", denuncia->fecha);
-    printf("Descripción   : %s\n", denuncia->descripcion);
+    printf("Descripcion   : %s\n", denuncia->descripcion);
     printf("Delito        : %s\n", denuncia->tipoDeDenuncia);
     if (denuncia->denunciante != NULL && denuncia->denunciado != NULL)
     {
@@ -55,7 +55,7 @@ void mostrarTodoDatoDeCausaPorRuc(struct nodoCausas *causas, char *rucBuscado) {
     //si no se encuentra o algun dato es invalido, retorna mensaje de error
     if (causaBuscada == NULL)
     {
-        printf("Se genero un error al buscar la carpeta o esta no existe\n");
+        printf("Se genero un error al buscar la causa o esta no existe\n");
         return;
     }
 
@@ -63,15 +63,15 @@ void mostrarTodoDatoDeCausaPorRuc(struct nodoCausas *causas, char *rucBuscado) {
     printf("Causa con Ruc: %s\n", causaBuscada->ruc);
     printf("========================================\n");
 
-    // Sección de denuncias
+    // Seccion de denuncias
     printf("\n>> DENUNCIA REGISTRADA:\n");
     mostrarDenunciaDeCausa(causaBuscada);
 
-    // Sección de involucrados
+    // Seccion de involucrados
     printf("\n>> INVOLUCRADOS:\n");
     mostrarTodosInvolucradosCausa(causaBuscada);
 
-    // Sección de datos de la carpeta
+    // Seccion de datos de la carpeta
     printf("\n>> DATOS CARPETA INVESTIGATIVA:\n");
     mostrarTodosDatosCarpetaCausa(causaBuscada);
 
@@ -81,10 +81,10 @@ void mostrarTodoDatoDeCausaPorRuc(struct nodoCausas *causas, char *rucBuscado) {
 void mostrarTodasLasCausas(struct nodoCausas *causas)
 {
     struct nodoCausas *actual = causas;
-    while (actual != NULL)
+    do
     {
         mostrarTodoDatoDeCausaPorRuc(causas, actual->datosCausa->ruc);
         printf("\n"); // Separador visual
         actual = actual->siguiente;
-    }
+    } while (actual != causas);
 }
