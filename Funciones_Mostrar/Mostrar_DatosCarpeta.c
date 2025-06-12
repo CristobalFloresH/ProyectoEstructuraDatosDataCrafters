@@ -1,11 +1,11 @@
 void mostrarDatosCarpetaCausaPorTipo(struct causa *causa, int tipoDeDato)
 {
-    if (causa == NULL) 
+    if (causa == NULL)
     {
-        printf("No se encontró la causa seleccionada.\n");
+        printf("No se encontro la causa seleccionada.\n");
         return;
     }
-    if (causa->datosCarpetas == NULL) 
+    if (causa->datosCarpetas == NULL)
     {
         printf("Esta causa no contiene datos investigativos registrados.\n");
         return;
@@ -32,10 +32,10 @@ void mostrarDatosCarpetaCausaPorTipo(struct causa *causa, int tipoDeDato)
             }
 
             printf("Fecha          : %s\n", actual->datosCarpeta->fecha);
-            printf("Descripción    : %s\n", actual->datosCarpeta->descripcion);
+            printf("Descripcion    : %s\n", actual->datosCarpeta->descripcion);
 
             if (tipoDeDato == 1)
-                printf("Tipo de dato   : Declaración\n");
+                printf("Tipo de dato   : Declaracion\n");
             else if (tipoDeDato == 2)
                 printf("Tipo de dato   : Prueba general (Fotos, videos, etc)\n");
             else if (tipoDeDato == 3)
@@ -71,7 +71,7 @@ void mostrarDatosCarpetaCausaPorTipo(struct causa *causa, int tipoDeDato)
 void mostrarTodosDatosCarpetaCausa(struct causa *causa)
 {
     if (causa == NULL) {
-        printf("No se encontró la causa seleccionada.\n");
+        printf("No se encontro la causa seleccionada.\n");
         return;
     }
     if (causa->datosCarpetas == NULL) {
@@ -101,10 +101,10 @@ void mostrarTodosDatosCarpetaCausa(struct causa *causa)
             }
 
             printf("Fecha          : %s\n", carpeta->fecha);
-            printf("Descripción    : %s\n", carpeta->descripcion);
+            printf("Descripcion    : %s\n", carpeta->descripcion);
 
             if (carpeta->tipoDeDato == 1)
-                printf("Tipo de dato   : Declaración\n");
+                printf("Tipo de dato   : Declaracion\n");
             else if (carpeta->tipoDeDato == 2)
                 printf("Tipo de dato   : Prueba general (Fotos, videos, etc)\n");
             else if (carpeta->tipoDeDato == 3)
