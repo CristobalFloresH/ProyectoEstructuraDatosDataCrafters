@@ -1,35 +1,32 @@
-void agregarDenunciaAPersona(char *rut ,struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
-    // se busca a la persona usando su rut
-    struct persona *personaEncontrada = buscarPersonaPorRut(nodoPersonasABB, rut);
+struct persona *buscarPersonaPorRut(struct nodoPersonasABB *personas, char *rutBuscado)
+{
+    /** esto es para que retorne NULL si no encuentra la persona, ya que al ser recursivo
+    Esto sera NULL cuando personas apunte a NULL y eso significa que llego a la hoja del arbol
+    por lo cual no hay donde mas buscar**/
 
-    // si no se encuentra la persona, se informa al usuario
-    if(personaEncontrada == NULL){
-        printf("No se encontraron personas\n");
-        return;
+    if (personas == NULL || rutBuscado == NULL)
+    {
+        return NULL;
     }
 
-    // se asigna memoria y se verifica que haya sido exitoso
-    struct nodoDenuncias *nuevoNodo = (struct nodoDenuncias*)malloc(sizeof(struct nodoDenuncias));
-    if(nuevoNodo == NULL){
-        printf("Error al asignar memoria");
-        return;
+    //compara datos del arbol con el buscado
+    int comparacionActual = strcmp(personas->datosPersona->rut, rutBuscado);
+
+    /** comparacionActual == 0 se encontro
+    comparacionActual > 0 vamos a la izquierda (menores), ya que el numero en el que estamos es mayor al buscado
+    comparacionActual < 0 (o else) vamos a la derecha (mayores), ya que el numero en el que estamos es menor al buscado
+    **/
+
+    if (comparacionActual == 0)
+    {
+        return personas->datosPersona;
     }
-
-    // se asignan valores a nuevo nodo
-    nuevoNodo->datosDenuncia = nuevaDenuncia;
-    nuevoNodo->siguiente = NULL;
-    nuevoNodo->anterior = NULL;
-
-    struct nodoDenuncias *actual = personaEncontrada->denuncias;
-    if(actual == NULL){
-        // denuncias vacia, se agrega de primero
-        personaEncontrada->denuncias = nuevoNodo;
-    } else {
-        // se recorre hasta el final la lista de denuncias
-        while(actual->siguiente != NULL){
-            actual = actual->siguiente;
-        }
-        actual->siguiente = nuevoNodo;
-        nuevoNodo->anterior = actual;
+    else if (comparacionActual > 0)
+    {
+        return buscarPersonaPorRut(personas->izquierda, rutBuscado);
+    }
+    else
+    {
+        return buscarPersonaPorRut(personas->derecha, rutBuscado);
     }
 }
