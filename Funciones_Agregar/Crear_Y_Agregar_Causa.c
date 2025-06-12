@@ -1,4 +1,4 @@
-void crearYagregarCausaNueva(struct ministerioPublico *ministerio, struct denuncia *denunciaAsociada) {
+void crearYagregarCausaNueva(struct ministerio *ministerio, struct denuncia *denunciaAsociada, int estadoCausa) {
     if (ministerio == NULL || denunciaAsociada == NULL) {
         printf("Ministerio o denuncia inválida.\n");
         return;
@@ -12,20 +12,19 @@ void crearYagregarCausaNueva(struct ministerioPublico *ministerio, struct denunc
     nuevaCausa->ruc = duplicarCadena(denunciaAsociada->ruc);
     if (nuevaCausa->ruc == NULL) {
         printf("Error al duplicar el RUC.\n");
-        free(nuevaCausa);
         return;
     }
+
 
     nuevaCausa->denuncia = denunciaAsociada;
     nuevaCausa->datosCarpetas = NULL;
     nuevaCausa->involucrados = NULL;
     nuevaCausa->tamInvolucrados = 0;
-    nuevaCausa->estadoCausa = 2;
+
+    nuevaCausa->estadoCausa = estadoCausa;
     nuevaCausa->sentencia = NULL;
 
     agregarCausa(&ministerio->causas, nuevaCausa);
     printf("Causa agregada correctamente\n");
+
 }
-agregarCausa(&ministerio->causas, nuevaCausa);
-    printf("Causa agregada correctamente\n");
-}    
