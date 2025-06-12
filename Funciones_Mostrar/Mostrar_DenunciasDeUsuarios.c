@@ -4,7 +4,7 @@ void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
         return;
     }
     if (rutBuscado == NULL) {
-        printf("Por favor, ingrese un RUT válido para buscar denuncias.\n");
+        printf("Por favor, ingrese un RUT valido para buscar denuncias.\n");
         return;
     }
 
@@ -14,7 +14,7 @@ void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
     //si no se encuentra o algun dato es invalido, retorna mensaje de error
     if (personaBuscada == NULL)
     {
-        printf("No se encontró ningún usuario con el RUT ingresado.\n\n");
+        printf("No se encontro ningun usuario con el RUT ingresado.\n\n");
         return;
     }
 
@@ -26,7 +26,7 @@ void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
     struct nodoDenuncias *actual = personaBuscada->denuncias;
     int contadorDenuncias = 0;
 
-    printf("========================================\n");
+    printf("\n========================================\n");
     printf("Denuncias de %s %s | Rut: %s\n", personaBuscada->nombre, personaBuscada->apellido, personaBuscada->rut);
     printf("========================================\n");
 
@@ -38,7 +38,7 @@ void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
             printf("\n--------- DENUNCIA %d ---------\n", contadorDenuncias);
             printf("RUC           : %s\n", actual->datosDenuncia->ruc);
             printf("Fecha         : %s\n", actual->datosDenuncia->fecha);
-            printf("Descripción   : %s\n", actual->datosDenuncia->descripcion);
+            printf("Descripcion   : %s\n", actual->datosDenuncia->descripcion);
             printf("Tipo de delito: %s\n", actual->datosDenuncia->tipoDeDenuncia);
 
             //Si el rut del denunciante es el mismo de la persona buscada significa que la persona envio esta denuncia
@@ -59,7 +59,10 @@ void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
 void mostrarTodasLasDenunciasDePersonas(struct nodoPersonasABB *arbolPersonas)
 {
     if (arbolPersonas == NULL)
+    {
         return;
+    }
+
     mostrarTodasLasDenunciasDePersonas(arbolPersonas->izquierda);
     mostrarDenunciaPorRut(arbolPersonas, arbolPersonas->datosPersona->rut); // Mostrar denuncias de este usuario
     printf("\n"); // Separador visual
