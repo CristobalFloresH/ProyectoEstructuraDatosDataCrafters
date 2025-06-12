@@ -41,4 +41,5 @@ void eliminarPersona(struct nodoPersonasABB **personas, char *rut) {
             eliminarPersona(&(nodoEliminar->derecha), aux->rut);
         }
     }
+    printf("Persona eliminada correctamente.");
 }
