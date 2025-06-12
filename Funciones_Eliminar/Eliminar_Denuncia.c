@@ -8,12 +8,12 @@ void eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
 
     while (actual != NULL) {
         if (strcmp(actual->datosDenuncia->ruc, ruc) == 0) {
-            reenlazarNodoSimpleDoble(listaDenuncia, actual);
+            reenlazarDenuncias(listaDenuncia, actual);
             liberarDenuncia(actual->datosDenuncia);
             free(actual);
             printf("Denuncia eliminada correctamente.\n");
             return;
         }
-    actual = actual->siguiente;
+        actual = actual->siguiente;
     }
-};
+}
