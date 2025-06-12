@@ -1,4 +1,4 @@
-void eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, const char *rut) {
+void eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, char *rut) {
     struct involucrados *involucrado = buscarInvolucradoPorRut(involucrados, tam, rut);
     if (involucrado == NULL) {
         printf("No se encontró involucrado con RUT %s.\n", rut);
@@ -16,7 +16,8 @@ void eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, cons
     involucrado->persona = NULL;
 
     // Buscar índice para liberar memoria y poner NULL en el arreglo
-    for (int i = 0; i < tam; i++) {
+    int i;
+    for (i = 0; i < tam; i++) {
         if (involucrados[i] == involucrado) {
             free(involucrados[i]);
             involucrados[i] = NULL;
@@ -42,7 +43,7 @@ void eliminarInvolucrado(struct nodoCausas **listaCausas, char *ruc, char *rut) 
 
             eliminarInvolucradoPorRut(actual->datosCausa->involucrados, actual->datosCausa->tamInvolucrados, rut);
             return;
-        }
+            }
 
         actual = actual->siguiente;
     } while (actual != inicio);
