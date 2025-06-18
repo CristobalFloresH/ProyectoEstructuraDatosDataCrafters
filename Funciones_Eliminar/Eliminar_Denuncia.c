@@ -1,19 +1,17 @@
-void eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
-    if (listaDenuncia == NULL) {
-        printf("No se han encontrado denuncias");
-        return;
-    }
-
+int eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
     struct nodoDenuncias *actual = *listaDenuncia;
+    if (listaDenuncia == NULL) {
+        return 0;
+    }
 
     while (actual != NULL) {
         if (strcmp(actual->datosDenuncia->ruc, ruc) == 0) {
             reenlazarDenuncias(listaDenuncia, actual);
             liberarDenuncia(actual->datosDenuncia);
             free(actual);
-            printf("Denuncia eliminada correctamente.\n");
-            return;
+            return 1;
         }
         actual = actual->siguiente;
     }
+    return 0;
 }
