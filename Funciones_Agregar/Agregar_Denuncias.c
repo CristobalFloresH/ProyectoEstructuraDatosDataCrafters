@@ -1,6 +1,10 @@
-void agregarDenunciaAPersona(char *rut ,struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
+void agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
+    struct persona *personaEncontrada;
+    struct nodoDenuncias *nuevoNodo;
+    struct nodoDenuncias *actual;
+
     // se busca a la persona usando su rut
-    struct persona *personaEncontrada = buscarPersonaPorRut(nodoPersonasABB, rut);
+    personaEncontrada = buscarPersonaPorRut(nodoPersonasABB, rut);
 
     // si no se encuentra la persona, se informa al usuario
     if(personaEncontrada == NULL){
@@ -9,7 +13,7 @@ void agregarDenunciaAPersona(char *rut ,struct nodoPersonasABB *nodoPersonasABB,
     }
 
     // se asigna memoria y se verifica que haya sido exitoso
-    struct nodoDenuncias *nuevoNodo = (struct nodoDenuncias*)malloc(sizeof(struct nodoDenuncias));
+    nuevoNodo = (struct nodoDenuncias*)malloc(sizeof(struct nodoDenuncias));
     if(nuevoNodo == NULL){
         printf("Error al asignar memoria");
         return;
@@ -20,9 +24,9 @@ void agregarDenunciaAPersona(char *rut ,struct nodoPersonasABB *nodoPersonasABB,
     nuevoNodo->siguiente = NULL;
     nuevoNodo->anterior = NULL;
 
-    struct nodoDenuncias *actual = personaEncontrada->denuncias;
+    actual = personaEncontrada->denuncias;
     if(actual == NULL){
-        // denuncias vacia, se agrega de primero
+        // denuncias vacía, se agrega de primero
         personaEncontrada->denuncias = nuevoNodo;
     } else {
         // se recorre hasta el final la lista de denuncias
