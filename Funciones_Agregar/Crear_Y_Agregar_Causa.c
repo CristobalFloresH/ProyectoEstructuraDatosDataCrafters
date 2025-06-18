@@ -1,10 +1,12 @@
 void crearYagregarCausaNueva(struct ministerio *ministerio, struct denuncia *denunciaAsociada, int estadoCausa) {
+    struct causa *nuevaCausa;
+    
     if (ministerio == NULL || denunciaAsociada == NULL) {
         printf("Ministerio o denuncia inválida.\n");
         return;
     }
 
-    struct causa *nuevaCausa = (struct causa *)malloc(sizeof(struct causa));
+    nuevaCausa = (struct causa *)malloc(sizeof(struct causa));
     if (nuevaCausa == NULL) {
         printf("Error al asignar memoria para la causa.\n");
         return;
@@ -20,7 +22,6 @@ void crearYagregarCausaNueva(struct ministerio *ministerio, struct denuncia *den
     nuevaCausa->datosCarpetas = NULL;
     nuevaCausa->involucrados = NULL;
     nuevaCausa->tamInvolucrados = 0;
-
     nuevaCausa->estadoCausa = estadoCausa;
     nuevaCausa->sentencia = NULL;
 
