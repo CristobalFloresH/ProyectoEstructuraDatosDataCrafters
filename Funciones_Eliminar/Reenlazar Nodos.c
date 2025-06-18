@@ -15,19 +15,16 @@ void reenlazarCausas(struct nodoCausas **listaCausas, struct nodoCausas *nodoEli
     if (*listaCausas == nodoEliminar) {
         *listaCausas = nodoEliminar->siguiente;
     }
-};
-
+}
 void reenlazarDenuncias(struct nodoDenuncias **listaDenuncias, struct nodoDenuncias *nodoEliminar) {
     if (*listaDenuncias == NULL || nodoEliminar == NULL) return;
 
-    // Si el nodo a eliminar es el primero
     if (*listaDenuncias == nodoEliminar) {
         *listaDenuncias = nodoEliminar->siguiente;
         if (*listaDenuncias != NULL) {
             (*listaDenuncias)->anterior = NULL;
         }
     } else {
-        // Enlazamos
         if (nodoEliminar->anterior != NULL) {
             nodoEliminar->anterior->siguiente = nodoEliminar->siguiente;
         }
@@ -35,19 +32,16 @@ void reenlazarDenuncias(struct nodoDenuncias **listaDenuncias, struct nodoDenunc
             nodoEliminar->siguiente->anterior = nodoEliminar->anterior;
         }
     }
-};
-
+}
 void reenlazarDatosCarpeta(struct nodoDatosCarpetas **listaCarpetas, struct nodoDatosCarpetas *nodoEliminar) {
     if (*listaCarpetas == NULL || nodoEliminar == NULL) return;
 
-    // Si el nodo a eliminar es el primero
     if (*listaCarpetas == nodoEliminar) {
         *listaCarpetas = nodoEliminar->siguiente;
         if (*listaCarpetas != NULL) {
             (*listaCarpetas)->anterior = NULL;
         }
     } else {
-        // Enlazamos
         if (nodoEliminar->anterior != NULL) {
             nodoEliminar->anterior->siguiente = nodoEliminar->siguiente;
         }
