@@ -41,6 +41,9 @@ void mostrarTodosInvolucradosCausa(struct causa *causa) {
 
 void mostrarInvolucradosCausaPorTipo(struct causa *causa, int tipoInvolucrado)
 {
+    int contador;
+    int i;
+    
     if (causa == NULL) {
         printf("No se encontro la causa seleccionada.\n");
         return;
@@ -50,8 +53,7 @@ void mostrarInvolucradosCausaPorTipo(struct causa *causa, int tipoInvolucrado)
         return;
     }
 
-    int contador = 0;
-    int i;
+    contador = 0;
 
     for (i = 0; i < causa->tamInvolucrados; i++)
     {
