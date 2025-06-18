@@ -1,17 +1,16 @@
-void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, int tipoDeDato) {
+int eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, int tipoDeDato) {
     struct nodoCausas *causa = buscarNodoCausa(*listaCausas, ruc);
     struct nodoDatosCarpetas *carpeta = causa->datosCausa->datosCarpetas;
     struct nodoDatosCarpetas *aEliminar = carpeta;
 
     if (listaCausas == NULL || *listaCausas == NULL) { // Comprobamos existencia de causa.
-        printf("No hay causas registradas.\n");
-        return;
+        return 0;
     }
 
     char palabra[100];
     if (causa == NULL) {
         printf("No se encontró una causa con ese RUC.\n");
-        return;
+        return 0;
     }
 
     while (carpeta != NULL) {
@@ -70,8 +69,7 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                     break;
 
                 default:
-                    printf("Tipo de dato no válido.\n");
-                    return;
+                    return 0;
             }
 
             free(aEliminar->datosCarpeta);
@@ -79,14 +77,12 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
 
             free(aEliminar);
             aEliminar = NULL;
-
-            printf("Dato eliminado correctamente.\n");
-            return; // Salimos tras eliminar la primera coincidencia
+            
+            return 1; // Salimos tras eliminar la primera coincidencia
         }
         else {
             carpeta = carpeta->siguiente;
         }
     }
-
-    printf("No se encontraron datos del tipo especificado en carpetas.\n");
+    return 0;
 }
