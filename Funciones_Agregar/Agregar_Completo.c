@@ -1,10 +1,246 @@
+void agregarCarpetaInvestigativa(struct nodoDatosCarpetas **carpetas, struct datosCarpeta *nuevaCarpeta) {
+    struct nodoDatosCarpetas *nuevoNodo;
+    struct nodoDatosCarpetas *actual;
+
+    // Revisamos que la nueva carpeta exista
+    if(nuevaCarpeta == NULL){
+        printf("Nueva carpeta no existe\n");
+        return;
+    }
+
+    // Definimos nuevo nodo para asignarle nuevaCarpeta y corroboramos que se asigne memoria
+    nuevoNodo = (struct nodoDatosCarpetas *)malloc(sizeof(struct nodoDatosCarpetas));
+    if(nuevoNodo == NULL){
+        printf("Error al asignar memoria para el nuevo nodo\n");
+        return;
+    }
+
+    // Se asignan los campos al nuevo nodo
+    nuevoNodo->datosCarpeta = nuevaCarpeta;
+    nuevoNodo->siguiente = NULL;
+    nuevoNodo->anterior = NULL;
+
+    // Si está vacía, asignar al inicio
+    if(*carpetas == NULL){
+        *carpetas = nuevoNodo;
+    } else {
+        // Recorre hasta el final de la lista
+        actual = *carpetas;
+        while(actual->siguiente != NULL) {
+            actual = actual->siguiente;
+        }
+
+        // Asigna los punteros al nuevo nodo
+        actual->siguiente = nuevoNodo;
+        nuevoNodo->anterior = actual;
+    }
+    printf("Carpeta agregada exitosamente.\n");
+}
+
+void agregarCausa(struct nodoCausas **listaCausas, struct causa *nuevaCausa){
+    struct nodoCausas *nuevoNodo;
+    struct nodoCausas *ultimo;
+
+    // Se crea el nuevo Nodo al que se le asignará la nueva causa
+    nuevoNodo = (struct nodoCausas *)malloc(sizeof(struct nodoCausas));
+    if(nuevoNodo == NULL){
+        printf("Error al asignar memoria");
+        return;
+    }
+
+    // Se le asigna al nuevo nodo la nueva causa
+    nuevoNodo->datosCausa = nuevaCausa;
+
+    if(*listaCausas == NULL){
+        // Lista vacía, se agrega al inicio
+        nuevoNodo->siguiente = nuevoNodo;
+        nuevoNodo->anterior = nuevoNodo;
+        *listaCausas = nuevoNodo;
+    } else {
+        // Si la lista no está vacía se reenlazan los nodos
+        ultimo = (*listaCausas)->anterior;
+
+        nuevoNodo->siguiente = *listaCausas;
+        nuevoNodo->anterior = ultimo;
+
+        ultimo->siguiente = nuevoNodo;
+        (*listaCausas)->anterior = nuevoNodo;
+    }
+}
+
+void agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
+    struct persona *personaEncontrada;
+    struct nodoDenuncias *nuevoNodo;
+    struct nodoDenuncias *actual;
+
+    // se busca a la persona usando su rut
+    personaEncontrada = buscarPersonaPorRut(nodoPersonasABB, rut);
+
+    // si no se encuentra la persona, se informa al usuario
+    if(personaEncontrada == NULL){
+        printf("No se encontraron personas\n");
+        return;
+    }
+
+    // se asigna memoria y se verifica que haya sido exitoso
+    nuevoNodo = (struct nodoDenuncias*)malloc(sizeof(struct nodoDenuncias));
+    if(nuevoNodo == NULL){
+        printf("Error al asignar memoria");
+        return;
+    }
+
+    // se asignan valores a nuevo nodo
+    nuevoNodo->datosDenuncia = nuevaDenuncia;
+    nuevoNodo->siguiente = NULL;
+    nuevoNodo->anterior = NULL;
+
+    actual = personaEncontrada->denuncias;
+    if(actual == NULL){
+        // denuncias vacía, se agrega de primero
+        personaEncontrada->denuncias = nuevoNodo;
+    } else {
+        // se recorre hasta el final la lista de denuncias
+        while(actual->siguiente != NULL){
+            actual = actual->siguiente;
+        }
+        actual->siguiente = nuevoNodo;
+        nuevoNodo->anterior = actual;
+    }
+}
+
+void agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevoInvolucrado){
+    int i;
+    int nuevoTam;
+    struct involucrados **nuevoArreglo;
+
+    nuevoTam = 0;  // Inicialización por seguridad en TurboC
+
+    // Revisamos que causaDestinada y nuevoInvolucrado tengan datos
+    if (causaDestinada == NULL || nuevoInvolucrado == NULL) {
+        printf("Error: la causa o el involucrado están vacíos.\n");
+        return;
+    }
+
+    nuevoTam = causaDestinada->tamInvolucrados + 1;
+
+    // Asignamos memoria y validamos que esta sea correcta
+    nuevoArreglo = (struct involucrados **) malloc(sizeof(struct involucrados *) * nuevoTam);
+    if (nuevoArreglo == NULL) {
+        printf("Error al asignar memoria.\n");
+        return;
+    }
+
+    // Recorre el array hasta el último dato
+    for(i = 0; i < causaDestinada->tamInvolucrados; i++){
+        nuevoArreglo[i] = causaDestinada->involucrados[i];
+    }
+
+    // Se añade al final el nuevo involucrado
+    nuevoArreglo[causaDestinada->tamInvolucrados] = nuevoInvolucrado;
+
+    // Se libera memoria del array anterior
+    if(causaDestinada->involucrados != NULL){
+        free(causaDestinada->involucrados);
+    }
+
+    causaDestinada->involucrados = nuevoArreglo;
+    causaDestinada->tamInvolucrados = nuevoTam;
+}
+
+void agregarPersonas(struct ministerio **ministerio, struct persona *nuevaPersona) {
+    struct nodoPersonasABB *nuevoNodo;
+    struct nodoPersonasABB *actual;
+    struct nodoPersonasABB *padre;
+    int cmp;    
+    
+    if (ministerio == NULL || nuevaPersona == NULL) {
+        printf("Error: ministerio o persona inválidos.\n");
+        return;
+    }
+
+    // Si el árbol está vacío, se inicializa
+    if ((*ministerio)->personas == NULL) {
+        nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
+        if (nuevoNodo == NULL) {
+            printf("Error al asignar memoria.\n");
+            return;
+        }
+        nuevoNodo->datosPersona = nuevaPersona;
+        nuevoNodo->izquierda = NULL;
+        nuevoNodo->derecha = NULL;
+        (*ministerio)->personas = nuevoNodo;
+        return;
+    }
+
+    // Reutilizamos la lógica anterior de inserción en ABB
+    actual = (*ministerio)->personas;
+    padre = NULL;
+    cmp = 0;
+
+    while (actual != NULL) {
+        cmp = strcmp(nuevaPersona->rut, actual->datosPersona->rut);
+        if (cmp == 0) {
+            printf("Esta persona ya se registró.\n");
+            return;
+        }
+        padre = actual;
+        if (cmp < 0) {
+            if (actual->izquierda == NULL) break;
+            actual = actual->izquierda;
+        } else {
+            if (actual->derecha == NULL) break;
+            actual = actual->derecha;
+        }
+    }
+
+    nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
+    if (nuevoNodo == NULL) {
+        printf("Error al asignar memoria.\n");
+        return;
+    }
+    nuevoNodo->datosPersona = nuevaPersona;
+    nuevoNodo->izquierda = NULL;
+    nuevoNodo->derecha = NULL;
+
+    if (cmp < 0) {
+        padre->izquierda = nuevoNodo;
+    } else {
+        padre->derecha = nuevoNodo;
+    }
+    printf("La persona fue agregara con exito.\n");
+}
+
+void crearYagregarCausaNueva(struct ministerio *ministerio, struct denuncia *denunciaAsociada, int estadoCausa) {
+    struct causa *nuevaCausa;
+    
+    if (ministerio == NULL || denunciaAsociada == NULL) {
+        printf("Ministerio o denuncia inválida.\n");
+        return;
+    }
+
+    nuevaCausa = (struct causa *)malloc(sizeof(struct causa));
+    if (nuevaCausa == NULL) {
+        printf("Error al asignar memoria para la causa.\n");
+        return;
+    }
+    nuevaCausa->ruc = duplicarCadena(denunciaAsociada->ruc);
+    if (nuevaCausa->ruc == NULL) {
+        printf("Error al duplicar el RUC.\n");
+        return;
+    }
 
 
+    nuevaCausa->denuncia = denunciaAsociada;
+    nuevaCausa->datosCarpetas = NULL;
+    nuevaCausa->involucrados = NULL;
+    nuevaCausa->tamInvolucrados = 0;
+    nuevaCausa->estadoCausa = estadoCausa;
+    nuevaCausa->sentencia = NULL;
 
+    agregarCausa(&ministerio->causas, nuevaCausa);
+    printf("Causa agregada correctamente\n");
 
-
-
-
+}
 
 void menuAgregar(struct ministerio *ministerio){
     int opcion;
