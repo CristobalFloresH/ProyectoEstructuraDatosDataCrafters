@@ -1,6 +1,8 @@
 void menuEliminar(struct ministerio *ministerio) {
     int opcion = -1;
-    char rut[30], ruc[30];
+    char rut[30];
+    char ruc[30];
+    struct persona *persona;
 
     while (opcion != 0) {
         printf("\n=========== MENU ELIMINAR ===========\n");
@@ -31,7 +33,7 @@ void menuEliminar(struct ministerio *ministerio) {
                 scanf("%s", rut);
                 getchar();
 
-                struct persona *persona = buscarPersonaPorRut(ministerio->personas, rut);
+                persona = buscarPersonaPorRut(ministerio->personas, rut);
                 if (persona == NULL)
                     printf("Persona no encontrada.\n");
                 else {
@@ -43,7 +45,7 @@ void menuEliminar(struct ministerio *ministerio) {
                 break;
 
             case 4:
-                menuEliminarCarpeta(ministerio); //antes usaba &
+                menuEliminarCarpeta(ministerio);
                 break;
 
             case 5:
@@ -56,7 +58,7 @@ void menuEliminar(struct ministerio *ministerio) {
                 break;
 
             case 0:
-                //Volver. al menu anterior
+                // Volver al menú anterior
                 break;
 
             default:
