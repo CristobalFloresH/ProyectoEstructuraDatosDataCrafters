@@ -1,44 +1,31 @@
 void mostrarPorcentajesEstadoCausa(struct ministerio *ministerio){
+    float totalCausas, totalArchivada, totalInvestigacion, totalCerrado, totalJuicio;
+    float promedioArchivada, promedioInvestigacion, promedioCerrado, promedioJuicio;
+    struct nodoCausas *actual;
 
     if(ministerio == NULL || ministerio->causas == NULL){
-        printf("No se encontraron casuas en el sistema.");
+        printf("No se encontraron causas en el sistema.\n");
         return;
     }
 
-    float totalCausas = 0, totalArchivada = 0, totalInvestigacion = 0, totalCerrado = 0, totalJuicio = 0;
+    totalCausas = totalArchivada = totalInvestigacion = totalCerrado = totalJuicio = 0;
 
-    struct nodoCausas *actual = ministerio->causas;
+    actual = ministerio->causas;
 
-
-    do{
-
-        if(actual->datosCausa->estadoCausa == 1){
-            totalCausas++;
-            totalArchivada++;
-        }
-
-        else if(actual->datosCausa->estadoCausa == 2){
-            totalCausas++;
-            totalInvestigacion++;
-        }
-
-        else if(actual->datosCausa->estadoCausa == 3){
-            totalCausas++;
-            totalCerrado++;
-        }
-
-        else if(actual->datosCausa->estadoCausa == 4){
-            totalCausas++;
-            totalJuicio++;
+    do {
+        totalCausas++;
+        switch(actual->datosCausa->estadoCausa) {
+            case 1: totalArchivada++; break;
+            case 2: totalInvestigacion++; break;
+            case 3: totalCerrado++; break;
+            case 4: totalJuicio++; break;
+            default: break;
         }
         actual = actual->siguiente;
-
-    }while(actual != ministerio->causas);
-
-        float promedioArchivada, promedioInvestigacion, promedioCerrado, promedioJuicio;
+    } while(actual != ministerio->causas);
 
     if (totalCausas == 0) {
-        printf("No se encontraron casuas en el sistema.");
+        printf("No se encontraron causas en el sistema.\n");
         return;
     }
 
@@ -48,9 +35,8 @@ void mostrarPorcentajesEstadoCausa(struct ministerio *ministerio){
     promedioJuicio = (totalJuicio / totalCausas) * 100;
 
     printf("--- Porcentaje estado causa ---\n");
-    printf("El %.2f%% de las causas estan en estado 'archivada'\n", promedioArchivada);
-    printf("El %.2f%% de las causas estan en estado 'investigacion en progreso'\n", promedioInvestigacion);
-    printf("El %.2f%% de las causas estan en estado 'cerrada'\n", promedioCerrado );
-    printf("El %.2f%% de las causas estan en estado 'en juicio'\n", promedioJuicio);
-
+    printf("El %.2f%% de las causas están en estado 'archivada'\n", promedioArchivada);
+    printf("El %.2f%% de las causas están en estado 'investigación en progreso'\n", promedioInvestigacion);
+    printf("El %.2f%% de las causas están en estado 'cerrada'\n", promedioCerrado);
+    printf("El %.2f%% de las causas están en estado 'en juicio'\n", promedioJuicio);
 }
