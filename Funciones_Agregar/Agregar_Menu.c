@@ -19,11 +19,13 @@ void menuAgregar(struct ministerio *ministerio){
         }
         else if (opcion == 1) {
         /*Opcion 1 agregar persona*/
-            struct persona *nuevaPersona = (struct persona *)malloc(sizeof(struct persona));
-            /*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
+            struct pesona *nuevaPersona;
             char palabra[100];
             int rol;
             char contrasenaIngresada[100];
+            
+            nuevaPersona = (struct persona *)malloc(sizeof(struct persona));
+            /*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
 
             if(nuevaPersona == NULL){
                 printf("Error al asignar memora");
@@ -76,7 +78,6 @@ void menuAgregar(struct ministerio *ministerio){
             nuevaPersona->denuncias = NULL;
 
             agregarPersonas(&(ministerio), nuevaPersona);
-
             break;
             /*Funcion agregarPersonas recorre la lista de personas que se encuentra en ministerio para asi agregar a la nueva persona al final de la lista*/
         }
@@ -87,7 +88,10 @@ void menuAgregar(struct ministerio *ministerio){
             char rutDenunciante[20];
             char rutDenunciado[20];
             char palabra[100];
-
+            struct persona *nuevoDenunciante;
+            struct persona *nuevoDenunciado;
+            struct denuncia *nuevaDenuncia;
+            
             printf("Ingrese RUT del denunciante\n");
             scanf(" %[^\n]", rutDenunciante);
             getchar();
@@ -96,8 +100,8 @@ void menuAgregar(struct ministerio *ministerio){
             scanf(" %[^\n]", rutDenunciado);
             getchar();
 
-            struct persona *nuevoDenunciante = buscarPersonaPorRut(ministerio->personas, rutDenunciante);
-            struct persona *nuevoDenunciado = buscarPersonaPorRut(ministerio->personas, rutDenunciado);
+            nuevoDenunciante = buscarPersonaPorRut(ministerio->personas, rutDenunciante);
+            nuevoDenunciado = buscarPersonaPorRut(ministerio->personas, rutDenunciado);
             /*Se pregunta y lee los ruts de denunciante y denunciado para asi copiar esta informacion en 2 strcut personas */
 
             if(nuevoDenunciante == NULL || nuevoDenunciado == NULL){
@@ -105,7 +109,7 @@ void menuAgregar(struct ministerio *ministerio){
                 return;
             }
 
-            struct denuncia *nuevaDenuncia = (struct denuncia *)malloc(sizeof(struct denuncia));
+            nuevaDenuncia = (struct denuncia *)malloc(sizeof(struct denuncia));
 
             if(nuevaDenuncia == NULL){
                 printf("Error al asignar memoria");
@@ -149,8 +153,10 @@ void menuAgregar(struct ministerio *ministerio){
             char palabra[300];
             int tipoDato;
             struct datosCarpeta *nuevaCarpeta;
-
-
+            struct persona *declarante;
+            struct persona *buscado;
+            struct denuncia *denunciaAgregar;
+            struct nodoCausas *actual;            
             nuevaCarpeta = (struct datosCarpeta *)malloc(sizeof(struct datosCarpeta));
 
             nuevaCarpeta->descripcion = NULL;
@@ -286,6 +292,8 @@ void menuAgregar(struct ministerio *ministerio){
             char ruc[30];
             char rut[30];
             int numero =0;
+            struct persona *personaBuscada;
+            struct denuncia *denuncia;
             printf("Ingrese RUT del denunciado para crear la causa:\n");
             scanf("%s", rut);
             getchar(); // limpiar buffer
@@ -295,14 +303,14 @@ void menuAgregar(struct ministerio *ministerio){
             printf("Ingrese el estado de la causa (1 = Archivada 2 = Investigacion en progreso 3 = Cerrada 4 = En juicio): \n");
             scanf("%d", &numero);
             getchar();
-            struct persona *personaBuscada = buscarPersonaPorRut(ministerio->personas, rut);
+            personaBuscada = buscarPersonaPorRut(ministerio->personas, rut);
 
             if (personaBuscada == NULL || personaBuscada->denuncias == NULL) {
                 printf("Persona o sus denuncias fueron  no encontradas.\n");
                 return;
             }
 
-            struct denuncia *denuncia = buscarDenunciaPorRuc(personaBuscada->denuncias, ruc);
+            denuncia = buscarDenunciaPorRuc(personaBuscada->denuncias, ruc);
             if (denuncia == NULL) {
                 printf("No se encontro una denuncia con ese ruc que pertenezca al usuario entregado.\n");
             }
@@ -316,7 +324,9 @@ void menuAgregar(struct ministerio *ministerio){
         else if(opcion == 5){
 
             char palabra[100];
-            int involucradosNuevos = 1, i, tipo;
+            int involucradosNuevos = 1;
+            int i;
+            int tipo;
             struct causa *causaDestinada;
             struct involucrados *nuevoInvolucrado;
             struct persona *personaEncontrada;
