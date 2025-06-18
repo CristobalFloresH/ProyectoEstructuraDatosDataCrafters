@@ -1,7 +1,9 @@
 struct nodoCausas *buscarNodoCausa(struct nodoCausas *causas, char *rucBuscado) {
+    struct nodoCausas *actual;
+    
     if (causas == NULL || rucBuscado == NULL) return NULL;
 
-    struct nodoCausas *actual = causas;
+    actual = causas;
 
     do {
         if (strcmp(actual->datosCausa->ruc, rucBuscado) == 0) {
