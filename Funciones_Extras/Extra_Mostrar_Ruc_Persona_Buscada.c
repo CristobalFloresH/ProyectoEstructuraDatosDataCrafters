@@ -1,18 +1,23 @@
 void mostrarRucDePersonaBuscada(struct ministerio *ministerio, char *rutBuscado)
 {
+    int minimoUnEncontrado;
+    int i;
+    struct nodoCausas *actual;
+    struct nodoDatosCarpetas *actualCarpeta;
+    int encontrado;
+
     if (ministerio == NULL || ministerio->causas == NULL)
     {
         printf("No se encontraron causas en el sistema\n");
         return;
     }
 
-    int minimoUnEncontrado = 0;
-    int i;
-    struct nodoCausas *actual = ministerio->causas;
+    minimoUnEncontrado = 0;
+    actual = ministerio->causas;
 
     do
     {
-        int encontrado = 0;
+        encontrado = 0;
 
         // Buscar en involucrados
         for (i = 0; i < actual->datosCausa->tamInvolucrados; i++)
@@ -44,7 +49,7 @@ void mostrarRucDePersonaBuscada(struct ministerio *ministerio, char *rutBuscado)
         }
 
         // Buscar en datosPersona de todas las carpetas investigativas de la causa
-        struct nodoDatosCarpetas *actualCarpeta = actual->datosCausa->datosCarpetas;
+        actualCarpeta = actual->datosCausa->datosCarpetas;
         while (actualCarpeta != NULL)
         {
             if (actualCarpeta->datosCarpeta != NULL &&
