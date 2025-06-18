@@ -1,88 +1,113 @@
-int eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, int tipoDeDato) {
-    struct nodoCausas *causa = buscarNodoCausa(*listaCausas, ruc);
-    struct nodoDatosCarpetas *carpeta = causa->datosCausa->datosCarpetas;
-    struct nodoDatosCarpetas *aEliminar = carpeta;
+void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, int tipoDeDato) {
+    struct nodoCausas *causa;
+    struct nodoDatosCarpetas *carpeta;
+    struct nodoDatosCarpetas *aEliminar;
+    char palabra[100];
+    int coincide;
 
-    if (listaCausas == NULL || *listaCausas == NULL) { // Comprobamos existencia de causa.
-        return 0;
+    // Verificar si la lista es válida
+    if (listaCausas == NULL || *listaCausas == NULL) {
+        printf("No hay causas registradas.\n");
+        return;
     }
 
-    char palabra[100];
+    causa = buscarNodoCausa(*listaCausas, ruc);
     if (causa == NULL) {
         printf("No se encontró una causa con ese RUC.\n");
-        return 0;
+        return;
     }
+
+    carpeta = causa->datosCausa->datosCarpetas;
 
     while (carpeta != NULL) {
         if (carpeta->datosCarpeta != NULL && carpeta->datosCarpeta->tipoDeDato == tipoDeDato) {
-            carpeta = carpeta->siguiente; // Guardamos siguiente antes de eliminar
+            aEliminar = carpeta;
+            carpeta = carpeta->siguiente; // Avanzar antes de modificar
 
-            // Reenlazamos para sacar nodo de la lista doble
-            reenlazarDatosCarpeta(&(causa->datosCausa->datosCarpetas), aEliminar);
+            coincide = 0;
 
-            // Liberamos según tipo
             switch (tipoDeDato) {
-                case 1: // declaraciones
-                    printf("Ingrese RUT del que declara.\n");
+                case 1: // Declaraciones
+                    printf("Ingrese RUT del que declara:\n");
                     scanf(" %[^\n]", palabra);
                     getchar();
-                if (aEliminar != NULL && aEliminar->datosCarpeta->datosPersona->rut != NULL && strcmp(aEliminar->datosCarpeta->datosPersona->rut, palabra) == 0 ) {
+                    if (aEliminar->datosCarpeta->datosPersona != NULL &&
+                        strcmp(aEliminar->datosCarpeta->datosPersona->rut, palabra) == 0) {
                         free(aEliminar->datosCarpeta->fecha);
                         aEliminar->datosCarpeta->fecha = NULL;
+
                         free(aEliminar->datosCarpeta->descripcion);
                         aEliminar->datosCarpeta->descripcion = NULL;
+
                         free(aEliminar->datosCarpeta->datosPersona);
-                        aEliminar->datosCarpeta->datosPersona=NULL;
+                        aEliminar->datosCarpeta->datosPersona = NULL;
+
+                        coincide = 1;
                     }
                     break;
 
-                case 2: // pruebas
-                    printf("Ingrese Prueba que desea eliminar.\n");
+                case 2: // Pruebas
+                    printf("Ingrese descripción de la prueba a eliminar:\n");
                     scanf(" %[^\n]", palabra);
                     getchar();
-                    if (aEliminar != NULL && aEliminar->datosCarpeta->descripcion != NULL && strcmp(aEliminar->datosCarpeta->descripcion, palabra) == 0 ) {
+                    if (aEliminar->datosCarpeta->descripcion != NULL &&
+                        strcmp(aEliminar->datosCarpeta->descripcion, palabra) == 0) {
                         free(aEliminar->datosCarpeta->descripcion);
                         aEliminar->datosCarpeta->descripcion = NULL;
+
                         free(aEliminar->datosCarpeta->fecha);
                         aEliminar->datosCarpeta->fecha = NULL;
+
+                        coincide = 1;
                     }
                     break;
 
-                case 3: // diligencias
-                    printf("Ingrese descripcion de diligencia a eliminar.\n");
+                case 3: // Diligencias
+                    printf("Ingrese descripción de la diligencia a eliminar:\n");
                     scanf(" %[^\n]", palabra);
                     getchar();
-                    if (aEliminar != NULL && aEliminar->datosCarpeta->datosDiligencias != NULL && strcmp(aEliminar->datosCarpeta->datosDiligencias->descripcion, palabra) == 0) {
+                    if (aEliminar->datosCarpeta->datosDiligencias != NULL &&
+                        strcmp(aEliminar->datosCarpeta->datosDiligencias->descripcion, palabra) == 0) {
                         liberarDatosDiligencias(aEliminar->datosCarpeta->datosDiligencias);
                         aEliminar->datosCarpeta->datosDiligencias = NULL;
+                        coincide = 1;
                     }
                     break;
 
-                case 4: // denuncia
-                    printf("Ingrese RUC de la denuncia extra a eliminar.\n");
+                case 4: // Denuncia
+                    printf("Ingrese RUC de la denuncia extra a eliminar:\n");
                     scanf(" %[^\n]", palabra);
                     getchar();
-                    if (aEliminar != NULL && aEliminar->datosCarpeta->datosDenuncia != NULL && strcmp(aEliminar->datosCarpeta->datosDenuncia->ruc, palabra) == 0) {
+                    if (aEliminar->datosCarpeta->datosDenuncia != NULL &&
+                        strcmp(aEliminar->datosCarpeta->datosDenuncia->ruc, palabra) == 0) {
                         liberarDenuncia(aEliminar->datosCarpeta->datosDenuncia);
                         aEliminar->datosCarpeta->datosDenuncia = NULL;
+                        coincide = 1;
                     }
                     break;
 
                 default:
-                    return 0;
+                    printf("Tipo de dato no válido.\n");
+                    return;
             }
 
-            free(aEliminar->datosCarpeta);
-            aEliminar->datosCarpeta = NULL;
+            if (coincide) {
+                reenlazarDatosCarpeta(&(causa->datosCausa->datosCarpetas), aEliminar);
+                free(aEliminar->datosCarpeta);
+                aEliminar->datosCarpeta = NULL;
+                free(aEliminar);
+                aEliminar = NULL;
 
-            free(aEliminar);
-            aEliminar = NULL;
-            
-            return 1; // Salimos tras eliminar la primera coincidencia
-        }
-        else {
+                printf("Dato eliminado correctamente.\n");
+                return;
+            } else {
+                printf("No se encontró coincidencia con los datos ingresados.\n");
+                return;
+            }
+        } else {
             carpeta = carpeta->siguiente;
         }
     }
-    return 0;
+
+    printf("No se encontraron datos del tipo especificado en carpetas.\n");
 }
