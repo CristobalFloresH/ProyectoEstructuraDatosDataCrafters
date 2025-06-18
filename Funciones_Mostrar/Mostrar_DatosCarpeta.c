@@ -1,5 +1,8 @@
 void mostrarDatosCarpetaCausaPorTipo(struct causa *causa, int tipoDeDato)
 {
+    struct nodoDatosCarpetas *actual;
+    int contador;
+    
     if (causa == NULL)
     {
         printf("No se encontro la causa seleccionada.\n");
@@ -11,8 +14,8 @@ void mostrarDatosCarpetaCausaPorTipo(struct causa *causa, int tipoDeDato)
         return;
     }
 
-    struct nodoDatosCarpetas *actual = causa->datosCarpetas;
-    int contador = 0;
+    actual = causa->datosCarpetas;
+    contador = 0;
 
     while (actual != NULL)
     {
@@ -70,6 +73,10 @@ void mostrarDatosCarpetaCausaPorTipo(struct causa *causa, int tipoDeDato)
 
 void mostrarTodosDatosCarpetaCausa(struct causa *causa)
 {
+    struct nodoDatosCarpetas *actual;
+    struct datosCarpeta *carpeta;
+    int contador;
+
     if (causa == NULL) {
         printf("No se encontro la causa seleccionada.\n");
         return;
@@ -79,12 +86,12 @@ void mostrarTodosDatosCarpetaCausa(struct causa *causa)
         return;
     }
 
-    struct nodoDatosCarpetas *actual = causa->datosCarpetas;
-    int contador = 0;
+    actual = causa->datosCarpetas;
+    contador = 0;
 
     while (actual != NULL)
     {
-        struct datosCarpeta *carpeta = actual->datosCarpeta;
+        carpeta = actual->datosCarpeta;
         if (carpeta != NULL)
         {
             contador++;
