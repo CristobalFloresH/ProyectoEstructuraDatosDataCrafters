@@ -1,22 +1,21 @@
 void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, int tipoDeDato) {
+    struct nodoCausas *causa = buscarNodoCausa(*listaCausas, ruc);
+    struct nodoDatosCarpetas *carpeta = causa->datosCausa->datosCarpetas;
+    struct nodoDatosCarpetas *aEliminar = carpeta;
+
     if (listaCausas == NULL || *listaCausas == NULL) { // Comprobamos existencia de causa.
         printf("No hay causas registradas.\n");
         return;
     }
 
     char palabra[100];
-
-    struct nodoCausas *causa = buscarNodoCausa(*listaCausas, ruc); // Encontramos causa.
     if (causa == NULL) {
         printf("No se encontró una causa con ese RUC.\n");
         return;
     }
 
-    struct nodoDatosCarpetas *carpeta = causa->datosCausa->datosCarpetas;
-
     while (carpeta != NULL) {
         if (carpeta->datosCarpeta != NULL && carpeta->datosCarpeta->tipoDeDato == tipoDeDato) {
-            struct nodoDatosCarpetas *aEliminar = carpeta;
             carpeta = carpeta->siguiente; // Guardamos siguiente antes de eliminar
 
             // Reenlazamos para sacar nodo de la lista doble
