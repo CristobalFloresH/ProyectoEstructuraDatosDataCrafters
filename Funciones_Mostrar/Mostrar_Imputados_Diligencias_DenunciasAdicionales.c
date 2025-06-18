@@ -76,6 +76,9 @@ void mostrarDatosDenunciaAdicionalEnCausa(struct denuncia *denuncia)
 
 void mostrarDatosCarpetaCausaPorTipo(struct causa *causa, int tipoDeDato)
 {
+    struct nodoDatosCarpetas *actual;
+    int contador;
+    
     if (causa == NULL)
     {
         printf("No se encontro la causa seleccionada.\n");
@@ -87,8 +90,8 @@ void mostrarDatosCarpetaCausaPorTipo(struct causa *causa, int tipoDeDato)
         return;
     }
 
-    struct nodoDatosCarpetas *actual = causa->datosCarpetas;
-    int contador = 0;
+    actual = causa->datosCarpetas;
+    contador = 0;
 
     while (actual != NULL)
     {
