@@ -1,16 +1,18 @@
 void mostrarDenunciaDeCausa(struct causa *causaActual) {
     struct denuncia *denuncia;
+    struct causa *causaBuscada;
     
     if (causaActual == NULL) {
         printf("No se encontro la causa seleccionada.\n");
         return;
     }
-    if (causaActual->denuncia == NULL) {
+    if (causaActual->denuncia == NULL) {            
         printf("Esta causa no tiene denuncias asociadas.\n");
         return;
     }
 
     denuncia = causaActual->denuncia;
+
     printf("========================================\n");
     printf("DENUNCIA EN LA CAUSA RUC: %s\n", causaActual->ruc);
     printf("========================================\n");
@@ -18,6 +20,7 @@ void mostrarDenunciaDeCausa(struct causa *causaActual) {
     printf("Fecha         : %s\n", denuncia->fecha);
     printf("Descripcion   : %s\n", denuncia->descripcion);
     printf("Delito        : %s\n", denuncia->tipoDeDenuncia);
+
     if (denuncia->denunciante != NULL && denuncia->denunciado != NULL)
     {
         printf("Denunciante   : %s %s (RUT: %s)\n", denuncia->denunciante->nombre,
@@ -52,7 +55,7 @@ void mostrarTodoDatoDeCausaPorRuc(struct nodoCausas *causas, char *rucBuscado) {
     }
 
     //se busca a la carpeta indicada
-    struct causa *causaBuscada = buscarCausaPorRuc(causas, rucBuscado);
+    causaBuscada = buscarCausaPorRuc(causas, rucBuscado);
 
     //si no se encuentra o algun dato es invalido, retorna mensaje de error
     if (causaBuscada == NULL)
@@ -82,7 +85,8 @@ void mostrarTodoDatoDeCausaPorRuc(struct nodoCausas *causas, char *rucBuscado) {
 
 void mostrarTodasLasCausas(struct nodoCausas *causas)
 {
-    struct nodoCausas *actual = causas;
+    struct nodoCausas *actual;
+    actual = causas;
     do
     {
         mostrarTodoDatoDeCausaPorRuc(causas, actual->datosCausa->ruc);
