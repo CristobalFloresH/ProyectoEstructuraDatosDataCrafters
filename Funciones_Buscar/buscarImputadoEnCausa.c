@@ -1,11 +1,13 @@
 struct involucrados* buscarImputadoEnCausa(struct causa *c, char *rutImputado) {
+    int i;
+    struct involucrados *inv;
+    
     if (c == NULL || rutImputado == NULL) {
         printf("Error: causa o RUT inválido.\n");
         return NULL;
     }
-    int i;
     for (i = 0; i < c->tamInvolucrados; i++) {
-        struct involucrados *inv = c->involucrados[i];
+        inv = c->involucrados[i];
         if (inv != NULL &&
             inv->tipoInvolucrado == 2 && // Tipo imputado
             inv->persona != NULL &&
