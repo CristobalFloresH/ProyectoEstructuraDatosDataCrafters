@@ -1,4 +1,8 @@
 void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
+    struct persona *personaBuscada;
+    struct nodoDenuncias *actual;
+    int contadorDenuncias;
+    
     if (personas == NULL) {
         printf("No hay personas registradas en el sistema.\n");
         return;
@@ -9,7 +13,7 @@ void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
     }
 
     //se busca a la persona indicada
-    struct persona *personaBuscada = buscarPersonaPorRut(personas, rutBuscado);
+    personaBuscada = buscarPersonaPorRut(personas, rutBuscado);
 
     //si no se encuentra o algun dato es invalido, retorna mensaje de error
     if (personaBuscada == NULL)
@@ -23,8 +27,8 @@ void mostrarDenunciaPorRut(struct nodoPersonasABB *personas, char *rutBuscado) {
         printf("Este usuario no tiene denuncias asociadas.\n");
         return;
     }
-    struct nodoDenuncias *actual = personaBuscada->denuncias;
-    int contadorDenuncias = 0;
+    actual = personaBuscada->denuncias;
+    contadorDenuncias = 0;
 
     printf("\n========================================\n");
     printf("Denuncias de %s %s | Rut: %s\n", personaBuscada->nombre, personaBuscada->apellido, personaBuscada->rut);
