@@ -1,4 +1,9 @@
 void agregarPersonas(struct ministerio **ministerio, struct persona *nuevaPersona) {
+    struct nodoPersonasABB *nuevoNodo;
+    struct nodoPersonasABB *actual;
+    struct nodoPersonasABB *padre;
+    int cmp;    
+    
     if (ministerio == NULL || nuevaPersona == NULL) {
         printf("Error: ministerio o persona inválidos.\n");
         return;
@@ -6,7 +11,7 @@ void agregarPersonas(struct ministerio **ministerio, struct persona *nuevaPerson
 
     // Si el árbol está vacío, se inicializa
     if ((*ministerio)->personas == NULL) {
-        struct nodoPersonasABB *nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
+        nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
         if (nuevoNodo == NULL) {
             printf("Error al asignar memoria.\n");
             return;
@@ -19,9 +24,9 @@ void agregarPersonas(struct ministerio **ministerio, struct persona *nuevaPerson
     }
 
     // Reutilizamos la lógica anterior de inserción en ABB
-    struct nodoPersonasABB *actual = (*ministerio)->personas;
-    struct nodoPersonasABB *padre = NULL;
-    int cmp = 0;
+    actual = (*ministerio)->personas;
+    padre = NULL;
+    cmp = 0;
 
     while (actual != NULL) {
         cmp = strcmp(nuevaPersona->rut, actual->datosPersona->rut);
@@ -39,7 +44,7 @@ void agregarPersonas(struct ministerio **ministerio, struct persona *nuevaPerson
         }
     }
 
-    struct nodoPersonasABB *nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
+    nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
     if (nuevoNodo == NULL) {
         printf("Error al asignar memoria.\n");
         return;
