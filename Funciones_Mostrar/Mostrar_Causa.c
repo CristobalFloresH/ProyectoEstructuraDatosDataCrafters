@@ -1,4 +1,6 @@
 void mostrarDenunciaDeCausa(struct causa *causaActual) {
+    struct denuncia *denuncia;
+    
     if (causaActual == NULL) {
         printf("No se encontro la causa seleccionada.\n");
         return;
@@ -8,7 +10,7 @@ void mostrarDenunciaDeCausa(struct causa *causaActual) {
         return;
     }
 
-    struct denuncia *denuncia = causaActual->denuncia;
+    denuncia = causaActual->denuncia;
     printf("========================================\n");
     printf("DENUNCIA EN LA CAUSA RUC: %s\n", causaActual->ruc);
     printf("========================================\n");
