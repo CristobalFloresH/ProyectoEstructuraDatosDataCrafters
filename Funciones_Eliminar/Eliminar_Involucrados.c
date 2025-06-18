@@ -1,22 +1,21 @@
 void eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, char *rut) {
-    struct involucrados *involucrado = buscarInvolucradoPorRut(involucrados, tam, rut);
+    struct involucrados *involucrado;
+    int i;
+
+    involucrado = buscarInvolucradoPorRut(involucrados, tam, rut);
     if (involucrado == NULL) {
         printf("No se encontró involucrado con RUT %s.\n", rut);
         return;
     }
 
-    // Liberar datos imputados si es imputado (tipoInvolucrado == 2)
     if (involucrado->tipoInvolucrado == 2 && involucrado->datosImputados != NULL) {
         liberarDatosImputados(involucrado->datosImputados);
         involucrado->datosImputados = NULL;
     }
 
-    // Liberar datos persona
     liberarPersona(involucrado->persona);
     involucrado->persona = NULL;
 
-    // Buscar índice para liberar memoria y poner NULL en el arreglo
-    int i;
     for (i = 0; i < tam; i++) {
         if (involucrados[i] == involucrado) {
             free(involucrados[i]);
@@ -27,26 +26,32 @@ void eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, char
 
     printf("Involucrado con RUT %s eliminado correctamente.\n", rut);
 }
-
 void eliminarInvolucrado(struct nodoCausas **listaCausas, char *ruc, char *rut) {
+    struct nodoCausas *actual;
+    struct nodoCausas *inicio;
+
     if (listaCausas == NULL || *listaCausas == NULL) {
         printf("No hay causas registradas.\n");
         return;
     }
 
-    struct nodoCausas *actual = *listaCausas;
-    struct nodoCausas *inicio = *listaCausas;
+    actual = *listaCausas;
+    inicio = *listaCausas;
 
     do {
         if (actual->datosCausa != NULL &&
-            strcmp(actual->datosCausa->ruc, ruc) == 0 && actual->datosCausa->involucrados != NULL) {
+            strcmp(actual->datosCausa->ruc, ruc) == 0 &&
+            actual->datosCausa->involucrados != NULL) {
 
-            eliminarInvolucradoPorRut(actual->datosCausa->involucrados, actual->datosCausa->tamInvolucrados, rut);
+            eliminarInvolucradoPorRut(actual->datosCausa->involucrados,
+                                      actual->datosCausa->tamInvolucrados,
+                                      rut);
             return;
-            }
+        }
 
         actual = actual->siguiente;
     } while (actual != inicio);
 
     printf("No se encontró la causa con RUC %s.\n", ruc);
 }
+
