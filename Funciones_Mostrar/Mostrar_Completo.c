@@ -470,6 +470,8 @@ void mostrarInvolucradosCausaPorTipo(struct causa *causa, int tipoInvolucrado)
 }
 
 void mostrarTodoDatoDeCausaPorRuc(struct nodoCausas *causas, char *rucBuscado) {
+    struct causa *causaBuscada;
+    
     if (causas == NULL)
     {
         printf("No hay causas registradas en el sistema.\n");
