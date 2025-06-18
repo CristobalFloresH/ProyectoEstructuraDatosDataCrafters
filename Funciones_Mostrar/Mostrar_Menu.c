@@ -1,6 +1,8 @@
 void menuMostrar(struct ministerio *ministerio) {
-    int opcion = -1;
-    int segundaOpcion = -1;
+    int opcion;
+    opcion = -1;
+    int segundaOpcion; 
+    segundaOpcion = -1;
     char rut[32];
     char ruc[32];
     int tipo;
