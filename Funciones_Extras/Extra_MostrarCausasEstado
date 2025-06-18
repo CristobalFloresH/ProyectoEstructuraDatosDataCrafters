@@ -1,17 +1,18 @@
 void mostrarCausasEstado(struct ministerio *ministerio) {
-    int opcion = -1;
+    int opcion;
     int estadoFiltrado;
-    int contador = 0;
+    int contador;
+    struct nodoCausas *actual;
 
     if (ministerio == NULL || ministerio->causas == NULL) {
         printf("No hay causas registradas.\n");
         return;
     }
 
-    struct nodoCausas *actual;
+    opcion = -1;
+    contador = 0;
 
-    while (opcion != 0)
-        {
+    while (opcion != 0) {
         printf("\n========== MENU ESTADO DE CAUSAS ==========\n");
         printf("1. Mostrar todas las causas con su estado\n");
         printf("2. Mostrar causas de un estado especifico\n");
@@ -22,7 +23,6 @@ void mostrarCausasEstado(struct ministerio *ministerio) {
 
         switch (opcion) {
             case 1:
-                // Recorre la lista circular mostrando todas las causas y su estado
                 actual = ministerio->causas;
                 printf("\n========================================\n");
                 printf("REPORTE DE TODAS LAS CAUSAS CON ESTADO ACTUAL\n");
@@ -36,7 +36,6 @@ void mostrarCausasEstado(struct ministerio *ministerio) {
                 break;
 
             case 2:
-                // Pide estado a filtrar y muestra solo esas causas
                 printf("Ingrese el estado de causa a mostrar (1=Archivada, 2=En progreso, 3=Cerrada, 4=En juicio): ");
                 scanf("%d", &estadoFiltrado);
                 getchar();
@@ -48,23 +47,3 @@ void mostrarCausasEstado(struct ministerio *ministerio) {
                 do {
                     if (actual->datosCausa->estadoCausa == estadoFiltrado) {
                         printf("Causa N°%d: RUC: %s | Estado de causa: %d\n", contador, actual->datosCausa->ruc, actual->datosCausa->estadoCausa);
-                        contador++;
-                    }
-                    actual = actual->siguiente;
-                } while (actual != ministerio->causas);
-
-                if (contador == 0) {
-                    printf("No se encontraron causas con ese estado.\n");
-                }
-                contador = 0;
-                break;
-            case 0:
-                //volvemos
-                break;
-
-            default:
-                printf("Opcion invalida.\n");
-            break;
-        }
-    }
-}
