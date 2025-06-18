@@ -1,4 +1,6 @@
 void mostrarTodosInvolucradosCausa(struct causa *causa) {
+    int i;
+    
     if (causa == NULL) {
         printf("No se encontro la causa seleccionada.\n");
         return;
@@ -7,8 +9,6 @@ void mostrarTodosInvolucradosCausa(struct causa *causa) {
         printf("Esta causa no tiene involucrados registrados.\n");
         return;
     }
-
-    int i = 0;
 
     for (i = 0; i < causa->tamInvolucrados; i++)
     {
