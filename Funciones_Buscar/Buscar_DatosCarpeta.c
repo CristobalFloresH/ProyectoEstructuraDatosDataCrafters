@@ -1,8 +1,11 @@
-struct nodoDatosCarpetas *buscarDatosCarpetaPorTipo(struct causa *causa, int tipoDeDato)
-{
+struct nodoDatosCarpetas *buscarDatosCarpetaPorTipo(struct causa *causa, int tipoDeDato){
+    
     struct nodoDatosCarpetas *listaResultado = NULL;
-    struct nodoDatosCarpetas *nodoActualCarpeta = NULL;
+    struct nodoDatosCarpetas *nodoActualCarpeta;
+    struct nodoDatosCarpetas *nuevoNodoResultado;
+    struct nodoDatosCarpetas *nodoFinal;
 
+    
     if (causa == NULL || causa->datosCarpetas == NULL)
     {
         return NULL;
@@ -15,7 +18,7 @@ struct nodoDatosCarpetas *buscarDatosCarpetaPorTipo(struct causa *causa, int tip
         if (nodoActualCarpeta->datosCarpeta != NULL &&
             nodoActualCarpeta->datosCarpeta->tipoDeDato == tipoDeDato)
         {
-            struct nodoDatosCarpetas *nuevoNodoResultado = (struct nodoDatosCarpetas *)malloc(sizeof(struct nodoDatosCarpetas));
+            nuevoNodoResultado = (struct nodoDatosCarpetas *)malloc(sizeof(struct nodoDatosCarpetas));
             if (nuevoNodoResultado == NULL)
             {
                 return NULL;
@@ -33,7 +36,7 @@ struct nodoDatosCarpetas *buscarDatosCarpetaPorTipo(struct causa *causa, int tip
             else
             {
                 // Si no, recorre la lista resultado hasta el último nodo
-                struct nodoDatosCarpetas *nodoFinal = listaResultado;
+                nodoFinal = listaResultado;
                 while (nodoFinal->siguiente != NULL)
                 {
                     nodoFinal = nodoFinal->siguiente;
