@@ -1,5 +1,4 @@
-struct persona *buscarPersonaPorRut(struct nodoPersonasABB *personas, char *rutBuscado)
-{
+struct persona *buscarPersonaPorRut(struct nodoPersonasABB *personas, char *rutBuscado){
     /** esto es para que retorne NULL si no encuentra la persona, ya que al ser recursivo
     Esto sera NULL cuando personas apunte a NULL y eso significa que llego a la hoja del arbol
     por lo cual no hay donde mas buscar**/
