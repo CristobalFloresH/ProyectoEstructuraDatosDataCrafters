@@ -1,58 +1,55 @@
 void mostrarPorcentajeDiligencias(struct ministerio *ministerio){
-    
+    struct nodoCausas *causa;
+    struct nodoDatosCarpetas *actual;
+    int totalPrioridad, muyBaja, baja, media, alta, muyAlta;
+    float promedioMuyBajaPrioridad, promedioBajaPrioridad, promedioMediaPrioridad, promedioAltaPrioridad, promedioMuyAltaPrioridad;
+
     if(ministerio == NULL || ministerio->causas == NULL){
-        printf("No se encontraron causas en el sistema");
+        printf("No se encontraron causas en el sistema\n");
+        return;
     }
-    
-    struct nodoDatosCarpetas *actual = causa->datosCarpetas;
-    int totalPrioridad = 0, muyBaja = 0, baja = 0, media = 0, alta = 0; muyAlta = 0;
-    
+
+    causa = ministerio->causas;
+    actual = causa->datosCarpetas;
+
+    totalPrioridad = 0;
+    muyBaja = baja = media = alta = muyAlta = 0;
+
     while (actual != NULL){
         //Solo se trabajara con diligencia.
         if (actual->datosCarpeta != NULL && actual->datosCarpeta->tipoDeDato == 3){
-            
-            if(actual->datosCarpeta->datosDiligencias->prioridad == 1){
-                totalPrioridad++;
-                muyBaja++;
-            }
-            if(actual->datosCarpeta->datosDiligencias->prioridad == 2){
-                totalPrioridad++;
-                baja++;
-            }
-            if(actual->datosCarpeta->datosDiligencias->prioridad == 3){
-                totalPrioridad++;
-                media++;
-            }
-            if(actual->datosCarpeta->datosDiligencias->prioridad == 4){
-                totalPrioridad++;
-                alta++;
-            }
-            if(actual->datosCarpeta->datosDiligencias->prioridad == 5){
-                totalPrioridad++;
-                muyAlta++;
+            int prioridad = actual->datosCarpeta->datosDiligencias->prioridad;
+            totalPrioridad++;
+            switch(prioridad){
+                case 1: muyBaja++; break;
+                case 2: baja++; break;
+                case 3: media++; break;
+                case 4: alta++; break;
+                case 5: muyAlta++; break;
             }
         }
         actual = actual->siguiente;
     }
-    
-    
-    float promedioMuyBajaPrioridad, promedioBajaPrioridad, promedioMediaPrioridad, promedioAltaPrioridad, promedioMuyAltaPrioridad;
-    
-    promedioMuyBajaPrioridad = (muyBaja / totalPrioridad) * 100;
-    promedioBajaPrioridad = (baja / totalPrioridad) * 100;
-    promedioMediaPrioridad = (media / totalPrioridad) * 100;
-    promedioAltaPrioridad = (alta / totalPrioridad) * 100;
-    promedioMuyAltaPrioridad = (muyAlta / totalPrioridad) * 100;
-    
-    
+
+    if (totalPrioridad == 0) {
+        printf("No se encontraron diligencias para calcular porcentaje.\n");
+        return;
+    }
+
+    promedioMuyBajaPrioridad = ((float)muyBaja / totalPrioridad) * 100;
+    promedioBajaPrioridad = ((float)baja / totalPrioridad) * 100;
+    promedioMediaPrioridad = ((float)media / totalPrioridad) * 100;
+    promedioAltaPrioridad = ((float)alta / totalPrioridad) * 100;
+    promedioMuyAltaPrioridad = ((float)muyAlta / totalPrioridad) * 100;
+
     printf("\n========================================\n");
-    printf("PORCENTAJE DE PRIORIDAD DE DILIGENCIA EN CAUSA RUC: %s",ministerio->causas->datosCausa->ruc);
-    printf("\n========================================\n");
-    printf("El %f%% de las diligencias son de muy baja prioridad", promedioMuyBajaPrioridad);
-    printf("El %f%% de las diligencias son de baja prioridad", promedioBajaPrioridad);
-    printf("El %f%% de las diligencias son de media prioridad", promedioMediaPrioridad);
-    printf("El %f%% de las diligencias son de alta prioridad", promedioAltaPrioridad);
-    printf("El %f%% de las diligencias son de muy alta prioridad", promedioMuyAltaPrioridad);
+    printf("PORCENTAJE DE PRIORIDAD DE DILIGENCIA EN CAUSA RUC: %s\n", causa->datosCausa->ruc);
+    printf("========================================\n");
+    printf("El %.2f%% de las diligencias son de muy baja prioridad\n", promedioMuyBajaPrioridad);
+    printf("El %.2f%% de las diligencias son de baja prioridad\n", promedioBajaPrioridad);
+    printf("El %.2f%% de las diligencias son de media prioridad\n", promedioMediaPrioridad);
+    printf("El %.2f%% de las diligencias son de alta prioridad\n", promedioAltaPrioridad);
+    printf("El %.2f%% de las diligencias son de muy alta prioridad\n", promedioMuyAltaPrioridad);
 }
 
 
