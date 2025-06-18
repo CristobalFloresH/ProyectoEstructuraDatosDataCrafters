@@ -1,23 +1,21 @@
-void eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) {
-    if (listaCausas == NULL) {
-        printf("No hay causas registradas.\n");
-        return;
-    }
-
+int eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) {
     struct nodoCausas *causa = buscarNodoCausa(*listaCausas, ruc);
-    if (causa == NULL) {
-        printf("No se encontro una causas con ese RUC.\n");
-        return;
+    struct nodoDatosCarpetas *actualCarpeta = causa->datosCausa->datosCarpetas;
+    struct nodoDatosCarpetas *sig = actualCarpeta->siguiente;
+
+    if (listaCausas == NULL) {
+        return 0;
     }
 
-    struct nodoDatosCarpetas *actualCarpeta = causa->datosCausa->datosCarpetas;
+    if (causa == NULL) {
+        return 0;
+    }
     while (actualCarpeta != NULL) {
-        struct nodoDatosCarpetas *sig = actualCarpeta->siguiente;
         liberarDatosCarpeta(actualCarpeta->datosCarpeta);
         free(actualCarpeta);
         actualCarpeta = sig;
     }
 
     causa->datosCausa->datosCarpetas = NULL;
-    printf("Carpetas eliminadas correctamente.\n");
+    return 1;
 }
