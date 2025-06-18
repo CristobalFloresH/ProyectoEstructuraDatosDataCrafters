@@ -1,4 +1,3 @@
-
 void liberarPersona(struct persona *persona) {
     if (persona == NULL)
         return;
@@ -9,8 +8,7 @@ void liberarPersona(struct persona *persona) {
     free(persona->contrasena);
 
     free(persona);
-};
-
+}
 void liberarDenuncia(struct denuncia *denuncia) {
     if (denuncia == NULL)
         return;
@@ -21,8 +19,7 @@ void liberarDenuncia(struct denuncia *denuncia) {
     free(denuncia->tipoDeDenuncia);
 
     free(denuncia);
-};
-
+}
 void liberarDatosImputados(struct datosImputados *datos) {
     if (datos == NULL)
         return;
@@ -32,13 +29,13 @@ void liberarDatosImputados(struct datosImputados *datos) {
     free(datos->fechaFinMedida);
 
     free(datos);
-};
-
+}
 void liberarInvolucrados(struct involucrados **involucrados, int tam) {
+    int i;
+
     if (involucrados == NULL)
         return;
 
-    int i;
     for (i = 0; i < tam; i++) {
         if (involucrados[i] != NULL) {
             if (involucrados[i]->datosImputados != NULL) {
@@ -53,7 +50,6 @@ void liberarInvolucrados(struct involucrados **involucrados, int tam) {
 
     free(involucrados);
 }
-
 void liberarDatosDiligencias(struct datosDiligencias *degligencias) {
     if (degligencias == NULL)
         return;
@@ -65,8 +61,7 @@ void liberarDatosDiligencias(struct datosDiligencias *degligencias) {
     free(degligencias->tipoDiligencia);
 
     free(degligencias);
-};
-
+}
 void liberarDatosCarpeta(struct datosCarpeta *datosCarpeta) {
     if (datosCarpeta == NULL)
         return;
@@ -83,15 +78,18 @@ void liberarDatosCarpeta(struct datosCarpeta *datosCarpeta) {
         liberarDenuncia(datosCarpeta->datosDenuncia);
         datosCarpeta->datosDenuncia = NULL;
     }
+
     if (datosCarpeta->datosPersona != NULL) {
         liberarPersona(datosCarpeta->datosPersona);
         datosCarpeta->datosPersona = NULL;
-
     }
-    free(datosCarpeta);
-};
 
+    free(datosCarpeta);
+}
 void liberarCausa(struct causa *causa) {
+    struct nodoDatosCarpetas *actual;
+    struct nodoDatosCarpetas *sig;
+
     if (causa == NULL)
         return;
 
@@ -105,11 +103,10 @@ void liberarCausa(struct causa *causa) {
         causa->denuncia = NULL;
     }
 
-    struct nodoDatosCarpetas *actual = causa->datosCarpetas;
-
+    actual = causa->datosCarpetas;
     if (actual != NULL) {
         while (actual != NULL) {
-            struct nodoDatosCarpetas *sig = actual->siguiente;
+            sig = actual->siguiente;
             if (actual->datosCarpeta != NULL) {
                 liberarDatosCarpeta(actual->datosCarpeta);
                 actual->datosCarpeta = NULL;
@@ -118,10 +115,13 @@ void liberarCausa(struct causa *causa) {
             actual = sig;
         }
     }
+
     causa->datosCarpetas = NULL;
-    if (causa->involucrados != NULL){
+
+    if (causa->involucrados != NULL) {
         liberarInvolucrados(causa->involucrados, causa->tamInvolucrados);
         causa->involucrados = NULL;
     }
+
     free(causa);
 }
