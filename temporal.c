@@ -1014,7 +1014,6 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 1: // Declaraciones
                     printf("Ingrese RUT del que declara:\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
                     if (aEliminar->datosCarpeta->datosPersona != NULL &&
                         strcmp(aEliminar->datosCarpeta->datosPersona->rut, palabra) == 0) {
                         free(aEliminar->datosCarpeta->fecha);
@@ -1033,7 +1032,6 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 2: // Pruebas
                     printf("Ingrese descripción de la prueba a eliminar:\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
                     if (aEliminar->datosCarpeta->descripcion != NULL &&
                         strcmp(aEliminar->datosCarpeta->descripcion, palabra) == 0) {
                         free(aEliminar->datosCarpeta->descripcion);
@@ -1049,7 +1047,6 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 3: // Diligencias
                     printf("Ingrese descripción de la diligencia a eliminar:\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
                     if (aEliminar->datosCarpeta->datosDiligencias != NULL &&
                         strcmp(aEliminar->datosCarpeta->datosDiligencias->descripcion, palabra) == 0) {
                         liberarDatosDiligencias(aEliminar->datosCarpeta->datosDiligencias);
@@ -1061,7 +1058,7 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 4: // Denuncia
                     printf("Ingrese RUC de la denuncia extra a eliminar:\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     if (aEliminar->datosCarpeta->datosDenuncia != NULL &&
                         strcmp(aEliminar->datosCarpeta->datosDenuncia->ruc, palabra) == 0) {
                         liberarDenuncia(aEliminar->datosCarpeta->datosDenuncia);
@@ -1109,41 +1106,36 @@ void menuEliminarCarpeta(struct ministerio *ministerio) {
         printf("0  Volver.\n");
         printf("Ingrese opcion: ");
         scanf("%d", &opcion);
-        getchar();
+        (void)getchar();
 
         switch (opcion) {
             case 1:
                 printf("Ingrese RUC de carpeta a eliminar:\n");
             scanf(" %[^\n]", ruc);
-            getchar();
             eliminarCarpetaDeCausa(&(ministerio->causas), ruc);
             break;
 
             case 2:
                 printf("Ingrese RUC de declaracion a eliminar:\n");
             scanf(" %[^\n]", ruc);
-            getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 1);
             break;
 
             case 3:
                 printf("Ingrese RUC de prueba a eliminar:\n");
             scanf(" %[^\n]", ruc);
-            getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 2);
             break;
 
             case 4:
                 printf("Ingrese RUC de diligencia a eliminar:\n");
             scanf(" %[^\n]", ruc);
-            getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 3);
             break;
 
             case 5:
                 printf("Ingrese RUC de denuncia a eliminar:\n");
             scanf(" %[^\n]", ruc);
-            getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 4);
             break;
 
@@ -1176,13 +1168,12 @@ void menuEliminarCausa(struct ministerio *ministerio) {
         printf("0. Volver.\n");
         printf("Ingrese opcion:");
         scanf("%d", &opcion);
-        getchar();
+        (void)getchar();
 
         switch (opcion) {
             case 1:
                 printf("Ingrese RUC de la causa a eliminar:\n");
                 scanf(" %[^\n]", ruc);
-                getchar();
                 eliminarCausa(&(ministerio->causas), ruc);
                 break;
 
@@ -1193,16 +1184,16 @@ void menuEliminarCausa(struct ministerio *ministerio) {
             case 3:
                 printf("Ingrese RUC de la causa y RUT del involucrado a eliminar.\n");
                 scanf(" %[^\n]", ruc);
-                getchar();
+
                 scanf(" %[^\n]", rut);
-                getchar();
+
                 eliminarInvolucrado(&(ministerio->causas), ruc, rut);
                 break;
 
             case 4:
                 printf("Ingrese RUC de la sentencia a eliminar:\n");
                 scanf(" %[^\n]", ruc);
-                getchar();
+
                 encontrado = buscarNodoCausa(ministerio->causas, ruc);
                 if (encontrado != NULL && encontrado->datosCausa != NULL && encontrado->datosCausa->sentencia != NULL) {
                     free(encontrado->datosCausa->sentencia);
@@ -1243,13 +1234,13 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
 
     printf("Ingrese el RUC de la causa: ");
     scanf(" %[^\n]", ruc);
-    getchar(); // limpiar '\n'
+
     printf("Ingrese la fecha de inicio de la diligencia (YYYY-MM-DD): ");
     scanf(" %[^\n]", fechaInicio);
-    getchar();
+
     printf("Ingrese el tipo de diligencia: ");
     scanf(" %[^\n]", tipoDiligencia);
-    getchar();
+
 
     diligencia = buscarDiligencia(ministerio, ruc, fechaInicio, tipoDiligencia);
     if (diligencia == NULL) {
@@ -1268,14 +1259,14 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
         printf("0. Salir\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
-        getchar(); // limpiar buffer
+        (void)getchar(); // limpiar buffer
 
         switch (opcion) {
             case 1:
                 do {
                     printf("Ingrese nueva prioridad (1 = muy baja, ..., 5 = muy alta): ");
                     scanf("%d", &nueva_prioridad);
-                    getchar();
+                    (void)getchar();
                     if (nueva_prioridad < 1 || nueva_prioridad > 5)
                         printf("Prioridad inválida. Intente nuevamente.\n");
                 } while (nueva_prioridad < 1 || nueva_prioridad > 5);
@@ -1308,7 +1299,7 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
             case 4:
                 printf("Ingrese nueva descripción: ");
                 scanf(" %[^\n]", buffer);
-                getchar();
+
                 nuevaCadena = duplicarCadena(buffer);
                 if (nuevaCadena) {
                     free(diligencia->descripcion);
@@ -1320,7 +1311,7 @@ void modificarDatosDiligencia(struct ministerio *ministerio) {
             case 5:
                 printf("Ingrese nuevo estado: ");
                 scanf(" %[^\n]", buffer);
-                getchar();
+
                 nuevaCadena = duplicarCadena(buffer);
                 if (nuevaCadena) {
                     free(diligencia->estado);
@@ -1389,7 +1380,7 @@ void modificarDatosCarpeta(struct ministerio *ministerio) {
     do {
         printf("Ingrese el tipo de dato (1=declaraciones, 2=pruebas generales, 3=diligencias, 4=denuncia): ");
         scanf("%d", &tipo);
-        getchar();
+        (void)getchar();
 
         if (tipo < 1 || tipo > 4) {
             printf("Tipo inválido. Intente nuevamente.\n");
@@ -1411,7 +1402,7 @@ void modificarDatosCarpeta(struct ministerio *ministerio) {
         printf("Seleccione una opción: ");
 
         scanf("%d", &opcion);
-        getchar();
+        (void)getchar();
 
         switch (opcion) {
             case 1:
@@ -1448,7 +1439,7 @@ void modificarDatosCarpeta(struct ministerio *ministerio) {
                 do {
                     printf("Ingrese nuevo tipo de dato (1=declaraciones, 2=pruebas, 3=diligencias, 4=denuncia): ");
                     scanf("%d", &nuevo_tipo);
-                    getchar();
+                    (void)getchar();
 
                     if (nuevo_tipo < 1 || nuevo_tipo > 4) {
                         printf("Tipo inválido. Intente nuevamente.\n");
@@ -1526,7 +1517,7 @@ void modificarDenunciaMenu(struct ministerio *ministerio) {
         printf("Seleccione una opcion: ");
 
         scanf("%d", &opcion);
-        getchar();
+        (void)getchar();
 
         switch (opcion) {
             case 1:
@@ -1661,7 +1652,7 @@ void modificarImputado(struct ministerio *ministerio, char *rucCausa, char *rutI
         printf("0. Volver.\n");
         printf("Seleccione una opcion: ");
         scanf("%d", &opcion);
-        getchar();
+        (void)getchar();
 
         switch (opcion) {
             case 1:
@@ -1685,7 +1676,7 @@ void modificarImputado(struct ministerio *ministerio, char *rucCausa, char *rutI
                            "4 = Orden de Alejamiento, 5 = Arresto Domiciliario, 6 = Libertad bajo Fianza, 7 = Ninguna): ");
 
                     scanf("%d", &nueva_medida);
-                    getchar();
+                    (void)getchar();
 
 
                     if (nueva_medida < 1 || nueva_medida > 7) {
@@ -1732,7 +1723,7 @@ void modificarImputado(struct ministerio *ministerio, char *rucCausa, char *rutI
                     printf("Ingrese nuevo estado procesal (1: Cautelar, 2: Formalizado, 3: Sobreseido): ");
 
                     scanf("%d", &nuevo_estado);
-                    getchar();
+                    (void)getchar();
 
                     if (nuevo_estado < 1 || nuevo_estado > 3) {
                     printf("Estado procesal no valido. Intente nuevamente.\n");
@@ -1782,7 +1773,7 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
     do {
         printf("Ingrese nuevo tipo de involucrado (1=Víctima, 2=Imputado, 3=Testigo, 4=Otro): ");
         scanf("%d", &nuevoTipo);
-        getchar(); // Limpia buffer para evitar problemas con fgets si se usa después
+        (void)getchar(); // Limpia buffer para evitar problemas con fgets si se usa después
         if (nuevoTipo < 1 || nuevoTipo > 4) {
             printf("Tipo inválido. Intente nuevamente.\n");
         }
@@ -1836,7 +1827,6 @@ void modificarPersonaPorRUT(struct ministerio *ministerio) { // Agregue cambiar 
 
     printf("Ingrese RUT de la persona a modificar: ");
     scanf(" %[^\n]", rut);
-    getchar(); // Limpia el salto de línea
 
     persona = buscarPersonaPorRut(ministerio->personas, rut);
     if (persona == NULL) {
@@ -1855,7 +1845,7 @@ void modificarPersonaPorRUT(struct ministerio *ministerio) { // Agregue cambiar 
         printf("Seleccione una opción: ");
 
         scanf("%d", &opcion);
-        getchar(); // Limpiar '\n'
+        (void)getchar(); // Limpiar '\n'
         switch (opcion) {
             case 1:
                 printf("Nuevo nombre: ");
@@ -1902,7 +1892,7 @@ void modificarPersonaPorRUT(struct ministerio *ministerio) { // Agregue cambiar 
 
 
                     scanf("%d", &nuevo_rol);
-                    getchar();
+                    (void)getchar();
 
                     if (nuevo_rol < 1 || nuevo_rol > 3) {
                         printf("Rol inválido. Intente nuevamente.\n");
@@ -1957,7 +1947,7 @@ void menuModificar(struct ministerio *ministerio) {
         printf("Seleccione una opcion: ");
 
         scanf("%d", &opcion);
-        getchar();
+        (void)getchar();
 
         switch (opcion) {
             case 1:
@@ -1975,18 +1965,17 @@ void menuModificar(struct ministerio *ministerio) {
             case 4:
                 printf("Ingrese el RUC de la causa para cambiar su estado: \n");
                 scanf(" %[^\n]", ruc);
-                getchar();
                 cambiarEstadoCausa(ministerio, ruc);
                 break;
 
             case 5:
                 printf("Ingrese el RUC de la causa: \n");
                 scanf(" %[^\n]", ruc);
-                getchar();
+
 
                 printf("Ingrese el RUT del imputado: ");
                 scanf(" %[^\n]", rut);
-                getchar();
+
 
                 modificarImputado(ministerio, ruc, rut);
                 break;
@@ -2560,7 +2549,7 @@ void ingresarAlSistema(struct ministerio *ministerio) {
     printf("Ingrese su RUT.\n\n");
     printf("Ingrese opcion:");
     scanf(" %[^\n]", palabra);
-    getchar();
+
 
     nuevaPersona->rut = (char *)malloc(strlen(palabra) + 1);
     strcpy(nuevaPersona->rut, palabra);
@@ -2568,7 +2557,7 @@ void ingresarAlSistema(struct ministerio *ministerio) {
     printf("Ingrese su nombre.\n\n");
     printf("Ingrese opcion:");
     scanf(" %[^\n]", palabra);
-    getchar();
+
 
     nuevaPersona->nombre = (char *)malloc(strlen(palabra) + 1);
     strcpy(nuevaPersona->nombre, palabra);
@@ -2576,7 +2565,7 @@ void ingresarAlSistema(struct ministerio *ministerio) {
     printf("Ingrese su apellido.\n\n");
     printf("Ingrese opcion:");
     scanf(" %[^\n]", palabra);
-    getchar();
+
 
     nuevaPersona->apellido = (char *)malloc(strlen(palabra) + 1);
     strcpy(nuevaPersona->apellido, palabra);
@@ -2584,7 +2573,7 @@ void ingresarAlSistema(struct ministerio *ministerio) {
     printf("Ingrese su rol (1 = Usuario, 2 = Fiscal, 3 = Juez).\n\n");
     printf("Ingrese opcion:");
     scanf("%d", &rol);
-    getchar();
+    (void)getchar();
 
     if (rol == 1) {
         nuevaPersona->rol = rol;
@@ -2593,7 +2582,7 @@ void ingresarAlSistema(struct ministerio *ministerio) {
         printf("Ingrese contrasena del sistema.\n\n");
         printf("Ingrese opcion:");
         scanf(" %[^\n]", palabra);
-        getchar();
+
 
         if (strcmp(palabra, CONTRASENAFISCALJUEZ) == 0) {
             nuevaPersona->rol = rol;
@@ -2632,7 +2621,7 @@ void mostrarCausasEstado(struct ministerio *ministerio) {
         printf("0. Volver\n");
         printf("Seleccione una opcion: ");
         scanf("%d", &opcion);
-        getchar(); // Limpiar buffer
+        (void)getchar(); // Limpiar buffer
 
         switch (opcion) {
             case 1:
@@ -2651,7 +2640,7 @@ void mostrarCausasEstado(struct ministerio *ministerio) {
             case 2:
                 printf("Ingrese el estado de causa a mostrar (1=Archivada, 2=En progreso, 3=Cerrada, 4=En juicio): ");
                 scanf("%d", &estadoFiltrado);
-                getchar();
+                (void)getchar();
 
                 actual = ministerio->causas;
                 printf("\n========================================\n");
@@ -2778,7 +2767,7 @@ void mostrarPorcentajeDiligencias(struct ministerio *ministerio)
         printf("0. Volver\n");
         printf("Seleccione una opcion: ");
         scanf(" %d", &opcion);
-        getchar();
+        (void)getchar();
         totalPrioridad = muyBaja = baja = media = alta = muyAlta = 0;
         switch (opcion)
         {
@@ -2935,7 +2924,7 @@ void menuExtra(struct ministerio *ministerio) {
         printf("0. Volver.\n");
         printf("Seleccione una opcion: ");
         scanf("%d", &opcion);
-        getchar(); // Limpia el salto de linea despues de scanf
+        (void)getchar(); // Limpia el salto de linea despues de scanf
 
         switch (opcion) {
             case 1:
@@ -2949,7 +2938,6 @@ void menuExtra(struct ministerio *ministerio) {
             case 2:
                 printf("Ingrese el rut de la persona a buscar: \n");
                 scanf(" %[^\n]", rutBuscado);
-                getchar();
                 mostrarRucDePersonaBuscada(ministerio, rutBuscado);
                 break;
 
@@ -3013,30 +3001,29 @@ void menuAgregar(struct ministerio *ministerio){
 
             printf("Ingrese su rut: \n");
             scanf(" %[^\n]", palabra);
-            getchar();
+
             nuevaPersona->rut = (char *)malloc(strlen(palabra) + 1);
             strcpy(nuevaPersona->rut, palabra);
 
             printf("Ingrese su nombre \n");
             scanf(" %[^\n]", palabra);
-            getchar();
+
             nuevaPersona->nombre = (char *)malloc(strlen(palabra) + 1);
             strcpy(nuevaPersona->nombre, palabra);
 
             printf("Ingrese su apellido \n");
             scanf(" %[^\n]", palabra);
-            getchar();
+
             nuevaPersona->apellido = (char *)malloc(strlen(palabra) + 1);
             strcpy(nuevaPersona->apellido, palabra);
 
             printf("Ingrese su rol (1= usuario comun, 2= fiscal o 3= juez): \n");
             scanf("%d", &rol);
-            getchar();
+            (void)getchar();
 
             if (rol == 2 || rol == 3) {
                 printf("Ingrese la contraseña del sistema: \n");
                 scanf(" %[^\n]", contrasenaIngresada);
-                getchar();
 
                 if (strcmp(contrasenaIngresada, CONTRASENAFISCALJUEZ) != 0) {
                     printf("Contraseña incorrecta, se ingresara como Usuario Comun\n");
@@ -3073,11 +3060,11 @@ void menuAgregar(struct ministerio *ministerio){
 
             printf("Ingrese RUT del denunciante\n");
             scanf(" %[^\n]", rutDenunciante);
-            getchar();
+
 
             printf("Ingrese RUT del denunciado\n");
             scanf(" %[^\n]", rutDenunciado);
-            getchar();
+
 
             nuevoDenunciante = buscarPersonaPorRut(ministerio->personas, rutDenunciante);
             nuevoDenunciado = buscarPersonaPorRut(ministerio->personas, rutDenunciado);
@@ -3101,25 +3088,25 @@ void menuAgregar(struct ministerio *ministerio){
 
             printf("Ingrese la fecha actual: \n");
             scanf(" %[^\n]", palabra);
-            getchar();
+
             nuevaDenuncia->fecha = (char *)malloc(strlen(palabra) + 1);
             strcpy(nuevaDenuncia->fecha, palabra);
 
             printf("Ingrese descripcion de la denuncia: \n");
             scanf(" %[^\n]", palabra);
-            getchar();
+
             nuevaDenuncia->descripcion = (char *)malloc(strlen(palabra) + 1);
             strcpy(nuevaDenuncia->descripcion, palabra);
 
             printf("Ingrese RUC de la denuncia: \n");
             scanf(" %[^\n]", palabra);
-            getchar();
+
             nuevaDenuncia->ruc = (char *)malloc(strlen(palabra) + 1);
             strcpy(nuevaDenuncia->ruc, palabra);
 
             printf("Ingrese el tipo de denuncia: \n");
             scanf(" %[^\n]", palabra);
-            getchar();
+
             nuevaDenuncia->tipoDeDenuncia = (char *)malloc(strlen(palabra) + 1);
             strcpy(nuevaDenuncia->tipoDeDenuncia, palabra);
             /*Se le asigna la informacion a la denuncia como la fecha, quien es el denunciante y el denunciado entre otros*/
@@ -3156,28 +3143,28 @@ void menuAgregar(struct ministerio *ministerio){
 
             printf("Ingrese fecha de la carpeta\n");
             scanf(" %[^\n]", palabra);
-            getchar();
+
             nuevaCarpeta->fecha = (char *)malloc(strlen(palabra) + 1);
             strcpy(nuevaCarpeta->fecha, palabra);
 
             printf("Ingrese el tipo de dato, ya sea \n 1 = Declaraciones \n 2 = Pruebas Generales  \n 3 = Diligencias \n 4 = Denuncia\n");
             printf("Ingrese tipo de dato:\n");
             scanf("%d", &tipoDato);
-            getchar();
+            (void)getchar();
             nuevaCarpeta->tipoDeDato = tipoDato;
 
             switch (tipoDato) {
                 case 1:{
                     printf("Ingrese RUT de persona que declara.\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
 
                     struct persona *declarante = buscarPersonaPorRut(ministerio->personas, palabra);
                     nuevaCarpeta->datosPersona = declarante;
 
                     printf("Ingrese declaracion.\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
 
                     nuevaCarpeta->descripcion = (char *)malloc(strlen(palabra) + 1);
                     strcpy(nuevaCarpeta->descripcion, palabra);
@@ -3188,7 +3175,7 @@ void menuAgregar(struct ministerio *ministerio){
                 case 2:
                     printf("Ingrese prueba.\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     nuevaCarpeta->descripcion = (char *)malloc(strlen(palabra) + 1);
                     strcpy(nuevaCarpeta->descripcion, palabra);
                     printf("Prueba agregada correctamente.\n");
@@ -3203,31 +3190,31 @@ void menuAgregar(struct ministerio *ministerio){
 
                     printf("Ingrese prioridad digligencia. (1 = muy baja, 2 = baja, 3 = media, 4 = alta, 5 = muy alta)\n");
                     scanf(" %d", &tipoDato);
-                    getchar();
+                    (void)getchar();
                     nuevaCarpeta->datosDiligencias->prioridad = tipoDato;
                     printf("Ingrese fecha inicio.(YYY-MM-DD)\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     nuevaCarpeta->datosDiligencias->fechaInicio = (char *)malloc(strlen(palabra) + 1);
                     strcpy(nuevaCarpeta->datosDiligencias->fechaInicio, palabra);
                     printf("Ingrese fecha fin.(YYY-MM-DD)\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     nuevaCarpeta->datosDiligencias->fechaFin = (char *)malloc(strlen(palabra) + 1);
                     strcpy(nuevaCarpeta->datosDiligencias->fechaFin, palabra);
                     printf("Ingrese descripcion de la diligencia.\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     nuevaCarpeta->datosDiligencias->descripcion = (char *)malloc(strlen(palabra) + 1);
                     strcpy(nuevaCarpeta->datosDiligencias->descripcion, palabra);
                     printf("Ingrese estado diligencia.\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     nuevaCarpeta->datosDiligencias->estado = (char *)malloc(strlen(palabra) + 1);
                     strcpy(nuevaCarpeta->datosDiligencias->estado, palabra);
                     printf("Ingrese tipo de diligencia.\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     nuevaCarpeta->datosDiligencias->tipoDiligencia = (char *)malloc(strlen(palabra) + 1);
                     strcpy(nuevaCarpeta->datosDiligencias->tipoDiligencia, palabra);
                     printf("Diligencia agregada correctamente.\n");
@@ -3236,7 +3223,7 @@ void menuAgregar(struct ministerio *ministerio){
                 case 4:
                     printf("Ingrese RUT del denunciado.\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     struct persona *buscado = buscarPersonaPorRut(ministerio->personas, palabra);
                     if (buscado == NULL) {
                         printf("Persona no encontrada.\n");
@@ -3244,7 +3231,7 @@ void menuAgregar(struct ministerio *ministerio){
                     }
                     printf("Ingrese RUC de la denuncia.\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     struct denuncia * denunciaAgregar = buscarDenunciaPorRuc(buscado->denuncias, palabra);
                     if (denunciaAgregar == NULL) {
                         printf("Denuncia no encontrada.\n");
@@ -3258,7 +3245,7 @@ void menuAgregar(struct ministerio *ministerio){
             }
             printf("Ingrese RUC de la causa a la que desea asociar esta carpeta:\n");
             scanf(" %[^\n]", palabra);
-            getchar();
+
 
             if (ministerio == NULL || ministerio->causas == NULL) {
                 printf("no existe informacion sobre causas en el sistema.\n");
@@ -3279,13 +3266,13 @@ void menuAgregar(struct ministerio *ministerio){
             struct denuncia *denuncia;
             printf("Ingrese RUT del denunciado para crear la causa:\n");
             scanf(" %[^\n]", rut);
-            getchar(); // limpiar buffer
+
             printf("Ingrese RUC de la denuncia para crear la causa:\n");
             scanf(" %[^\n]", ruc);
-            getchar(); // limpiar buffer
+
             printf("Ingrese el estado de la causa (1 = Archivada 2 = Investigacion en progreso 3 = Cerrada 4 = En juicio): \n");
             scanf("%d", &numero);
-            getchar();
+            (void)getchar();
             personaBuscada = buscarPersonaPorRut(ministerio->personas, rut);
 
             if (personaBuscada == NULL || personaBuscada->denuncias == NULL) {
@@ -3317,7 +3304,7 @@ void menuAgregar(struct ministerio *ministerio){
 
             printf("Ingrese el RUC de la causa a la que desea agregar el o los involucrados\n");
             scanf(" %[^\n]", palabra);
-            getchar();
+
 
             causaDestinada = buscarCausaPorRuc(ministerio->causas, palabra);
             if(causaDestinada == NULL){
@@ -3334,7 +3321,7 @@ void menuAgregar(struct ministerio *ministerio){
 
                 printf("Ingrese el RUT del %d° involucrado:\n", involucradosNuevos + 1);
                 scanf(" %[^\n]", palabra);
-                getchar();
+
 
                 personaEncontrada = buscarPersonaPorRut(ministerio->personas, palabra);
                 if(personaEncontrada == NULL){
@@ -3358,7 +3345,7 @@ void menuAgregar(struct ministerio *ministerio){
                     }
                     printf("Ingrese la declaracion del imputado:\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     datosImp->declaracion = (char *)malloc(strlen(palabra) + 1);
                     strcpy(datosImp->declaracion, palabra);
 
@@ -3367,13 +3354,13 @@ void menuAgregar(struct ministerio *ministerio){
 
                     printf("Ingrese la fecha de inicio de la medida (formato: DD/MM/AAAA):\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     datosImp->fechaInicioMedida = (char *)malloc(strlen(palabra) + 1);
                     strcpy(datosImp->fechaInicioMedida, palabra);
 
                     printf("Ingrese la fecha de fin de la medida (formato: DD/MM/AAAA):\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
+
                     datosImp->fechaFinMedida = (char *)malloc(strlen(palabra) + 1);
                     strcpy(datosImp->fechaFinMedida, palabra);
 
@@ -3518,13 +3505,13 @@ void menuEliminar(struct ministerio *ministerio) {
         printf("0. Volver.\n");
         printf("Ingrese una opcion:");
         scanf("%d", &opcion);
-        getchar();
+        (void)getchar();
 
         switch (opcion) {
             case 1:
                 printf("Ingrese RUT de la persona a eliminar:\n");
                 scanf(" %[^\n]", rut);
-                getchar();
+
                 eliminarPersona(&(ministerio->personas), rut);
                 break;
 
@@ -3535,7 +3522,7 @@ void menuEliminar(struct ministerio *ministerio) {
             case 3:
                 printf("Ingrese RUT del denunciante:\n");
                 scanf(" %[^\n]", rut);
-                getchar();
+
 
                 persona = buscarPersonaPorRut(ministerio->personas, rut);
                 if (persona == NULL)
@@ -3543,7 +3530,7 @@ void menuEliminar(struct ministerio *ministerio) {
                 else {
                     printf("Ingrese RUC de la denuncia a eliminar:\n");
                     scanf(" %[^\n]", ruc);
-                    getchar();
+
                     eliminarDenuncia(&(persona->denuncias), ruc);
                 }
                 break;
@@ -3555,9 +3542,9 @@ void menuEliminar(struct ministerio *ministerio) {
             case 5:
                 printf("Ingrese RUC de la causa y RUT del involucrado a eliminar.\n");
                 scanf(" %[^\n]", ruc);
-                getchar();
+
                 scanf(" %[^\n]", rut);
-                getchar();
+
                 eliminarInvolucrado(&(ministerio->causas), ruc, rut);
                 break;
 
@@ -3746,7 +3733,7 @@ void menuPrincipal(struct ministerio *ministerio) {
         printf("0. Salir\n");
         printf("Seleccione una opcion: ");
         scanf("%d", &opcion);
-        getchar(); // Limpia el salto de linea despues de scanf
+        (void)getchar(); // Limpia el salto de linea despues de scanf
 
         switch(opcion) {
             case 1:
