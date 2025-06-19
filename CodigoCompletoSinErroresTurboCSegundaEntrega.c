@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS //no olvidar borrar es para eliminar temporalmente el error del scanf
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1609,18 +1608,29 @@ void cambiarEstadoCausa(struct ministerio *ministerio, char *rucCausa) {
 
     printf("Causa con RUC %s no encontrada.\n", rucCausa);
 }
+
+
 void modificarImputado(struct ministerio *ministerio, char *rucCausa, char *rutImputado) {
+    struct causa *c = NULL;
+    struct involucrados *imp = NULL;
+    struct datosImputados *datos = NULL;
+    int opcion = -1;
+    char palabras[300];
+    char *nuevaCadena = NULL;
+    int nueva_medida = 0;
+    int nuevo_estado = 0;
+
     if (ministerio == NULL || rucCausa == NULL || rutImputado == NULL) {
         return;
     }
 
-    struct causa *c = buscarCausaPorRuc(ministerio->causas, rucCausa);
+    c = buscarCausaPorRuc(ministerio->causas, rucCausa);
     if (c == NULL) {
         printf("Causa con RUC %s no encontrada.\n", rucCausa);
         return;
     }
 
-    struct involucrados *imp = buscarImputadoEnCausa(c, rutImputado);
+    imp = buscarImputadoEnCausa(c, rutImputado);
     if (imp == NULL || imp->tipoInvolucrado != 2) {
         printf("Imputado con RUT %s no encontrado en la causa.\n", rutImputado);
         return;
@@ -1636,11 +1646,7 @@ void modificarImputado(struct ministerio *ministerio, char *rucCausa, char *rutI
         }
     }
 
-    struct datosImputados *datos = imp->datosImputados;
-
-    int opcion = -1;
-    char palabras[300];
-    char *nuevaCadena;
+    datos = imp->datosImputados;
 
     while (opcion != 0) {
         printf("\n--- Modificar Imputado ---\n");
@@ -1670,24 +1676,19 @@ void modificarImputado(struct ministerio *ministerio, char *rucCausa, char *rutI
                 break;
 
             case 2:
-                int nueva_medida;
                 do {
                     printf("Ingrese nueva medida cautelar (1 = Prision Preventiva, 2 = Arraigo Nacional, 3 = Firma Periodica, "
                            "4 = Orden de Alejamiento, 5 = Arresto Domiciliario, 6 = Libertad bajo Fianza, 7 = Ninguna): ");
-
                     scanf("%d", &nueva_medida);
                     (void)getchar();
-
-
                     if (nueva_medida < 1 || nueva_medida > 7) {
                         printf("Medida cautelar no valida. Intente nuevamente.\n");
-                        }
-
+                    }
                 } while (nueva_medida < 1 || nueva_medida > 7);
 
                 datos->medidasCautelar = nueva_medida;
                 printf("Medida cautelar actualizada correctamente.\n");
-
+                break;
 
             case 3:
                 printf("Ingrese nueva fecha de inicio (YYYY-MM-DD): ");
@@ -1718,24 +1719,20 @@ void modificarImputado(struct ministerio *ministerio, char *rucCausa, char *rutI
                 break;
 
             case 5:
-                int nuevo_estado;
                 do {
                     printf("Ingrese nuevo estado procesal (1: Cautelar, 2: Formalizado, 3: Sobreseido): ");
-
                     scanf("%d", &nuevo_estado);
                     (void)getchar();
-
                     if (nuevo_estado < 1 || nuevo_estado > 3) {
-                    printf("Estado procesal no valido. Intente nuevamente.\n");
+                        printf("Estado procesal no valido. Intente nuevamente.\n");
                     }
-
                 } while (nuevo_estado < 1 || nuevo_estado > 3);
 
                 datos->estadoProcesal = nuevo_estado;
                 printf("Estado procesal actualizado correctamente.\n");
+                break;
 
             case 0:
-                //Volver.
                 break;
 
             default:
@@ -1749,18 +1746,21 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
     char ruc[100];
     char rut[100];
     int nuevoTipo;
+    int encontrado;
+    int i;
+    struct causa *c = NULL;
+    struct involucrados *inv = NULL;
 
-  	if (ministerio == NULL) {
+    if (ministerio == NULL) {
         printf("Ministerio no válido.\n");
         return;
     }
 
-
     printf("Ingrese el RUC de la causa: ");
-    fgets(ruc, sizeof(ruc), stdin); // fgets
+    fgets(ruc, sizeof(ruc), stdin);
     removerSaltoLinea(ruc);
 
-    struct causa *c = buscarCausaPorRuc(ministerio->causas, ruc);
+    c = buscarCausaPorRuc(ministerio->causas, ruc);
     if (c == NULL || c->involucrados == NULL) {
         printf("No se encontró la causa o no tiene involucrados.\n");
         return;
@@ -1773,15 +1773,16 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
     do {
         printf("Ingrese nuevo tipo de involucrado (1=Víctima, 2=Imputado, 3=Testigo, 4=Otro): ");
         scanf("%d", &nuevoTipo);
-        (void)getchar(); // Limpia buffer para evitar problemas con fgets si se usa después
+        (void)getchar();
         if (nuevoTipo < 1 || nuevoTipo > 4) {
             printf("Tipo inválido. Intente nuevamente.\n");
         }
     } while (nuevoTipo < 1 || nuevoTipo > 4);
 
-    int encontrado = 0, i;
+    encontrado = 0;
+
     for (i = 0; i < c->tamInvolucrados; i++) {
-        struct involucrados *inv = c->involucrados[i];
+        inv = c->involucrados[i];
 
         if (inv != NULL && inv->persona != NULL && strcmp(inv->persona->rut, rut) == 0) {
             encontrado = 1;
@@ -1794,7 +1795,7 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
             inv->tipoInvolucrado = nuevoTipo;
 
             if (nuevoTipo == 2 && inv->datosImputados == NULL) {
-                inv->datosImputados = malloc(sizeof(struct datosImputados));
+                inv->datosImputados = (struct datosImputados *)malloc(sizeof(struct datosImputados));
                 if (inv->datosImputados == NULL) {
                     printf("Error al asignar memoria para datosImputados.\n");
                     return;
@@ -2202,6 +2203,9 @@ void mostrarDatosDenunciaAdicionalEnCausa(struct denuncia *denuncia)
 
 void mostrarDatosCarpetaCausaPorTipo(struct causa *causa, int tipoDeDato)
 {
+  	struct nodoDatosCarpetas *actual;
+    int contador;
+
     if (causa == NULL)
     {
         printf("No se encontro la causa seleccionada.\n");
@@ -2213,8 +2217,8 @@ void mostrarDatosCarpetaCausaPorTipo(struct causa *causa, int tipoDeDato)
         return;
     }
 
-    struct nodoDatosCarpetas *actual = causa->datosCarpetas;
-    int contador = 0;
+    actual = causa->datosCarpetas;
+    contador = 0;
 
     while (actual != NULL)
     {
@@ -2378,6 +2382,8 @@ void mostrarDenunciaDeCausa(struct causa *causaActual) {
 }
 
 void mostrarTodosInvolucradosCausa(struct causa *causa) {
+  	int i;
+
     if (causa == NULL) {
         printf("No se encontro la causa seleccionada.\n");
         return;
@@ -2386,8 +2392,6 @@ void mostrarTodosInvolucradosCausa(struct causa *causa) {
         printf("Esta causa no tiene involucrados registrados.\n");
         return;
     }
-
-    int i = 0;
 
     for (i = 0; i < causa->tamInvolucrados; i++)
     {
@@ -2420,6 +2424,9 @@ void mostrarTodosInvolucradosCausa(struct causa *causa) {
 
 void mostrarInvolucradosCausaPorTipo(struct causa *causa, int tipoInvolucrado)
 {
+  	int i;
+    int contador;
+
     if (causa == NULL) {
         printf("No se encontro la causa seleccionada.\n");
         return;
@@ -2429,8 +2436,7 @@ void mostrarInvolucradosCausaPorTipo(struct causa *causa, int tipoInvolucrado)
         return;
     }
 
-    int contador = 0;
-    int i;
+    contador = 0;
 
     for (i = 0; i < causa->tamInvolucrados; i++)
     {
@@ -3159,7 +3165,7 @@ void menuAgregar(struct ministerio *ministerio){
                     scanf(" %[^\n]", palabra);
 
 
-                    struct persona *declarante = buscarPersonaPorRut(ministerio->personas, palabra);
+                    declarante = buscarPersonaPorRut(ministerio->personas, palabra);
                     nuevaCarpeta->datosPersona = declarante;
 
                     printf("Ingrese declaracion.\n");
@@ -3224,7 +3230,7 @@ void menuAgregar(struct ministerio *ministerio){
                     printf("Ingrese RUT del denunciado.\n");
                     scanf(" %[^\n]", palabra);
 
-                    struct persona *buscado = buscarPersonaPorRut(ministerio->personas, palabra);
+                    buscado = buscarPersonaPorRut(ministerio->personas, palabra);
                     if (buscado == NULL) {
                         printf("Persona no encontrada.\n");
                         break;
@@ -3232,7 +3238,7 @@ void menuAgregar(struct ministerio *ministerio){
                     printf("Ingrese RUC de la denuncia.\n");
                     scanf(" %[^\n]", palabra);
 
-                    struct denuncia * denunciaAgregar = buscarDenunciaPorRuc(buscado->denuncias, palabra);
+                    denunciaAgregar = buscarDenunciaPorRuc(buscado->denuncias, palabra);
                     if (denunciaAgregar == NULL) {
                         printf("Denuncia no encontrada.\n");
                         break;
@@ -3561,13 +3567,14 @@ void menuEliminar(struct ministerio *ministerio) {
 
 void menuMostrar(struct ministerio *ministerio) {
     int opcion;
-    opcion = -1;
     int segundaOpcion;
-    segundaOpcion = -1;
     char rut[32];
     char ruc[32];
     int tipo;
     struct causa *causaActual;
+
+    opcion = -1;
+    segundaOpcion = -1;
 
     while (opcion != 0) {
         // Imprime el menu principal de mostrar
@@ -3768,4 +3775,16 @@ void menuPrincipal(struct ministerio *ministerio) {
                     break;
         }
     }
+}
+
+int main(){
+
+    struct ministerio *ministerio = malloc(sizeof(struct ministerio));
+    ministerio->personas = NULL;
+    ministerio->causas = NULL;
+
+    ingresarAlSistema(ministerio);
+    menuPrincipal(ministerio);
+
+    return 0;
 }
