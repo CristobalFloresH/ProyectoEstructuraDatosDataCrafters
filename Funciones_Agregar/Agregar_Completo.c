@@ -1,4 +1,8 @@
 void agregarPersonaMenu(struct ministerio *ministerio){
+    struct persona *nuevaPersona;
+    char palabra[100];
+    int rol;
+    char contrasenaIngresada[100];    
     nuevaPersona = (struct persona *)malloc(sizeof(struct persona));
     /*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
 
@@ -51,7 +55,7 @@ void agregarPersonaMenu(struct ministerio *ministerio){
 
     nuevaPersona->denuncias = NULL;
 
-    agregarPersonas(&(ministerio), nuevaPersona);   
+    agregarPersonas(ministerio, nuevaPersona);   
 }
 
 void agregarDenunciaMenu(struct ministerio *ministerio){
@@ -119,8 +123,7 @@ void agregarDenunciaMenu(struct ministerio *ministerio){
     printf("Denuncia agregada correctamente. \n");    
 }
 
-void agregarCarpeta(struct ministerio *ministerio){
-
+void agregarCarpetaMenu(struct ministerio *ministerio){
     char palabra[300];
     int tipoDato;
     struct datosCarpeta *nuevaCarpeta;
@@ -246,14 +249,14 @@ void agregarCarpeta(struct ministerio *ministerio){
 
     if (ministerio == NULL || ministerio->causas == NULL) {
         printf("no existe informacion sobre causas en el sistema.\n");
-        break;
+        return;
     }
 
     actual = buscarNodoCausa((ministerio->causas), palabra);
     agregarCarpetaInvestigativa(&actual->datosCausa->datosCarpetas, nuevaCarpeta);
 }
 
-void agregarInvolucradoMenu(struct ministerio ministerio){
+void agregarInvolucradoMenu(struct ministerio *ministerio){
     char palabra[100];
     int involucradosNuevos = 1;
     int i;
@@ -279,7 +282,7 @@ void agregarInvolucradoMenu(struct ministerio ministerio){
             return;
         }
 
-        printf("Ingrese el RUT del %d° involucrado:\n", involucradosNuevos + 1);
+        printf("Ingrese el RUT del involucrado:\n");
         scanf(" %[^\n]", palabra);
 
         personaEncontrada = buscarPersonaPorRut(ministerio->personas, palabra);
@@ -333,10 +336,10 @@ void agregarInvolucradoMenu(struct ministerio ministerio){
 
         agregarInvolucrado(causaDestinada, nuevoInvolucrado);
         printf("Involucrado agregado correctamente\n");    
-    
+    }
 }
 
-void agregarPersonas(struct ministerio **ministerio, struct persona *nuevaPersona) {
+void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona) {
     struct nodoPersonasABB *nuevoNodo;
     struct nodoPersonasABB *actual;
     struct nodoPersonasABB *padre;
@@ -348,7 +351,7 @@ void agregarPersonas(struct ministerio **ministerio, struct persona *nuevaPerson
     }
 
     // Si el árbol está vacío, se inicializa
-    if ((*ministerio)->personas == NULL) {
+    if (ministerio->personas == NULL) {
         nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
         if (nuevoNodo == NULL) {
             printf("Error al asignar memoria.\n");
@@ -357,12 +360,12 @@ void agregarPersonas(struct ministerio **ministerio, struct persona *nuevaPerson
         nuevoNodo->datosPersona = nuevaPersona;
         nuevoNodo->izquierda = NULL;
         nuevoNodo->derecha = NULL;
-        (*ministerio)->personas = nuevoNodo;
+        ministerio->personas = nuevoNodo;
         return;
     }
 
     // Reutilizamos la lógica anterior de inserción en ABB
-    actual = (*ministerio)->personas;
+    actual = ministerio->personas;
     padre = NULL;
     cmp = 0;
 
@@ -396,7 +399,7 @@ void agregarPersonas(struct ministerio **ministerio, struct persona *nuevaPerson
     } else {
         padre->derecha = nuevoNodo;
     }
-    printf("La persona fue agregara con exito.\n");
+    printf("La persona fue agregada con exito.\n");
 }
 
 void agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
@@ -582,11 +585,6 @@ void agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevo
 
 void menuAgregar(struct ministerio *ministerio){
     int opcion;
-    struct persona *nuevaPersona;
-    char palabra[100];
-    int rol;
-    char contrasenaIngresada[100];
-
     while(1){
         printf("\n=========== MENU AGREGAR ===========\n");
         printf("Opcion 1: Agregar persona\n");
@@ -621,17 +619,18 @@ void menuAgregar(struct ministerio *ministerio){
             break;
         }
         else if (opcion == 4) { 
+        /*Opcion 4 agregar causa*/
             agregarCausaMenu(ministerio);
             break;
         }
-
         else if(opcion == 5){
+        /*Opcion 5 agregar involucrado*/
             agregarInvolucradoMenu(ministerio);
             break;
         }
-    }
-    else{
-        printf("Opcion invalida, intente nuevamente.\n");
+        else{
+            printf("Opcion invalida, intente nuevamente.\n");
+        }
     }
 }
 
