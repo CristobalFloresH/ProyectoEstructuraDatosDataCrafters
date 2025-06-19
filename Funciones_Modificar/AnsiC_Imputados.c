@@ -109,5 +109,23 @@ void modificarImputado(struct ministerio *ministerio, char *rucCausa, char *rutI
             case 5:
                 do {
                     printf("Ingrese nuevo estado procesal (1: Cautelar, 2: Formalizado, 3: Sobreseido): ");
-                    sca
+                    scanf("%d", &nuevo_estado);
+                    getchar();
+                    if (nuevo_estado < 1 || nuevo_estado > 3) {
+                        printf("Estado procesal no valido. Intente nuevamente.\n");
+                    }
+                } while (nuevo_estado < 1 || nuevo_estado > 3);
 
+                datos->estadoProcesal = nuevo_estado;
+                printf("Estado procesal actualizado correctamente.\n");
+                break;
+
+            case 0:
+                break;
+
+            default:
+                printf("Opcion no valida.\n");
+                break;
+        }
+    }
+}
