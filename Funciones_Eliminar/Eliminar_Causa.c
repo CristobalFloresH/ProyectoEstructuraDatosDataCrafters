@@ -2,13 +2,11 @@ int eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
     struct nodoCausas *aEliminar;
 
     if (listaCausa == NULL || *listaCausa == NULL) {
-        printf("No se han encontrado causas.\n");
         return 0;
     }
 
     aEliminar = buscarNodoCausa(*listaCausa, ruc);
     if (aEliminar == NULL) {
-        printf("No se han encontrado causas.\n");
         return 0;
     }
 
