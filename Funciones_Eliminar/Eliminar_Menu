@@ -1,5 +1,5 @@
 void menuEliminar(struct ministerio *ministerio) {
-    int opcion = -1;
+    int opcion = -1, exito;
     char rut[30];
     char ruc[30];
     struct persona *persona;
@@ -21,7 +21,11 @@ void menuEliminar(struct ministerio *ministerio) {
                 printf("Ingrese RUT de la persona a eliminar:\n");
                 scanf("%s", rut);
                 (void)getchar();
-                eliminarPersona(&(ministerio->personas), rut);
+                exito = eliminarPersona(&(ministerio->personas), rut);
+                if (exito == 0)
+                    printf("No se pudo eliminar la persona.\n");
+                else
+                    printf("Persona eliminada con exito.\n");
                 break;
 
             case 2:
@@ -40,7 +44,11 @@ void menuEliminar(struct ministerio *ministerio) {
                     printf("Ingrese RUC de la denuncia a eliminar:\n");
                     scanf("%s", ruc);
                     (void)getchar();
-                    eliminarDenuncia(&(persona->denuncias), ruc);
+                    exito = eliminarDenuncia(&(persona->denuncias), ruc);
+                    if (exito == 0)
+                        printf("No se pudo eliminar la denuncia.\n");
+                    else
+                        printf("Denuncia eliminada con exito.\n");
                 }
                 break;
 
@@ -54,7 +62,11 @@ void menuEliminar(struct ministerio *ministerio) {
                 getchar();
                 scanf("%s", rut);
                 (void)getchar();
-                eliminarInvolucrado(&(ministerio->causas), ruc, rut);
+                exito = eliminarInvolucrado(&(ministerio->causas), ruc, rut);
+                if (exito == 0)
+                    printf("No se pudo eliminar el involucrado.\n");
+                else
+                    printf("Involucrado eliminado con exito.\n");
                 break;
 
             case 0:
