@@ -1,3 +1,23 @@
+void compactarInvolucrados(struct involucrados **involucrados, int *tam) {
+    int i, j = 0;
+
+    if (involucrados == NULL || tam == NULL || *tam == 0)
+        return;
+
+    for (i = 0; i < *tam; i++) {
+        if (involucrados[i] != NULL) {
+            if (i != j) {
+                involucrados[j] = involucrados[i];
+                involucrados[i] = NULL;
+            }
+            j++;
+        }
+    }
+    *tam = j;
+}
+
+
+
 int eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, char *rut) {
     struct involucrados *involucrado;
     int i;
@@ -18,6 +38,7 @@ int eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, char 
         if (involucrados[i] == involucrado) {
             free(involucrados[i]);
             involucrados[i] = NULL;
+            compactarInvolucrados(involucrados, tam);
             return 1;
         }
     }
