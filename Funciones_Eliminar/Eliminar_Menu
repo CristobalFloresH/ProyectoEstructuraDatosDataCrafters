@@ -1,3 +1,4 @@
+
 void menuEliminar(struct ministerio *ministerio) {
     int opcion = -1, exito;
     char rut[30];
@@ -33,7 +34,7 @@ void menuEliminar(struct ministerio *ministerio) {
                 break;
 
             case 3:
-                printf("Ingrese RUT del denunciante:\n");
+                printf("Ingrese RUT del denunciante o denunciado:\n");
                 scanf("%s", rut);
                 (void)getchar();
 
@@ -59,7 +60,7 @@ void menuEliminar(struct ministerio *ministerio) {
             case 5:
                 printf("Ingrese RUC de la causa y RUT del involucrado a eliminar.\n");
                 scanf("%s", ruc);
-                getchar();
+                (void)getchar();
                 scanf("%s", rut);
                 (void)getchar();
                 exito = eliminarInvolucrado(&(ministerio->causas), ruc, rut);
