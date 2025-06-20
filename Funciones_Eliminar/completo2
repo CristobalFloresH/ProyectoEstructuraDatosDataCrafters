@@ -1,10 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 struct denuncia { //Datos denuncia singular.
     struct persona *denunciante; //persona que envio la denuncia
