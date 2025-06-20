@@ -1,26 +1,24 @@
-void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona) {
+int agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona) {
     struct nodoPersonasABB *nuevoNodo;
     struct nodoPersonasABB *actual;
     struct nodoPersonasABB *padre;
     int cmp;
 
     if (ministerio == NULL || nuevaPersona == NULL) {
-        printf("Error: ministerio o persona inválidos.\n");
-        return;
+        return -1;
     }
 
     // Si el árbol está vacío, se inicializa
     if (ministerio->personas == NULL) {
         nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
         if (nuevoNodo == NULL) {
-            printf("Error al asignar memoria.\n");
-            return;
+            return -2;
         }
         nuevoNodo->datosPersona = nuevaPersona;
         nuevoNodo->izquierda = NULL;
         nuevoNodo->derecha = NULL;
         ministerio->personas = nuevoNodo;
-        return;
+        return 1;
     }
 
     // Reutilizamos la lógica anterior de inserción en ABB
@@ -31,8 +29,7 @@ void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona
     while (actual != NULL) {
         cmp = strcmp(nuevaPersona->rut, actual->datosPersona->rut);
         if (cmp == 0) {
-            printf("Esta persona ya se registró.\n");
-            return;
+            return 0;
         }
         padre = actual;
         if (cmp < 0) {
@@ -46,8 +43,7 @@ void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona
 
     nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
     if (nuevoNodo == NULL) {
-        printf("Error al asignar memoria.\n");
-        return;
+        return -2;
     }
     nuevoNodo->datosPersona = nuevaPersona;
     nuevoNodo->izquierda = NULL;
@@ -58,7 +54,7 @@ void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona
     } else {
         padre->derecha = nuevoNodo;
     }
-    printf("La persona fue agregada con exito.\n");
+    return 1;
 }
 
 void agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
@@ -71,15 +67,14 @@ void agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB,
 
     // si no se encuentra la persona, se informa al usuario
     if(personaEncontrada == NULL){
-        printf("No se encontraron personas\n");
-        return;
+        return -3;
     }
 
     // se asigna memoria y se verifica que haya sido exitoso
     nuevoNodo = (struct nodoDenuncias*)malloc(sizeof(struct nodoDenuncias));
     if(nuevoNodo == NULL){
         printf("Error al asignar memoria");
-        return;
+        return -2;
     }
 
     // se asignan valores a nuevo nodo
@@ -384,8 +379,7 @@ void agregarPersonaMenu(struct ministerio *ministerio){
     /*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
 
     if(nuevaPersona == NULL){
-        printf("Error al asignar memora");
-        return;
+        return -2;
     }
 
     printf("Ingrese su rut: \n");
@@ -432,7 +426,7 @@ void agregarPersonaMenu(struct ministerio *ministerio){
 
     nuevaPersona->denuncias = NULL;
 
-    agregarPersonas(ministerio, nuevaPersona);
+    return agregarPersonas(ministerio, nuevaPersona);
 }
 
 void agregarDenunciaMenu(struct ministerio *ministerio){
