@@ -107,6 +107,45 @@ struct ministerio { //el mismisimo ministerio
 	            SECCION BUSCAR (TODOS)
 =========================================================**/
 
+/**
+int compactarInvolucrados(struct involucrados **array, int tamInvolucrados) {
+    int nuevoTam = 0;
+
+    // Mover todos los elementos no NULL al frente del arreglo
+    for (int i = 0; i < tamInvolucrados; i++) {
+        if (array[i] != NULL) {
+            array[nuevoTam++] = array[i];
+        }
+    }
+
+    // Rellenar el resto del arreglo con NULL
+    for (int i = nuevoTam; i < tamInvolucrados; i++) {
+        array[i] = NULL;
+    }
+
+    return nuevoTam;
+}
+**/
+
+void compactarInvolucrados(struct involucrados **involucrados, int *tam) {
+    int i, j = 0;
+
+    if (involucrados == NULL || tam == NULL || *tam == 0)
+        return;
+
+    for (i = 0; i < *tam; i++) {
+        if (involucrados[i] != NULL) {
+            if (i != j) {
+                involucrados[j] = involucrados[i];
+                involucrados[i] = NULL;
+            }
+            j++;
+        }
+    }
+    *tam = j;
+}
+
+
 struct nodoDatosCarpetas *buscarDatosCarpetaPorTipo(struct causa *causa, int tipoDeDato){
 
     struct nodoDatosCarpetas *listaResultado = NULL;
@@ -176,6 +215,7 @@ struct denuncia *buscarDenunciaPorRuc(struct nodoDenuncias *listaDenuncias, char
         actual = actual->siguiente;
     }
     return NULL;
+
 }
 
 struct involucrados* buscarInvolucradoPorRut(struct involucrados **involucrados, int tam, char *rut) {
@@ -183,8 +223,8 @@ struct involucrados* buscarInvolucradoPorRut(struct involucrados **involucrados,
 
     if (involucrados == NULL) return NULL;
 
-    for (i = 0; i < tam; i++) {
-        if (involucrados[i] != NULL && involucrados[i]->persona != NULL) {
+    for (i = 0; i < tam && involucrados[i] != NULL; i++) {
+         if (involucrados[i]->persona != NULL) {
             if (strcmp(involucrados[i]->persona->rut, rut) == 0) {
                 return involucrados[i];
             }
@@ -303,11 +343,11 @@ struct involucrados* buscarImputadoEnCausa(struct causa *c, char *rutImputado) {
     int i;
     struct involucrados *inv;
 
-    if (c == NULL || rutImputado == NULL) {
+    if (c == NULL || rutImputado == NULL || c->involucrados == NULL) {
         printf("Error: causa o RUT inválido.\n");
         return NULL;
     }
-    for (i = 0; i < c->tamInvolucrados; i++) {
+    for (i = 0; i < c->tamInvolucrados && c->involucrados[i] != NULL ; i++) {
         inv = c->involucrados[i];
         if (inv != NULL && inv->tipoInvolucrado == 2 && inv->persona != NULL && strcmp(inv->persona->rut, rutImputado) == 0) {
             return inv;
@@ -379,29 +419,27 @@ struct datosCarpeta* buscarCarpetaPorTipoYFecha(struct nodoDatosCarpetas *lista,
 	            SECCION AGREGAR (diego cortez)
 =========================================================**/
 
-void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona) {
+int agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona) {
     struct nodoPersonasABB *nuevoNodo;
     struct nodoPersonasABB *actual;
     struct nodoPersonasABB *padre;
     int cmp;
 
     if (ministerio == NULL || nuevaPersona == NULL) {
-        printf("Error: ministerio o persona inválidos.\n");
-        return;
+        return -1;
     }
 
     // Si el árbol está vacío, se inicializa
     if (ministerio->personas == NULL) {
         nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
         if (nuevoNodo == NULL) {
-            printf("Error al asignar memoria.\n");
-            return;
+            return -2;
         }
         nuevoNodo->datosPersona = nuevaPersona;
         nuevoNodo->izquierda = NULL;
         nuevoNodo->derecha = NULL;
         ministerio->personas = nuevoNodo;
-        return;
+        return 1;
     }
 
     // Reutilizamos la lógica anterior de inserción en ABB
@@ -412,8 +450,7 @@ void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona
     while (actual != NULL) {
         cmp = strcmp(nuevaPersona->rut, actual->datosPersona->rut);
         if (cmp == 0) {
-            printf("Esta persona ya se registró.\n");
-            return;
+            return 0;
         }
         padre = actual;
         if (cmp < 0) {
@@ -427,8 +464,7 @@ void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona
 
     nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
     if (nuevoNodo == NULL) {
-        printf("Error al asignar memoria.\n");
-        return;
+        return -2;
     }
     nuevoNodo->datosPersona = nuevaPersona;
     nuevoNodo->izquierda = NULL;
@@ -439,10 +475,10 @@ void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona
     } else {
         padre->derecha = nuevoNodo;
     }
-    printf("La persona fue agregada con exito.\n");
+    return 1;
 }
 
-void agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
+int agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
     struct persona *personaEncontrada;
     struct nodoDenuncias *nuevoNodo;
     struct nodoDenuncias *actual;
@@ -452,15 +488,13 @@ void agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB,
 
     // si no se encuentra la persona, se informa al usuario
     if(personaEncontrada == NULL){
-        printf("No se encontraron personas\n");
-        return;
+        return -3;
     }
 
     // se asigna memoria y se verifica que haya sido exitoso
     nuevoNodo = (struct nodoDenuncias*)malloc(sizeof(struct nodoDenuncias));
     if(nuevoNodo == NULL){
-        printf("Error al asignar memoria");
-        return;
+        return -2;
     }
 
     // se asignan valores a nuevo nodo
@@ -480,9 +514,10 @@ void agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB,
         actual->siguiente = nuevoNodo;
         nuevoNodo->anterior = actual;
     }
+    return 1;
 }
 
-void agregarCausa(struct nodoCausas **listaCausas, struct causa *nuevaCausa){
+int agregarCausa(struct nodoCausas **listaCausas, struct causa *nuevaCausa){
     struct nodoCausas *nuevoNodo;
     struct nodoCausas *ultimo;
 
@@ -490,7 +525,7 @@ void agregarCausa(struct nodoCausas **listaCausas, struct causa *nuevaCausa){
     nuevoNodo = (struct nodoCausas *)malloc(sizeof(struct nodoCausas));
     if(nuevoNodo == NULL){
         printf("Error al asignar memoria");
-        return;
+        return -2;
     }
 
     // Se le asigna al nuevo nodo la nueva causa
@@ -511,23 +546,22 @@ void agregarCausa(struct nodoCausas **listaCausas, struct causa *nuevaCausa){
         ultimo->siguiente = nuevoNodo;
         (*listaCausas)->anterior = nuevoNodo;
     }
+    return 1;
 }
 
-void agregarCarpetaInvestigativa(struct nodoDatosCarpetas **carpetas, struct datosCarpeta *nuevaCarpeta) {
+int agregarCarpetaInvestigativa(struct nodoDatosCarpetas **carpetas, struct datosCarpeta *nuevaCarpeta) {
     struct nodoDatosCarpetas *nuevoNodo;
     struct nodoDatosCarpetas *actual;
 
     // Revisamos que la nueva carpeta exista
     if(nuevaCarpeta == NULL){
-        printf("Nueva carpeta no existe\n");
-        return;
+        return -1;
     }
 
     // Definimos nuevo nodo para asignarle nuevaCarpeta y corroboramos que se asigne memoria
     nuevoNodo = (struct nodoDatosCarpetas *)malloc(sizeof(struct nodoDatosCarpetas));
     if(nuevoNodo == NULL){
-        printf("Error al asignar memoria para el nuevo nodo\n");
-        return;
+        return -2;
     }
 
     // Se asignan los campos al nuevo nodo
@@ -549,26 +583,23 @@ void agregarCarpetaInvestigativa(struct nodoDatosCarpetas **carpetas, struct dat
         actual->siguiente = nuevoNodo;
         nuevoNodo->anterior = actual;
     }
-    printf("Carpeta agregada exitosamente.\n");
+    return 1;
 }
 
-void crearYagregarCausaNueva(struct ministerio *ministerio, struct denuncia *denunciaAsociada, int estadoCausa) {
+int crearYagregarCausaNueva(struct ministerio *ministerio, struct denuncia *denunciaAsociada, int estadoCausa) {
     struct causa *nuevaCausa;
 
     if (ministerio == NULL || denunciaAsociada == NULL) {
-        printf("Ministerio o denuncia inválida.\n");
-        return;
+        return -4;
     }
 
     nuevaCausa = (struct causa *)malloc(sizeof(struct causa));
     if (nuevaCausa == NULL) {
-        printf("Error al asignar memoria para la causa.\n");
-        return;
+        return -2;
     }
     nuevaCausa->ruc = duplicarCadena(denunciaAsociada->ruc);
     if (nuevaCausa->ruc == NULL) {
-        printf("Error al duplicar el RUC.\n");
-        return;
+        return -5;
     }
 
 
@@ -580,11 +611,11 @@ void crearYagregarCausaNueva(struct ministerio *ministerio, struct denuncia *den
     nuevaCausa->sentencia = NULL;
 
     agregarCausa(&ministerio->causas, nuevaCausa);
-    printf("Causa agregada correctamente\n");
+    return 1;
 
 }
 
-void agregarCarpetaMenu(struct ministerio *ministerio){
+int agregarCarpetaMenu(struct ministerio *ministerio){
     char palabra[300];
     int tipoDato;
     struct datosCarpeta *nuevaCarpeta;
@@ -601,8 +632,7 @@ void agregarCarpetaMenu(struct ministerio *ministerio){
     nuevaCarpeta->datosPersona = NULL;
 
     if(nuevaCarpeta == NULL){
-        printf("Error al asignar memoria");
-        return;
+        return -2;
     }
     /*Se le asigna memoria a la nueva caprtea, si esta falla termina el programa*/
 
@@ -709,15 +739,15 @@ void agregarCarpetaMenu(struct ministerio *ministerio){
     scanf(" %[^\n]", palabra);
 
     if (ministerio == NULL || ministerio->causas == NULL) {
-        printf("no existe informacion sobre causas en el sistema.\n");
-        return;
+        return 0;
     }
 
     actual = buscarNodoCausa((ministerio->causas), palabra);
     agregarCarpetaInvestigativa(&actual->datosCausa->datosCarpetas, nuevaCarpeta);
+    return 1;
 }
 
-void agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevoInvolucrado){
+int agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevoInvolucrado){
     int i;
     int nuevoTam;
     struct involucrados **nuevoArreglo;
@@ -726,8 +756,7 @@ void agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevo
 
     // Revisamos que causaDestinada y nuevoInvolucrado tengan datos
     if (causaDestinada == NULL || nuevoInvolucrado == NULL) {
-        printf("Error: la causa o el involucrado están vacíos.\n");
-        return;
+        return 0;
     }
 
     nuevoTam = causaDestinada->tamInvolucrados + 1;
@@ -735,12 +764,11 @@ void agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevo
     // Asignamos memoria y validamos que esta sea correcta
     nuevoArreglo = (struct involucrados **) malloc(sizeof(struct involucrados *) * nuevoTam);
     if (nuevoArreglo == NULL) {
-        printf("Error al asignar memoria.\n");
-        return;
+        return -2;
     }
 
     // Recorre el array hasta el último dato
-    for(i = 0; i < causaDestinada->tamInvolucrados; i++){
+    for(i = 0; i < causaDestinada->tamInvolucrados && causaDestinada->involucrados[i] != NULL; i++){
         nuevoArreglo[i] = causaDestinada->involucrados[i];
     }
 
@@ -754,9 +782,10 @@ void agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevo
 
     causaDestinada->involucrados = nuevoArreglo;
     causaDestinada->tamInvolucrados = nuevoTam;
+    return 1;
 }
 
-void agregarPersonaMenu(struct ministerio *ministerio){
+int agregarPersonaMenu(struct ministerio *ministerio){
     struct persona *nuevaPersona;
     char palabra[100];
     int rol;
@@ -765,8 +794,7 @@ void agregarPersonaMenu(struct ministerio *ministerio){
     /*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
 
     if(nuevaPersona == NULL){
-        printf("Error al asignar memora");
-        return;
+        return -2;
     }
 
     printf("Ingrese su rut: \n");
@@ -788,7 +816,7 @@ void agregarPersonaMenu(struct ministerio *ministerio){
     strcpy(nuevaPersona->apellido, palabra);
 
     printf("Ingrese su rol (1= usuario comun, 2= fiscal o 3= juez): \n");
-    scanf_s("%d", &rol);
+    scanf("%d", &rol);
     (void)getchar();
 
     if (rol == 2 || rol == 3) {
@@ -813,10 +841,10 @@ void agregarPersonaMenu(struct ministerio *ministerio){
 
     nuevaPersona->denuncias = NULL;
 
-    agregarPersonas(ministerio, nuevaPersona);
+    return agregarPersonas(ministerio, nuevaPersona);
 }
 
-void agregarDenunciaMenu(struct ministerio *ministerio, char *rutDenunciante){
+int agregarDenunciaMenu(struct ministerio *ministerio, char *rutDenunciante){
     char rutDenunciado[20];
     char palabra[100];
     struct persona *nuevoDenunciante;
@@ -832,15 +860,13 @@ void agregarDenunciaMenu(struct ministerio *ministerio, char *rutDenunciante){
     /*Se pregunta y lee los ruts de denunciante y denunciado para asi copiar esta informacion en 2 strcut personas */
 
     if(nuevoDenunciante == NULL || nuevoDenunciado == NULL){
-        printf("Denunciante y denunciado no encontrados, intente con un RUT valido\n");
-        return;
+        return 0;
     }
 
     nuevaDenuncia = (struct denuncia *)malloc(sizeof(struct denuncia));
 
     if(nuevaDenuncia == NULL){
-        printf("Error al asignar memoria");
-        return;
+        return -2;
     }
     /*Se corrobora que exita denunciante y denunciado para luego asignar memoria a la nueva denuncia (tambien se corrobora que se asigne correctamente la memoria)*/
 
@@ -874,10 +900,10 @@ void agregarDenunciaMenu(struct ministerio *ministerio, char *rutDenunciante){
 
     agregarDenunciaAPersona(rutDenunciante, ministerio->personas, nuevaDenuncia);
     agregarDenunciaAPersona(rutDenunciado, ministerio->personas, nuevaDenuncia);
-    printf("Denuncia agregada correctamente. \n");
+    return 1;
 }
 
-void agregarCausaMenu(struct ministerio *ministerio){
+int agregarCausaMenu(struct ministerio *ministerio){
     char ruc[30];
     char rut[30];
     int numero =0;
@@ -895,21 +921,21 @@ void agregarCausaMenu(struct ministerio *ministerio){
     personaBuscada = buscarPersonaPorRut(ministerio->personas, rut);
 
     if (personaBuscada == NULL || personaBuscada->denuncias == NULL) {
-        printf("Persona o sus denuncias fueron  no encontradas.\n");
-        return;
+        return -1;
     }
 
     denuncia = buscarDenunciaPorRuc(personaBuscada->denuncias, ruc);
     if (denuncia == NULL) {
-        printf("No se encontro una denuncia con ese ruc que pertenezca al usuario entregado.\n");
+        return -3;
     }
 
     else {
         crearYagregarCausaNueva(ministerio, denuncia, numero);
+        return 1;
     }
 }
 
-void agregarInvolucradoMenu(struct ministerio *ministerio){
+int agregarInvolucradoMenu(struct ministerio *ministerio){
     char palabra[100];
     int involucradosNuevos = 1;
     int i;
@@ -924,15 +950,13 @@ void agregarInvolucradoMenu(struct ministerio *ministerio){
 
     causaDestinada = buscarCausaPorRuc(ministerio->causas, palabra);
     if(causaDestinada == NULL){
-        printf("No se encontro una causa con ese RUC\n");
-        return;
+        return -1;
     }
 
     for(i = 0; i < involucradosNuevos; i++){
         nuevoInvolucrado = (struct involucrados *)malloc(sizeof(struct involucrados));
         if(nuevoInvolucrado == NULL){
-            printf("Error al asignar memoria");
-            return;
+            return -2;
         }
 
         printf("Ingrese el RUT del involucrado:\n");
@@ -955,8 +979,7 @@ void agregarInvolucradoMenu(struct ministerio *ministerio){
         if(tipo == 2){
             datosImp = (struct datosImputados *)malloc(sizeof(struct datosImputados));
             if(datosImp == NULL){
-                printf("Error al asignar memoria");
-                return;
+                return -2;
             }
             printf("Ingrese la declaracion del imputado:\n");
             scanf(" %[^\n]", palabra);
@@ -988,9 +1011,11 @@ void agregarInvolucradoMenu(struct ministerio *ministerio){
         }
 
         agregarInvolucrado(causaDestinada, nuevoInvolucrado);
-        printf("Involucrado agregado correctamente\n");
     }
+    return 1;
 }
+
+
 
 /**=========================================================
 	            SECCION ELIMINAR (Rafael Valdes)
@@ -1016,22 +1041,24 @@ void reenlazarCausas(struct nodoCausas **listaCausas, struct nodoCausas *nodoEli
     }
 }
 void reenlazarDenuncias(struct nodoDenuncias **listaDenuncias, struct nodoDenuncias *nodoEliminar) {
-    if (*listaDenuncias == NULL || nodoEliminar == NULL) return;
+    if (listaDenuncias == NULL || *listaDenuncias == NULL) return;
+
+    if (nodoEliminar->anterior == NULL && nodoEliminar->siguiente == NULL) {
+        *listaDenuncias = NULL;
+        return;
+    }
 
     if (*listaDenuncias == nodoEliminar) {
         *listaDenuncias = nodoEliminar->siguiente;
-        if (*listaDenuncias != NULL) {
-            (*listaDenuncias)->anterior = NULL;
-        }
-    } else {
-        if (nodoEliminar->anterior != NULL) {
-            nodoEliminar->anterior->siguiente = nodoEliminar->siguiente;
-        }
-        if (nodoEliminar->siguiente != NULL) {
-            nodoEliminar->siguiente->anterior = nodoEliminar->anterior;
-        }
     }
+
+    if (nodoEliminar->anterior != NULL)
+        nodoEliminar->anterior->siguiente = nodoEliminar->siguiente;
+
+    if (nodoEliminar->siguiente != NULL)
+        nodoEliminar->siguiente->anterior = nodoEliminar->anterior;
 }
+
 void reenlazarDatosCarpeta(struct nodoDatosCarpetas **listaCarpetas, struct nodoDatosCarpetas *nodoEliminar) {
     if (*listaCarpetas == NULL || nodoEliminar == NULL) return;
 
@@ -1049,7 +1076,6 @@ void reenlazarDatosCarpeta(struct nodoDatosCarpetas **listaCarpetas, struct nodo
         }
     }
 }
-
 void liberarPersona(struct persona *persona) {
     if (persona == NULL)
         return;
@@ -1069,6 +1095,8 @@ void liberarDenuncia(struct denuncia *denuncia) {
     free(denuncia->descripcion);
     free(denuncia->ruc);
     free(denuncia->tipoDeDenuncia);
+    denuncia->denunciante = NULL;
+    denuncia->denunciado = NULL;
 
     free(denuncia);
 }
@@ -1094,7 +1122,6 @@ void liberarInvolucrados(struct involucrados **involucrados, int tam) {
                 liberarDatosImputados(involucrados[i]->datosImputados);
                 involucrados[i]->datosImputados = NULL;
             }
-            // No liberamos persona, asumiendo que es compartida
             free(involucrados[i]);
             involucrados[i] = NULL;
         }
@@ -1127,12 +1154,10 @@ void liberarDatosCarpeta(struct datosCarpeta *datosCarpeta) {
     }
 
     if (datosCarpeta->datosDenuncia != NULL) {
-        liberarDenuncia(datosCarpeta->datosDenuncia);
         datosCarpeta->datosDenuncia = NULL;
     }
 
     if (datosCarpeta->datosPersona != NULL) {
-        liberarPersona(datosCarpeta->datosPersona);
         datosCarpeta->datosPersona = NULL;
     }
 
@@ -1177,19 +1202,16 @@ void liberarCausa(struct causa *causa) {
 
     free(causa);
 }
-
-void eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
+int eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
     struct nodoCausas *aEliminar;
 
-    if (listaCausa == NULL) {
-        printf("No se han encontrado causas.\n");
-        return;
+    if (listaCausa == NULL || *listaCausa == NULL) {
+        return 0;
     }
 
     aEliminar = buscarNodoCausa(*listaCausa, ruc);
     if (aEliminar == NULL) {
-        printf("No se han encontrado causas.\n");
-        return;
+        return 0;
     }
 
     if (aEliminar != NULL) {
@@ -1197,17 +1219,15 @@ void eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
         liberarCausa(aEliminar->datosCausa);
         free(aEliminar);
         aEliminar = NULL;
-        printf("Causa eliminada correctamente.\n");
-    } else {
-        printf("No se encontró una causa con ese RUC.\n");
+        return 1;
     }
+    return 0;
 }
-void eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
+int eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
     struct nodoDenuncias *actual;
 
-    if (listaDenuncia == NULL) {
-        printf("No se han encontrado denuncias");
-        return;
+    if (listaDenuncia == NULL || *listaDenuncia == NULL) {
+        return 0;
     }
 
     actual = *listaDenuncia;
@@ -1217,34 +1237,81 @@ void eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
             reenlazarDenuncias(listaDenuncia, actual);
             liberarDenuncia(actual->datosDenuncia);
             free(actual);
-            printf("Denuncia eliminada correctamente.\n");
-            return;
+            return 1;
         }
         actual = actual->siguiente;
     }
+    return 0;
+}
+
+int eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, char *rut) {
+    struct involucrados *involucrado;
+    int i;
+    involucrado = buscarInvolucradoPorRut(involucrados, tam, rut);
+    if (involucrado == NULL) {
+        return 0;
+    }
+
+    if (involucrado->tipoInvolucrado == 2 && involucrado->datosImputados != NULL) {
+        liberarDatosImputados(involucrado->datosImputados);
+        involucrado->datosImputados = NULL;
+    }
+    involucrado->persona = NULL;
+
+    for (i = 0; i < tam && involucrados[i] != NULL; i++) {
+        if (involucrados[i] == involucrado) {
+            free(involucrados[i]);
+            involucrados[i] = NULL;
+            compactarInvolucrados(involucrados, &tam);
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int eliminarInvolucrado(struct nodoCausas **listaCausas, char *ruc, char *rut) {
+    struct nodoCausas *actual;
+    struct nodoCausas *inicio;
+
+    if (listaCausas == NULL || *listaCausas == NULL) {
+        return 0;
+    }
+
+    actual = *listaCausas;
+    inicio = *listaCausas;
+
+    do {
+        if (actual->datosCausa != NULL && strcmp(actual->datosCausa->ruc, ruc) == 0 && actual->datosCausa->involucrados != NULL) {
+
+            return eliminarInvolucradoPorRut(actual->datosCausa->involucrados, actual->datosCausa->tamInvolucrados, rut);
+        }
+
+        actual = actual->siguiente;
+    } while (actual != inicio);
+
+    return 0;
 }
 struct nodoPersonasABB* minimo(struct nodoPersonasABB *arbol) {
     while (arbol != NULL && arbol->izquierda != NULL)
         arbol = arbol->izquierda;
     return arbol;
 }
-void eliminarPersona(struct nodoPersonasABB **personas, char *rut) {
+int eliminarPersona(struct nodoPersonasABB **personas, char *rut) {
     int comparar;
     struct nodoPersonasABB *nodoEliminar;
     struct nodoPersonasABB *minNodo;
     struct persona *aux;
 
     if (personas == NULL || *personas == NULL) {
-        printf("No se encontraron personas\n");
-        return;
+        return 0;
     }
 
     comparar = strcmp(rut, (*personas)->datosPersona->rut);
 
     if (comparar < 0) {
-        eliminarPersona(&((*personas)->izquierda), rut);
+        return eliminarPersona(&((*personas)->izquierda), rut);
     } else if (comparar > 0) {
-        eliminarPersona(&((*personas)->derecha), rut);
+        return eliminarPersona(&((*personas)->derecha), rut);
     } else {
         nodoEliminar = *personas;
 
@@ -1252,89 +1319,34 @@ void eliminarPersona(struct nodoPersonasABB **personas, char *rut) {
             *personas = nodoEliminar->derecha;
             liberarPersona(nodoEliminar->datosPersona);
             free(nodoEliminar);
+
         } else if (nodoEliminar->derecha == NULL) {
             *personas = nodoEliminar->izquierda;
             liberarPersona(nodoEliminar->datosPersona);
             free(nodoEliminar);
+
         } else {
             minNodo = minimo(nodoEliminar->derecha);
             aux = nodoEliminar->datosPersona;
             nodoEliminar->datosPersona = minNodo->datosPersona;
             minNodo->datosPersona = aux;
-
-            eliminarPersona(&(nodoEliminar->derecha), aux->rut);
+            return eliminarPersona(&(nodoEliminar->derecha), aux->rut);
         }
     }
-
-    printf("Persona eliminada correctamente.");
+    return 1;
 }
-void eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, char *rut) {
-    struct involucrados *involucrado;
-    int i;
-
-    involucrado = buscarInvolucradoPorRut(involucrados, tam, rut);
-    if (involucrado == NULL) {
-        printf("No se encontró involucrado con RUT %s.\n", rut);
-        return;
-    }
-
-    if (involucrado->tipoInvolucrado == 2 && involucrado->datosImputados != NULL) {
-        liberarDatosImputados(involucrado->datosImputados);
-        involucrado->datosImputados = NULL;
-    }
-
-    liberarPersona(involucrado->persona);
-    involucrado->persona = NULL;
-
-    for (i = 0; i < tam; i++) {
-        if (involucrados[i] == involucrado) {
-            free(involucrados[i]);
-            involucrados[i] = NULL;
-            break;
-        }
-    }
-
-    printf("Involucrado con RUT %s eliminado correctamente.\n", rut);
-}
-void eliminarInvolucrado(struct nodoCausas **listaCausas, char *ruc, char *rut) {
-    struct nodoCausas *actual;
-    struct nodoCausas *inicio;
-
-    if (listaCausas == NULL || *listaCausas == NULL) {
-        printf("No hay causas registradas.\n");
-        return;
-    }
-
-    actual = *listaCausas;
-    inicio = *listaCausas;
-
-    do {
-        if (actual->datosCausa != NULL &&
-            strcmp(actual->datosCausa->ruc, ruc) == 0 &&
-            actual->datosCausa->involucrados != NULL) {
-            eliminarInvolucradoPorRut(actual->datosCausa->involucrados,actual->datosCausa->tamInvolucrados,rut);
-            return;
-            }
-
-        actual = actual->siguiente;
-    } while (actual != inicio);
-
-    printf("No se encontró la causa con RUC %s.\n", ruc);
-}
-void eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) {
+int eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) {
     struct nodoCausas *causa;
     struct nodoDatosCarpetas *actualCarpeta;
     struct nodoDatosCarpetas *sig;
 
-    if (listaCausas == NULL) {
-        printf("No hay causas registradas.\n");
-        return;
+    if (listaCausas == NULL || *listaCausas == NULL) {
+        return 0;
     }
 
     causa = buscarNodoCausa(*listaCausas, ruc);
     if (causa == NULL) {
-        printf("No se encontro una causas con ese RUC.\n");
-        return;
+        return 0;
     }
 
     actualCarpeta = causa->datosCausa->datosCarpetas;
@@ -1344,9 +1356,8 @@ void eliminarCarpetaDeCausa(struct nodoCausas **listaCausas, char *ruc) {
         free(actualCarpeta);
         actualCarpeta = sig;
     }
-
     causa->datosCausa->datosCarpetas = NULL;
-    printf("Carpetas eliminadas correctamente.\n");
+    return 1;
 }
 void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, int tipoDeDato) {
     struct nodoCausas *causa;
@@ -1380,8 +1391,8 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 1: // Declaraciones
                     printf("Ingrese RUT del que declara:\n");
                     scanf(" %[^\n]", palabra);
-                    if (aEliminar->datosCarpeta->datosPersona != NULL &&
-                        strcmp(aEliminar->datosCarpeta->datosPersona->rut, palabra) == 0) {
+                    (void)getchar();
+                    if (aEliminar->datosCarpeta->datosPersona != NULL && strcmp(aEliminar->datosCarpeta->datosPersona->rut, palabra) == 0) {
                         free(aEliminar->datosCarpeta->fecha);
                         aEliminar->datosCarpeta->fecha = NULL;
 
@@ -1398,8 +1409,8 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 2: // Pruebas
                     printf("Ingrese descripción de la prueba a eliminar:\n");
                     scanf(" %[^\n]", palabra);
-                    if (aEliminar->datosCarpeta->descripcion != NULL &&
-                        strcmp(aEliminar->datosCarpeta->descripcion, palabra) == 0) {
+                    (void)getchar();
+                    if (aEliminar->datosCarpeta->descripcion != NULL && strcmp(aEliminar->datosCarpeta->descripcion, palabra) == 0) {
                         free(aEliminar->datosCarpeta->descripcion);
                         aEliminar->datosCarpeta->descripcion = NULL;
 
@@ -1413,8 +1424,8 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 3: // Diligencias
                     printf("Ingrese descripción de la diligencia a eliminar:\n");
                     scanf(" %[^\n]", palabra);
-                    if (aEliminar->datosCarpeta->datosDiligencias != NULL &&
-                        strcmp(aEliminar->datosCarpeta->datosDiligencias->descripcion, palabra) == 0) {
+                    (void)getchar();
+                    if (aEliminar->datosCarpeta->datosDiligencias != NULL && strcmp(aEliminar->datosCarpeta->datosDiligencias->descripcion, palabra) == 0) {
                         liberarDatosDiligencias(aEliminar->datosCarpeta->datosDiligencias);
                         aEliminar->datosCarpeta->datosDiligencias = NULL;
                         coincide = 1;
@@ -1424,9 +1435,8 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 4: // Denuncia
                     printf("Ingrese RUC de la denuncia extra a eliminar:\n");
                     scanf(" %[^\n]", palabra);
-
-                    if (aEliminar->datosCarpeta->datosDenuncia != NULL &&
-                        strcmp(aEliminar->datosCarpeta->datosDenuncia->ruc, palabra) == 0) {
+                    (void)getchar();
+                    if (aEliminar->datosCarpeta->datosDenuncia != NULL && strcmp(aEliminar->datosCarpeta->datosDenuncia->ruc, palabra) == 0) {
                         liberarDenuncia(aEliminar->datosCarpeta->datosDenuncia);
                         aEliminar->datosCarpeta->datosDenuncia = NULL;
                         coincide = 1;
@@ -1458,8 +1468,9 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
 
     printf("No se encontraron datos del tipo especificado en carpetas.\n");
 }
+
 void menuEliminarCarpeta(struct ministerio *ministerio) {
-    int opcion = -1;
+    int opcion = -1, exito;
     char ruc[30];
 
     while (opcion != 0) {
@@ -1477,31 +1488,40 @@ void menuEliminarCarpeta(struct ministerio *ministerio) {
         switch (opcion) {
             case 1:
                 printf("Ingrese RUC de carpeta a eliminar:\n");
-            scanf(" %[^\n]", ruc);
-            eliminarCarpetaDeCausa(&(ministerio->causas), ruc);
+            scanf("%s", ruc);
+            (void)getchar();
+            exito = eliminarCarpetaDeCausa(&(ministerio->causas), ruc);
+            if (exito == 0)
+                printf("No se pudo eliminar la carpeta.\n");
+            else
+                printf("Carpeta eliminada con exito. \n");
             break;
 
             case 2:
                 printf("Ingrese RUC de declaracion a eliminar:\n");
-            scanf(" %[^\n]", ruc);
+            scanf("%s", ruc);
+            (void)getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 1);
             break;
 
             case 3:
                 printf("Ingrese RUC de prueba a eliminar:\n");
-            scanf(" %[^\n]", ruc);
+            scanf("%s", ruc);
+            (void)getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 2);
             break;
 
             case 4:
                 printf("Ingrese RUC de diligencia a eliminar:\n");
-            scanf(" %[^\n]", ruc);
+            scanf("%s", ruc);
+            (void)getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 3);
             break;
 
             case 5:
                 printf("Ingrese RUC de denuncia a eliminar:\n");
-            scanf(" %[^\n]", ruc);
+            scanf("%s", ruc);
+            (void)getchar();
             eliminarDatoDeCarpetaPorTipo(&(ministerio->causas), ruc, 4);
             break;
 
@@ -1514,8 +1534,9 @@ void menuEliminarCarpeta(struct ministerio *ministerio) {
         }
     }
 }
+
 void menuEliminarCausa(struct ministerio *ministerio) {
-    int opcion = -1;
+    int opcion = -1, exito;
     char rut[30];
     char ruc[30];
     struct nodoCausas *encontrado;
@@ -1539,8 +1560,14 @@ void menuEliminarCausa(struct ministerio *ministerio) {
         switch (opcion) {
             case 1:
                 printf("Ingrese RUC de la causa a eliminar:\n");
-                scanf(" %[^\n]", ruc);
-                eliminarCausa(&(ministerio->causas), ruc);
+                scanf("%s", ruc);
+                (void)getchar();
+                exito = eliminarCausa(&(ministerio->causas), ruc);
+                if (exito == 0)
+                    printf("No se pudo eliminar causa.\n");
+                else
+                    printf("Causa eliminada exitosamente.\n");
+
                 break;
 
             case 2:
@@ -1549,17 +1576,21 @@ void menuEliminarCausa(struct ministerio *ministerio) {
 
             case 3:
                 printf("Ingrese RUC de la causa y RUT del involucrado a eliminar.\n");
-                scanf(" %[^\n]", ruc);
-
-                scanf(" %[^\n]", rut);
-
-                eliminarInvolucrado(&(ministerio->causas), ruc, rut);
+                scanf("%s", ruc);
+                (void)getchar();
+                scanf("%s", rut);
+                (void)getchar();
+                exito = eliminarInvolucrado(&(ministerio->causas), ruc, rut);
+                if (exito == 0)
+                    printf("No se pudo eliminar el involucrado.\n");
+                else
+                    printf("Involucrado eliminado exitosamente.\n");
                 break;
 
             case 4:
                 printf("Ingrese RUC de la sentencia a eliminar:\n");
-                scanf(" %[^\n]", ruc);
-
+                scanf("%s", ruc);
+                (void)getchar();
                 encontrado = buscarNodoCausa(ministerio->causas, ruc);
                 if (encontrado != NULL && encontrado->datosCausa != NULL && encontrado->datosCausa->sentencia != NULL) {
                     free(encontrado->datosCausa->sentencia);
@@ -1579,7 +1610,6 @@ void menuEliminarCausa(struct ministerio *ministerio) {
         }
     }
 }
-
 /**=========================================================
 	            SECCION MODIFICAR (Mauricio Morales)
 =========================================================**/
@@ -2148,10 +2178,10 @@ void cambiarTipoInvolucrado(struct ministerio *ministerio) {
 
     encontrado = 0;
 
-    for (i = 0; i < c->tamInvolucrados; i++) {
+    for (i = 0; i < c->tamInvolucrados && c->involucrados != NULL; i++) {
         inv = c->involucrados[i];
 
-        if (inv != NULL && inv->persona != NULL && strcmp(inv->persona->rut, rut) == 0) {
+        if (inv->persona != NULL && strcmp(inv->persona->rut, rut) == 0) {
             encontrado = 1;
 
             if (inv->tipoInvolucrado == 2 && nuevoTipo != 2 && inv->datosImputados != NULL) {
@@ -2759,30 +2789,28 @@ void mostrarTodosInvolucradosCausa(struct causa *causa) {
         return;
     }
 
-    for (i = 0; i < causa->tamInvolucrados; i++)
+    for (i = 0; i < causa->tamInvolucrados && causa->involucrados[i] != NULL; i++)
     {
         //1 = victima, 2 = imputado, 3 = fiscal, 4 = juez
-        if (causa->involucrados[i] != NULL)
-        {
-            printf("\n========================================\n");
-            printf("INVOLUCRADO #%d\n", i + 1);
-            printf("========================================\n");
-            printf("RUT           : %s\n", causa->involucrados[i]->persona->rut);
-            printf("Nombre        : %s\n", causa->involucrados[i]->persona->nombre);
-            printf("Apellido      : %s\n", causa->involucrados[i]->persona->apellido);
-            if (causa->involucrados[i]->tipoInvolucrado == 1) {
-                printf("Rol dentro de la causa: Victima\n");
-            }
-            else if (causa->involucrados[i]->tipoInvolucrado == 2) {
-                printf("Rol dentro de la causa: Imputado\n");
-                mostrarDatosImputados(causa->involucrados[i]->datosImputados);
-            }
-            else if (causa->involucrados[i]->tipoInvolucrado == 3) {
-                printf("Rol dentro de la causa: Fiscal\n");
-            }
-            else if (causa->involucrados[i]->tipoInvolucrado == 4) {
-                printf("Rol dentro de la causa: Juez\n");
-            }
+
+       printf("\n========================================\n");
+       printf("INVOLUCRADO #%d\n", i + 1);
+       printf("========================================\n");
+       printf("RUT           : %s\n", causa->involucrados[i]->persona->rut);
+       printf("Nombre        : %s\n", causa->involucrados[i]->persona->nombre);
+       printf("Apellido      : %s\n", causa->involucrados[i]->persona->apellido);
+       if (causa->involucrados[i]->tipoInvolucrado == 1) {
+           printf("Rol dentro de la causa: Victima\n");
+       }
+       else if (causa->involucrados[i]->tipoInvolucrado == 2) {
+           printf("Rol dentro de la causa: Imputado\n");
+           mostrarDatosImputados(causa->involucrados[i]->datosImputados);
+       }
+       else if (causa->involucrados[i]->tipoInvolucrado == 3) {
+           printf("Rol dentro de la causa: Fiscal\n");
+       }
+       else if (causa->involucrados[i]->tipoInvolucrado == 4) {
+           printf("Rol dentro de la causa: Juez\n");
         }
     }
 
@@ -2804,9 +2832,9 @@ void mostrarInvolucradosCausaPorTipo(struct causa *causa, int tipoInvolucrado)
 
     contador = 0;
 
-    for (i = 0; i < causa->tamInvolucrados; i++)
+    for (i = 0; i < causa->tamInvolucrados && causa->involucrados[i] != NULL; i++)
     {
-        if (causa->involucrados[i] != NULL && causa->involucrados[i]->tipoInvolucrado == tipoInvolucrado)
+        if (causa->involucrados[i]->tipoInvolucrado == tipoInvolucrado)
         {
             contador++;
             printf("\n========================================\n");
@@ -2904,6 +2932,57 @@ void mostrarTodasLasCausas(struct nodoCausas *causas)
 /**=========================================================
 	            SECCION EXTRA (TODOS)
 =========================================================**/
+
+// Busca usando busqueda binaria en el array involucrados ordenado por rut, devuelve el índice o -1 si no encontrado.
+struct persona *busquedaBinariaInvolucradosPorRut(struct involucrados **array, int tamInvolucrados, char *rutBuscado) {
+    int izq, der, medio, cmp;
+
+    izq = 0,
+    der = tamInvolucrados - 1;
+
+    while (izq <= der) { // mientras la izq no haya sobrepasado derecha
+
+      medio = (izq + der) / 2; // si el tam es par la division entera dedonde hacia abajo o sea a la izquierda
+
+      cmp = strcmp(array[medio]->persona->rut, rutBuscado);
+        if (cmp == 0) {
+            return array[medio]->persona;
+
+        } else if (cmp < 0) { // si la comparacion sale negativa, significa que es mayor el que buscamos entonces busca por la derecha
+            izq = medio + 1; // ajustamos medio para la derecha
+        } else { // si la comparacion resulta positiva, signnifica que es menor el que buscamos entonces busca por la izq
+            der = medio - 1; // ajustamos medio para la izq
+        }
+    }
+    return NULL; // No encontrado // si sale del ciclo no encontramos
+}
+
+// Funcion de ordenamiento
+void OrdenarSeleccionDirectaInvolucradosPorRut(struct involucrados **involucrados, int tam) {
+    int i, j, indiceMinimo;
+    struct involucrados *temporal;
+
+    if (involucrados == NULL) {
+        return;
+    }
+    // asigna el i y ademas busca el menor hasta el ultimo dato del array
+    for (i = 0; i < tam - 1; i++) {
+        indiceMinimo = i;
+        for (j = i + 1; j < tam; j++) {
+            if (strcmp(involucrados[j]->persona->rut, involucrados[indiceMinimo]->persona->rut) < 0) {
+                indiceMinimo = j;
+            }
+        }
+
+        // si el indice del minimo no es igual al i actual (osea, existe un minimo) intercambia posiciones
+        if (indiceMinimo != i) {
+            temporal = involucrados[i];
+            involucrados[i] = involucrados[indiceMinimo];
+            involucrados[indiceMinimo] = temporal;
+        }
+    }
+}
+
 
 struct persona *ingresarAlSistema(struct ministerio *ministerio) {
     char palabra[100];
@@ -3061,9 +3140,9 @@ void mostrarRucDePersonaBuscada(struct ministerio *ministerio, char *rutBuscado)
         encontrado = 0;
 
         // Buscar en involucrados
-        for (i = 0; i < actual->datosCausa->tamInvolucrados; i++)
+        for (i = 0; i < actual->datosCausa->tamInvolucrados && actual->datosCausa->involucrados[i] != NULL; i++)
         {
-            if (actual->datosCausa->involucrados[i] != NULL && actual->datosCausa->involucrados[i]->persona != NULL && actual->datosCausa->involucrados[i]->persona->rut != NULL && strcmp(actual->datosCausa->involucrados[i]->persona->rut, rutBuscado) == 0)
+            if (actual->datosCausa->involucrados[i]->persona != NULL && actual->datosCausa->involucrados[i]->persona->rut != NULL && strcmp(actual->datosCausa->involucrados[i]->persona->rut, rutBuscado) == 0)
             {
                 encontrado = 1;
             }
@@ -3329,6 +3408,7 @@ void menuExtra(struct ministerio *ministerio) {
 void menuAgregar(struct ministerio *ministerio){
     int opcion;
     char rutDenunciante[20];
+    int resultado;
     while(1){
         printf("\n=========== MENU AGREGAR ===========\n");
         printf("Opcion 1: Agregar persona\n");
@@ -3347,7 +3427,12 @@ void menuAgregar(struct ministerio *ministerio){
         }
         else if (opcion == 1) {
         /*Opcion 1 agregar persona*/
-            agregarPersonaMenu(ministerio);
+            resultado = agregarPersonaMenu(ministerio);
+            if (resultado == -3)printf("No se encontraron personas\n");
+            if (resultado == -2)printf("Error al asignar memoria.\n");
+            if (resultado == -1)printf("Error: ministerio o persona inválidos.\n");
+            if (resultado == 0)printf("Esta persona ya se registró.\n");
+            if (resultado == 1)printf("La persona fue agregada con exito.\n");
             break;
         }
 
@@ -3355,24 +3440,42 @@ void menuAgregar(struct ministerio *ministerio){
         /*Opcion 2 agregar denuncia */
             printf("Ingrese RUT del denunciante\n");
             scanf(" %[^\n]", rutDenunciante);
-
-            agregarDenunciaMenu(ministerio, rutDenunciante);
+            resultado = agregarDenunciaMenu(ministerio, rutDenunciante);
+            if (resultado == -3)printf("Denunciante y denunciado no encontrados, intente con un RUT valido\n");
+            if (resultado == -2)printf("Error al asignar memoria\n");
+            if (resultado == 0)printf("Persona no encontrada\n");
+            if (resultado == 1)printf("Denuncia agregada correctamente. \n");
             break;
         }
 
         else if(opcion == 3){
         /*Opcion 3 agregar carpeta*/
-            agregarCarpetaMenu(ministerio);
+            resultado = agregarCarpetaMenu(ministerio);
+            if (resultado == -2)printf("Error al asignar memoria");
+            if (resultado == -1)printf("Nueva carpeta no existe\n");
+            if (resultado == 0)printf("no existe informacion sobre causas en el sistema.\n");
+            if (resultado == 1)printf("Carpeta agregada exitosamente.\n");
             break;
         }
         else if (opcion == 4) {
         /*Opcion 4 agregar causa*/
-            agregarCausaMenu(ministerio);
+            resultado = agregarCausaMenu(ministerio);
+            if (resultado == -5)printf("Error al duplicar el RUC.\n");
+            if (resultado == -4)printf("Ministerio o denuncia inválida.\n");
+            if (resultado == -3)printf("No se encontro una denuncia con ese ruc que pertenezca al usuario entregado.\n");
+            if (resultado == -2)printf("Error al asignar memoria para la causa.\n");
+            if (resultado == -1)printf("Persona o sus denuncias fueron  no encontradas.\n");
+            if (resultado == 1)printf("Causa agregada correctamente\n");
             break;
         }
         else if(opcion == 5){
         /*Opcion 5 agregar involucrado*/
-            agregarInvolucradoMenu(ministerio);
+            resultado = agregarInvolucradoMenu(ministerio);
+            if (resultado == -2)printf("Error al asignar memoria");
+            if (resultado == -1)printf("No se encontro una causa con ese RUC\n");
+            if (resultado == 0)printf("Error: la causa o el involucrado están vacíos.\n");
+            if (resultado == 1)printf("Involucrado agregado correctamente\n");
+
             break;
         }
         else{
@@ -3380,6 +3483,7 @@ void menuAgregar(struct ministerio *ministerio){
         }
     }
 }
+
 
 void menuBuscar(struct ministerio *ministerio) {
     int opcion = -1;
@@ -3487,7 +3591,7 @@ void menuBuscar(struct ministerio *ministerio) {
 }
 
 void menuEliminar(struct ministerio *ministerio) {
-    int opcion = -1;
+    int opcion = -1, exito;
     char rut[30];
     char ruc[30];
     struct persona *persona;
@@ -3507,9 +3611,13 @@ void menuEliminar(struct ministerio *ministerio) {
         switch (opcion) {
             case 1:
                 printf("Ingrese RUT de la persona a eliminar:\n");
-                scanf(" %[^\n]", rut);
-
-                eliminarPersona(&(ministerio->personas), rut);
+                scanf("%s", rut);
+                (void)getchar();
+                exito = eliminarPersona(&(ministerio->personas), rut);
+                if (exito == 0)
+                    printf("No se pudo eliminar la persona.\n");
+                else
+                    printf("Persona eliminada con exito.\n");
                 break;
 
             case 2:
@@ -3517,18 +3625,22 @@ void menuEliminar(struct ministerio *ministerio) {
                 break;
 
             case 3:
-                printf("Ingrese RUT del denunciante:\n");
-                scanf(" %[^\n]", rut);
-
+                printf("Ingrese RUT del denunciante o denunciado:\n");
+                scanf("%s", rut);
+                (void)getchar();
 
                 persona = buscarPersonaPorRut(ministerio->personas, rut);
                 if (persona == NULL)
                     printf("Persona no encontrada.\n");
                 else {
                     printf("Ingrese RUC de la denuncia a eliminar:\n");
-                    scanf(" %[^\n]", ruc);
-
-                    eliminarDenuncia(&(persona->denuncias), ruc);
+                    scanf("%s", ruc);
+                    (void)getchar();
+                    exito = eliminarDenuncia(&(persona->denuncias), ruc);
+                    if (exito == 0)
+                        printf("No se pudo eliminar la denuncia.\n");
+                    else
+                        printf("Denuncia eliminada con exito.\n");
                 }
                 break;
 
@@ -3538,11 +3650,15 @@ void menuEliminar(struct ministerio *ministerio) {
 
             case 5:
                 printf("Ingrese RUC de la causa y RUT del involucrado a eliminar.\n");
-                scanf(" %[^\n]", ruc);
-
-                scanf(" %[^\n]", rut);
-
-                eliminarInvolucrado(&(ministerio->causas), ruc, rut);
+                scanf("%s", ruc);
+                (void)getchar();
+                scanf("%s", rut);
+                (void)getchar();
+                exito = eliminarInvolucrado(&(ministerio->causas), ruc, rut);
+                if (exito == 0)
+                    printf("No se pudo eliminar el involucrado.\n");
+                else
+                    printf("Involucrado eliminado con exito.\n");
                 break;
 
             case 0:
