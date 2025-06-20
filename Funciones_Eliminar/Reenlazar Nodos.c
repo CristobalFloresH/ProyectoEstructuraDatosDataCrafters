@@ -17,22 +17,24 @@ void reenlazarCausas(struct nodoCausas **listaCausas, struct nodoCausas *nodoEli
     }
 }
 void reenlazarDenuncias(struct nodoDenuncias **listaDenuncias, struct nodoDenuncias *nodoEliminar) {
-    if (*listaDenuncias == NULL || nodoEliminar == NULL) return;
+    if (listaDenuncias == NULL || *listaDenuncias == NULL || nodoEliminar == NULL) return;
+
+    if (nodoEliminar->anterior == NULL && nodoEliminar->siguiente == NULL) {
+        *listaDenuncias = NULL;
+        return;
+    }
 
     if (*listaDenuncias == nodoEliminar) {
         *listaDenuncias = nodoEliminar->siguiente;
-        if (*listaDenuncias != NULL) {
-            (*listaDenuncias)->anterior = NULL;
-        }
-    } else {
-        if (nodoEliminar->anterior != NULL) {
-            nodoEliminar->anterior->siguiente = nodoEliminar->siguiente;
-        }
-        if (nodoEliminar->siguiente != NULL) {
-            nodoEliminar->siguiente->anterior = nodoEliminar->anterior;
-        }
     }
+
+    if (nodoEliminar->anterior != NULL)
+        nodoEliminar->anterior->siguiente = nodoEliminar->siguiente;
+
+    if (nodoEliminar->siguiente != NULL)
+        nodoEliminar->siguiente->anterior = nodoEliminar->anterior;
 }
+
 void reenlazarDatosCarpeta(struct nodoDatosCarpetas **listaCarpetas, struct nodoDatosCarpetas *nodoEliminar) {
     if (*listaCarpetas == NULL || nodoEliminar == NULL) return;
 
