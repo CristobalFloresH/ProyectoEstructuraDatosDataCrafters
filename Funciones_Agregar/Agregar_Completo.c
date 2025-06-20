@@ -1,23 +1,26 @@
-int agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona) {
+void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona) {
     struct nodoPersonasABB *nuevoNodo;
     struct nodoPersonasABB *actual;
     struct nodoPersonasABB *padre;
     int cmp;
 
     if (ministerio == NULL || nuevaPersona == NULL) {
-        return -2;
+        printf("Error: ministerio o persona inválidos.\n");
+        return;
     }
 
     // Si el árbol está vacío, se inicializa
     if (ministerio->personas == NULL) {
         nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
         if (nuevoNodo == NULL) {
-            return -1;
+            printf("Error al asignar memoria.\n");
+            return;
         }
         nuevoNodo->datosPersona = nuevaPersona;
         nuevoNodo->izquierda = NULL;
         nuevoNodo->derecha = NULL;
         ministerio->personas = nuevoNodo;
+        return;
     }
 
     // Reutilizamos la lógica anterior de inserción en ABB
@@ -29,7 +32,7 @@ int agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona)
         cmp = strcmp(nuevaPersona->rut, actual->datosPersona->rut);
         if (cmp == 0) {
             printf("Esta persona ya se registró.\n");
-            return 0;
+            return;
         }
         padre = actual;
         if (cmp < 0) {
@@ -55,7 +58,7 @@ int agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona)
     } else {
         padre->derecha = nuevoNodo;
     }
-    return 1;
+    printf("La persona fue agregada con exito.\n");
 }
 
 void agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
@@ -372,7 +375,7 @@ void agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevo
     causaDestinada->tamInvolucrados = nuevoTam;
 }
 
-int agregarPersonaMenu(struct ministerio *ministerio){
+void agregarPersonaMenu(struct ministerio *ministerio){
     struct persona *nuevaPersona;
     char palabra[100];
     int rol;
@@ -381,7 +384,8 @@ int agregarPersonaMenu(struct ministerio *ministerio){
     /*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
 
     if(nuevaPersona == NULL){
-        return -1;
+        printf("Error al asignar memora");
+        return;
     }
 
     printf("Ingrese su rut: \n");
@@ -428,7 +432,7 @@ int agregarPersonaMenu(struct ministerio *ministerio){
 
     nuevaPersona->denuncias = NULL;
 
-    return agregarPersonas(ministerio, nuevaPersona);
+    agregarPersonas(ministerio, nuevaPersona);
 }
 
 void agregarDenunciaMenu(struct ministerio *ministerio){
@@ -610,57 +614,3 @@ void agregarInvolucradoMenu(struct ministerio *ministerio){
         printf("Involucrado agregado correctamente\n");
     }
 }
-void menuAgregar(struct ministerio *ministerio){
-    int opcion;
-    while(1){
-        printf("\n=========== MENU AGREGAR ===========\n");
-        printf("Opcion 1: Agregar persona\n");
-        printf("Opcion 2: Agregar denuncia\n");
-        printf("Opcion 3: Agregar carpeta investigativa\n");
-        printf("Opcion 4: Agregar causa\n");
-        printf("Opcion 5: Agregar involucrados\n");
-        printf("Opcion 0: Volver.\n");
-        printf("Ingrese una opcion:");
-        scanf("%d", &opcion);
-        /*El fiscal tendra que elegir la opcion a agregar, ya sea una persona, denuncia, carpeta investigativa*/
-
-        if(opcion == 0){
-            //menuPrincipal(struct ministerio *ministerio);
-            break;
-        }
-        else if (opcion == 1) {
-        /*Opcion 1 agregar persona*/
-            if(agregarPersonaMenu(ministerio) == -1)printf("Error al asignar memoria\n");
-            if(agregarPersonaMenu(ministerio) == -2)printf("Error al agregar nueva persona\n");
-            if(agregarPersonaMenu(ministerio) == 1)printf("La persona fue agregada con exito.\n");
-            break;
-        }
-
-        else if(opcion == 2){
-        /*Opcion 2 agregar denuncia */
-            agregarDenunciaMenu(ministerio);
-            break;
-        }
-
-        else if(opcion == 3){
-        /*Opcion 3 agregar carpeta*/
-            agregarCarpetaMenu(ministerio);
-            break;
-        }
-        else if (opcion == 4) {
-        /*Opcion 4 agregar causa*/
-            agregarCausaMenu(ministerio);
-            break;
-        }
-        else if(opcion == 5){
-        /*Opcion 5 agregar involucrado*/
-            agregarInvolucradoMenu(ministerio);
-            break;
-        }
-        else{
-            printf("Opcion invalida, intente nuevamente.\n");
-        }
-    }
-}
-
-
