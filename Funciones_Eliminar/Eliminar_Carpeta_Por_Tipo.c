@@ -30,9 +30,8 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 1: // Declaraciones
                     printf("Ingrese RUT del que declara:\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
-                    if (aEliminar->datosCarpeta->datosPersona != NULL &&
-                        strcmp(aEliminar->datosCarpeta->datosPersona->rut, palabra) == 0) {
+                    (void)getchar();
+                    if (aEliminar->datosCarpeta->datosPersona != NULL && strcmp(aEliminar->datosCarpeta->datosPersona->rut, palabra) == 0) {
                         free(aEliminar->datosCarpeta->fecha);
                         aEliminar->datosCarpeta->fecha = NULL;
 
@@ -49,9 +48,8 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 2: // Pruebas
                     printf("Ingrese descripción de la prueba a eliminar:\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
-                    if (aEliminar->datosCarpeta->descripcion != NULL &&
-                        strcmp(aEliminar->datosCarpeta->descripcion, palabra) == 0) {
+                    (void)getchar();
+                    if (aEliminar->datosCarpeta->descripcion != NULL && strcmp(aEliminar->datosCarpeta->descripcion, palabra) == 0) {
                         free(aEliminar->datosCarpeta->descripcion);
                         aEliminar->datosCarpeta->descripcion = NULL;
 
@@ -65,9 +63,8 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 3: // Diligencias
                     printf("Ingrese descripción de la diligencia a eliminar:\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
-                    if (aEliminar->datosCarpeta->datosDiligencias != NULL &&
-                        strcmp(aEliminar->datosCarpeta->datosDiligencias->descripcion, palabra) == 0) {
+                    (void)getchar();
+                    if (aEliminar->datosCarpeta->datosDiligencias != NULL && strcmp(aEliminar->datosCarpeta->datosDiligencias->descripcion, palabra) == 0) {
                         liberarDatosDiligencias(aEliminar->datosCarpeta->datosDiligencias);
                         aEliminar->datosCarpeta->datosDiligencias = NULL;
                         coincide = 1;
@@ -77,9 +74,8 @@ void eliminarDatoDeCarpetaPorTipo(struct nodoCausas **listaCausas, char *ruc, in
                 case 4: // Denuncia
                     printf("Ingrese RUC de la denuncia extra a eliminar:\n");
                     scanf(" %[^\n]", palabra);
-                    getchar();
-                    if (aEliminar->datosCarpeta->datosDenuncia != NULL &&
-                        strcmp(aEliminar->datosCarpeta->datosDenuncia->ruc, palabra) == 0) {
+                    (void)getchar();
+                    if (aEliminar->datosCarpeta->datosDenuncia != NULL && strcmp(aEliminar->datosCarpeta->datosDenuncia->ruc, palabra) == 0) {
                         liberarDenuncia(aEliminar->datosCarpeta->datosDenuncia);
                         aEliminar->datosCarpeta->datosDenuncia = NULL;
                         coincide = 1;
