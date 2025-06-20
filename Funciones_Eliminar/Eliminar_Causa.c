@@ -1,15 +1,15 @@
-void eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
+int eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
     struct nodoCausas *aEliminar;
 
-    if (listaCausa == NULL) {
+    if (listaCausa == NULL || *listaCausa == NULL) {
         printf("No se han encontrado causas.\n");
-        return;
+        return 0;
     }
 
     aEliminar = buscarNodoCausa(*listaCausa, ruc);
     if (aEliminar == NULL) {
         printf("No se han encontrado causas.\n");
-        return;
+        return 0;
     }
 
     if (aEliminar != NULL) {
@@ -17,8 +17,7 @@ void eliminarCausa(struct nodoCausas **listaCausa, char *ruc) {
         liberarCausa(aEliminar->datosCausa);
         free(aEliminar);
         aEliminar = NULL;
-        printf("Causa eliminada correctamente.\n");
-    } else {
-        printf("No se encontró una causa con ese RUC.\n");
+        return 1;
     }
+    return 0;
 }
