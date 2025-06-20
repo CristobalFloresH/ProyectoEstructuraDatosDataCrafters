@@ -1,9 +1,8 @@
-void eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
+int eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
     struct nodoDenuncias *actual;
 
-    if (listaDenuncia == NULL) {
-        printf("No se han encontrado denuncias");
-        return;
+    if (listaDenuncia == NULL || *listaDenuncia == NULL) {
+        return 0;
     }
 
     actual = *listaDenuncia;
@@ -13,9 +12,9 @@ void eliminarDenuncia(struct nodoDenuncias **listaDenuncia, char *ruc) {
             reenlazarDenuncias(listaDenuncia, actual);
             liberarDenuncia(actual->datosDenuncia);
             free(actual);
-            printf("Denuncia eliminada correctamente.\n");
-            return;
+            return 1;
         }
         actual = actual->siguiente;
     }
+    return 0;
 }
