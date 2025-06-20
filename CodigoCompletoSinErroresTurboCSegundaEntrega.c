@@ -379,27 +379,29 @@ struct datosCarpeta* buscarCarpetaPorTipoYFecha(struct nodoDatosCarpetas *lista,
 	            SECCION AGREGAR (diego cortez)
 =========================================================**/
 
-int agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona) {
+void agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona) {
     struct nodoPersonasABB *nuevoNodo;
     struct nodoPersonasABB *actual;
     struct nodoPersonasABB *padre;
     int cmp;
 
     if (ministerio == NULL || nuevaPersona == NULL) {
-        return -1;
+        printf("Error: ministerio o persona inválidos.\n");
+        return;
     }
 
     // Si el árbol está vacío, se inicializa
     if (ministerio->personas == NULL) {
         nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
         if (nuevoNodo == NULL) {
-            return -2;
+            printf("Error al asignar memoria.\n");
+            return;
         }
         nuevoNodo->datosPersona = nuevaPersona;
         nuevoNodo->izquierda = NULL;
         nuevoNodo->derecha = NULL;
         ministerio->personas = nuevoNodo;
-        return 1;
+        return;
     }
 
     // Reutilizamos la lógica anterior de inserción en ABB
@@ -410,7 +412,8 @@ int agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona)
     while (actual != NULL) {
         cmp = strcmp(nuevaPersona->rut, actual->datosPersona->rut);
         if (cmp == 0) {
-            return 0;
+            printf("Esta persona ya se registró.\n");
+            return;
         }
         padre = actual;
         if (cmp < 0) {
@@ -424,7 +427,8 @@ int agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona)
 
     nuevoNodo = (struct nodoPersonasABB *)malloc(sizeof(struct nodoPersonasABB));
     if (nuevoNodo == NULL) {
-        return -2;
+        printf("Error al asignar memoria.\n");
+        return;
     }
     nuevoNodo->datosPersona = nuevaPersona;
     nuevoNodo->izquierda = NULL;
@@ -435,10 +439,10 @@ int agregarPersonas(struct ministerio *ministerio, struct persona *nuevaPersona)
     } else {
         padre->derecha = nuevoNodo;
     }
-    return 1;
+    printf("La persona fue agregada con exito.\n");
 }
 
-int agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
+void agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, struct denuncia *nuevaDenuncia){
     struct persona *personaEncontrada;
     struct nodoDenuncias *nuevoNodo;
     struct nodoDenuncias *actual;
@@ -448,13 +452,15 @@ int agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, 
 
     // si no se encuentra la persona, se informa al usuario
     if(personaEncontrada == NULL){
-        return -3;
+        printf("No se encontraron personas\n");
+        return;
     }
 
     // se asigna memoria y se verifica que haya sido exitoso
     nuevoNodo = (struct nodoDenuncias*)malloc(sizeof(struct nodoDenuncias));
     if(nuevoNodo == NULL){
-        return -2;
+        printf("Error al asignar memoria");
+        return;
     }
 
     // se asignan valores a nuevo nodo
@@ -474,10 +480,9 @@ int agregarDenunciaAPersona(char *rut, struct nodoPersonasABB *nodoPersonasABB, 
         actual->siguiente = nuevoNodo;
         nuevoNodo->anterior = actual;
     }
-    return 1;
 }
 
-int agregarCausa(struct nodoCausas **listaCausas, struct causa *nuevaCausa){
+void agregarCausa(struct nodoCausas **listaCausas, struct causa *nuevaCausa){
     struct nodoCausas *nuevoNodo;
     struct nodoCausas *ultimo;
 
@@ -485,7 +490,7 @@ int agregarCausa(struct nodoCausas **listaCausas, struct causa *nuevaCausa){
     nuevoNodo = (struct nodoCausas *)malloc(sizeof(struct nodoCausas));
     if(nuevoNodo == NULL){
         printf("Error al asignar memoria");
-        return -2;
+        return;
     }
 
     // Se le asigna al nuevo nodo la nueva causa
@@ -506,22 +511,23 @@ int agregarCausa(struct nodoCausas **listaCausas, struct causa *nuevaCausa){
         ultimo->siguiente = nuevoNodo;
         (*listaCausas)->anterior = nuevoNodo;
     }
-    return 1;
 }
 
-int agregarCarpetaInvestigativa(struct nodoDatosCarpetas **carpetas, struct datosCarpeta *nuevaCarpeta) {
+void agregarCarpetaInvestigativa(struct nodoDatosCarpetas **carpetas, struct datosCarpeta *nuevaCarpeta) {
     struct nodoDatosCarpetas *nuevoNodo;
     struct nodoDatosCarpetas *actual;
 
     // Revisamos que la nueva carpeta exista
     if(nuevaCarpeta == NULL){
-        return -1;
+        printf("Nueva carpeta no existe\n");
+        return;
     }
 
     // Definimos nuevo nodo para asignarle nuevaCarpeta y corroboramos que se asigne memoria
     nuevoNodo = (struct nodoDatosCarpetas *)malloc(sizeof(struct nodoDatosCarpetas));
     if(nuevoNodo == NULL){
-        return -2;
+        printf("Error al asignar memoria para el nuevo nodo\n");
+        return;
     }
 
     // Se asignan los campos al nuevo nodo
@@ -543,23 +549,26 @@ int agregarCarpetaInvestigativa(struct nodoDatosCarpetas **carpetas, struct dato
         actual->siguiente = nuevoNodo;
         nuevoNodo->anterior = actual;
     }
-    return 1;
+    printf("Carpeta agregada exitosamente.\n");
 }
 
-int crearYagregarCausaNueva(struct ministerio *ministerio, struct denuncia *denunciaAsociada, int estadoCausa) {
+void crearYagregarCausaNueva(struct ministerio *ministerio, struct denuncia *denunciaAsociada, int estadoCausa) {
     struct causa *nuevaCausa;
 
     if (ministerio == NULL || denunciaAsociada == NULL) {
-        return -4;
+        printf("Ministerio o denuncia inválida.\n");
+        return;
     }
 
     nuevaCausa = (struct causa *)malloc(sizeof(struct causa));
     if (nuevaCausa == NULL) {
-        return -2;
+        printf("Error al asignar memoria para la causa.\n");
+        return;
     }
     nuevaCausa->ruc = duplicarCadena(denunciaAsociada->ruc);
     if (nuevaCausa->ruc == NULL) {
-        return -5;
+        printf("Error al duplicar el RUC.\n");
+        return;
     }
 
 
@@ -571,11 +580,11 @@ int crearYagregarCausaNueva(struct ministerio *ministerio, struct denuncia *denu
     nuevaCausa->sentencia = NULL;
 
     agregarCausa(&ministerio->causas, nuevaCausa);
-    return 1;
+    printf("Causa agregada correctamente\n");
 
 }
 
-int agregarCarpetaMenu(struct ministerio *ministerio){
+void agregarCarpetaMenu(struct ministerio *ministerio){
     char palabra[300];
     int tipoDato;
     struct datosCarpeta *nuevaCarpeta;
@@ -592,7 +601,8 @@ int agregarCarpetaMenu(struct ministerio *ministerio){
     nuevaCarpeta->datosPersona = NULL;
 
     if(nuevaCarpeta == NULL){
-        return -2;
+        printf("Error al asignar memoria");
+        return;
     }
     /*Se le asigna memoria a la nueva caprtea, si esta falla termina el programa*/
 
@@ -699,15 +709,15 @@ int agregarCarpetaMenu(struct ministerio *ministerio){
     scanf(" %[^\n]", palabra);
 
     if (ministerio == NULL || ministerio->causas == NULL) {
-        return 0;
+        printf("no existe informacion sobre causas en el sistema.\n");
+        return;
     }
 
     actual = buscarNodoCausa((ministerio->causas), palabra);
     agregarCarpetaInvestigativa(&actual->datosCausa->datosCarpetas, nuevaCarpeta);
-    return 1;
 }
 
-int agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevoInvolucrado){
+void agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevoInvolucrado){
     int i;
     int nuevoTam;
     struct involucrados **nuevoArreglo;
@@ -716,7 +726,8 @@ int agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevoI
 
     // Revisamos que causaDestinada y nuevoInvolucrado tengan datos
     if (causaDestinada == NULL || nuevoInvolucrado == NULL) {
-        return 0;
+        printf("Error: la causa o el involucrado están vacíos.\n");
+        return;
     }
 
     nuevoTam = causaDestinada->tamInvolucrados + 1;
@@ -724,7 +735,8 @@ int agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevoI
     // Asignamos memoria y validamos que esta sea correcta
     nuevoArreglo = (struct involucrados **) malloc(sizeof(struct involucrados *) * nuevoTam);
     if (nuevoArreglo == NULL) {
-        return -2;
+        printf("Error al asignar memoria.\n");
+        return;
     }
 
     // Recorre el array hasta el último dato
@@ -742,10 +754,9 @@ int agregarInvolucrado(struct causa *causaDestinada, struct involucrados *nuevoI
 
     causaDestinada->involucrados = nuevoArreglo;
     causaDestinada->tamInvolucrados = nuevoTam;
-    return 1;
 }
 
-int agregarPersonaMenu(struct ministerio *ministerio){
+void agregarPersonaMenu(struct ministerio *ministerio){
     struct persona *nuevaPersona;
     char palabra[100];
     int rol;
@@ -754,7 +765,8 @@ int agregarPersonaMenu(struct ministerio *ministerio){
     /*Se crea el struct persona y se le asigna memoria de inmediato, si el asignar memoria falla finaliza el programa*/
 
     if(nuevaPersona == NULL){
-        return -2;
+        printf("Error al asignar memora");
+        return;
     }
 
     printf("Ingrese su rut: \n");
@@ -776,7 +788,7 @@ int agregarPersonaMenu(struct ministerio *ministerio){
     strcpy(nuevaPersona->apellido, palabra);
 
     printf("Ingrese su rol (1= usuario comun, 2= fiscal o 3= juez): \n");
-    scanf("%d", &rol);
+    scanf_s("%d", &rol);
     (void)getchar();
 
     if (rol == 2 || rol == 3) {
@@ -801,19 +813,15 @@ int agregarPersonaMenu(struct ministerio *ministerio){
 
     nuevaPersona->denuncias = NULL;
 
-    return agregarPersonas(ministerio, nuevaPersona);
+    agregarPersonas(ministerio, nuevaPersona);
 }
 
-int agregarDenunciaMenu(struct ministerio *ministerio){
-    char rutDenunciante[20];
+void agregarDenunciaMenu(struct ministerio *ministerio, char *rutDenunciante){
     char rutDenunciado[20];
     char palabra[100];
     struct persona *nuevoDenunciante;
     struct persona *nuevoDenunciado;
     struct denuncia *nuevaDenuncia;
-
-    printf("Ingrese RUT del denunciante\n");
-    scanf(" %[^\n]", rutDenunciante);
 
     printf("Ingrese RUT del denunciado\n");
     scanf(" %[^\n]", rutDenunciado);
@@ -824,13 +832,15 @@ int agregarDenunciaMenu(struct ministerio *ministerio){
     /*Se pregunta y lee los ruts de denunciante y denunciado para asi copiar esta informacion en 2 strcut personas */
 
     if(nuevoDenunciante == NULL || nuevoDenunciado == NULL){
-        return 0;
+        printf("Denunciante y denunciado no encontrados, intente con un RUT valido\n");
+        return;
     }
 
     nuevaDenuncia = (struct denuncia *)malloc(sizeof(struct denuncia));
 
     if(nuevaDenuncia == NULL){
-        return -2;
+        printf("Error al asignar memoria");
+        return;
     }
     /*Se corrobora que exita denunciante y denunciado para luego asignar memoria a la nueva denuncia (tambien se corrobora que se asigne correctamente la memoria)*/
 
@@ -864,10 +874,10 @@ int agregarDenunciaMenu(struct ministerio *ministerio){
 
     agregarDenunciaAPersona(rutDenunciante, ministerio->personas, nuevaDenuncia);
     agregarDenunciaAPersona(rutDenunciado, ministerio->personas, nuevaDenuncia);
-    return 1;
+    printf("Denuncia agregada correctamente. \n");
 }
 
-int agregarCausaMenu(struct ministerio *ministerio){
+void agregarCausaMenu(struct ministerio *ministerio){
     char ruc[30];
     char rut[30];
     int numero =0;
@@ -885,21 +895,21 @@ int agregarCausaMenu(struct ministerio *ministerio){
     personaBuscada = buscarPersonaPorRut(ministerio->personas, rut);
 
     if (personaBuscada == NULL || personaBuscada->denuncias == NULL) {
-        return -1;
+        printf("Persona o sus denuncias fueron  no encontradas.\n");
+        return;
     }
 
     denuncia = buscarDenunciaPorRuc(personaBuscada->denuncias, ruc);
     if (denuncia == NULL) {
-        return -3;
+        printf("No se encontro una denuncia con ese ruc que pertenezca al usuario entregado.\n");
     }
 
     else {
         crearYagregarCausaNueva(ministerio, denuncia, numero);
-        return 1;
     }
 }
 
-int agregarInvolucradoMenu(struct ministerio *ministerio){
+void agregarInvolucradoMenu(struct ministerio *ministerio){
     char palabra[100];
     int involucradosNuevos = 1;
     int i;
@@ -914,13 +924,15 @@ int agregarInvolucradoMenu(struct ministerio *ministerio){
 
     causaDestinada = buscarCausaPorRuc(ministerio->causas, palabra);
     if(causaDestinada == NULL){
-        return -1;
+        printf("No se encontro una causa con ese RUC\n");
+        return;
     }
 
     for(i = 0; i < involucradosNuevos; i++){
         nuevoInvolucrado = (struct involucrados *)malloc(sizeof(struct involucrados));
         if(nuevoInvolucrado == NULL){
-            return -2;
+            printf("Error al asignar memoria");
+            return;
         }
 
         printf("Ingrese el RUT del involucrado:\n");
@@ -943,7 +955,8 @@ int agregarInvolucradoMenu(struct ministerio *ministerio){
         if(tipo == 2){
             datosImp = (struct datosImputados *)malloc(sizeof(struct datosImputados));
             if(datosImp == NULL){
-                return -2;
+                printf("Error al asignar memoria");
+                return;
             }
             printf("Ingrese la declaracion del imputado:\n");
             scanf(" %[^\n]", palabra);
@@ -975,8 +988,8 @@ int agregarInvolucradoMenu(struct ministerio *ministerio){
         }
 
         agregarInvolucrado(causaDestinada, nuevoInvolucrado);
+        printf("Involucrado agregado correctamente\n");
     }
-    return 1;
 }
 
 /**=========================================================
@@ -2693,7 +2706,6 @@ void mostrarTodosDatosCarpetaCausa(struct causa *causa)
 
 void mostrarDenunciaDeCausa(struct causa *causaActual) {
     struct denuncia *denuncia;
-    struct causa *causaBuscada;
 
     if (causaActual == NULL) {
         printf("No se encontro la causa seleccionada.\n");
@@ -2893,7 +2905,7 @@ void mostrarTodasLasCausas(struct nodoCausas *causas)
 	            SECCION EXTRA (TODOS)
 =========================================================**/
 
-void ingresarAlSistema(struct ministerio *ministerio) {
+struct persona *ingresarAlSistema(struct ministerio *ministerio) {
     char palabra[100];
     int rol;
     struct persona *nuevaPersona;
@@ -2902,7 +2914,7 @@ void ingresarAlSistema(struct ministerio *ministerio) {
     // Validar si se pudo asignar memoria
     if (nuevaPersona == NULL) {
         printf("Error al asignar memoria para nueva persona.\n");
-        return;
+        return NULL;
     }
 
     printf("\n=========== Bienvenido al sistema ===========\n");
@@ -2955,12 +2967,12 @@ void ingresarAlSistema(struct ministerio *ministerio) {
         }
     } else {
         printf("Opcion no valida. Intente de nuevo.\n");
-        return;
+        return NULL;
     }
 
     nuevaPersona->denuncias = NULL;
     agregarPersonas(ministerio, nuevaPersona);
-    printf("Ingresando al menu...\n\n");
+    return nuevaPersona;
 }
 
 void mostrarCausasEstado(struct ministerio *ministerio) {
@@ -3051,10 +3063,7 @@ void mostrarRucDePersonaBuscada(struct ministerio *ministerio, char *rutBuscado)
         // Buscar en involucrados
         for (i = 0; i < actual->datosCausa->tamInvolucrados; i++)
         {
-            if (actual->datosCausa->involucrados[i] != NULL &&
-                actual->datosCausa->involucrados[i]->persona != NULL &&
-                actual->datosCausa->involucrados[i]->persona->rut != NULL &&
-                strcmp(actual->datosCausa->involucrados[i]->persona->rut, rutBuscado) == 0)
+            if (actual->datosCausa->involucrados[i] != NULL && actual->datosCausa->involucrados[i]->persona != NULL && actual->datosCausa->involucrados[i]->persona->rut != NULL && strcmp(actual->datosCausa->involucrados[i]->persona->rut, rutBuscado) == 0)
             {
                 encontrado = 1;
             }
@@ -3063,15 +3072,11 @@ void mostrarRucDePersonaBuscada(struct ministerio *ministerio, char *rutBuscado)
         // Buscar en denuncia (denunciante y denunciado)
         if (actual->datosCausa->denuncia != NULL)
         {
-            if (actual->datosCausa->denuncia->denunciante != NULL &&
-                actual->datosCausa->denuncia->denunciante->rut != NULL &&
-                strcmp(actual->datosCausa->denuncia->denunciante->rut, rutBuscado) == 0)
+            if (actual->datosCausa->denuncia->denunciante != NULL && actual->datosCausa->denuncia->denunciante->rut != NULL && strcmp(actual->datosCausa->denuncia->denunciante->rut, rutBuscado) == 0)
             {
                 encontrado = 1;
             }
-            if (actual->datosCausa->denuncia->denunciado != NULL &&
-                actual->datosCausa->denuncia->denunciado->rut != NULL &&
-                strcmp(actual->datosCausa->denuncia->denunciado->rut, rutBuscado) == 0)
+            if (actual->datosCausa->denuncia->denunciado != NULL && actual->datosCausa->denuncia->denunciado->rut != NULL && strcmp(actual->datosCausa->denuncia->denunciado->rut, rutBuscado) == 0)
             {
                 encontrado = 1;
             }
@@ -3081,10 +3086,7 @@ void mostrarRucDePersonaBuscada(struct ministerio *ministerio, char *rutBuscado)
         actualCarpeta = actual->datosCausa->datosCarpetas;
         while (actualCarpeta != NULL)
         {
-            if (actualCarpeta->datosCarpeta != NULL &&
-                actualCarpeta->datosCarpeta->datosPersona != NULL &&
-                actualCarpeta->datosCarpeta->datosPersona->rut != NULL &&
-                strcmp(actualCarpeta->datosCarpeta->datosPersona->rut, rutBuscado) == 0)
+            if (actualCarpeta->datosCarpeta != NULL && actualCarpeta->datosCarpeta->datosPersona != NULL && actualCarpeta->datosCarpeta->datosPersona->rut != NULL && strcmp(actualCarpeta->datosCarpeta->datosPersona->rut, rutBuscado) == 0)
             {
                 encontrado = 1;
             }
@@ -3326,7 +3328,7 @@ void menuExtra(struct ministerio *ministerio) {
 
 void menuAgregar(struct ministerio *ministerio){
     int opcion;
-    int resultado;
+    char rutDenunciante[20];
     while(1){
         printf("\n=========== MENU AGREGAR ===========\n");
         printf("Opcion 1: Agregar persona\n");
@@ -3345,53 +3347,32 @@ void menuAgregar(struct ministerio *ministerio){
         }
         else if (opcion == 1) {
         /*Opcion 1 agregar persona*/
-            resultado = agregarPersonaMenu(ministerio);
-            if (resultado == -3)printf("No se encontraron personas\n");
-            if (resultado == -2)printf("Error al asignar memoria.\n");
-            if (resultado == -1)printf("Error: ministerio o persona inválidos.\n");
-            if (resultado == 0)printf("Esta persona ya se registró.\n");
-            if (resultado == 1)printf("La persona fue agregada con exito.\n");
+            agregarPersonaMenu(ministerio);
             break;
         }
 
         else if(opcion == 2){
         /*Opcion 2 agregar denuncia */
-            resultado = agregarDenunciaMenu(ministerio);
-            if (resultado == -3)printf("Denunciante y denunciado no encontrados, intente con un RUT valido\n");
-            if (resultado == -2)printf("Error al asignar memoria\n");
-            if (resultado == 0)printf("Persona no encontrada\n");
-            if (resultado == 1)printf("Denuncia agregada correctamente. \n");
+            printf("Ingrese RUT del denunciante\n");
+            scanf(" %[^\n]", rutDenunciante);
+
+            agregarDenunciaMenu(ministerio, rutDenunciante);
             break;
         }
 
         else if(opcion == 3){
         /*Opcion 3 agregar carpeta*/
-            resultado = agregarCarpetaMenu(ministerio);
-            if (resultado == -2)printf("Error al asignar memoria");
-            if (resultado == -1)printf("Nueva carpeta no existe\n");
-            if (resultado == 0)printf("no existe informacion sobre causas en el sistema.\n");
-            if (resultado == 1)printf("Carpeta agregada exitosamente.\n");
+            agregarCarpetaMenu(ministerio);
             break;
         }
         else if (opcion == 4) {
         /*Opcion 4 agregar causa*/
-            resultado = agregarCausaMenu(ministerio);
-            if (resultado == -5)printf("Error al duplicar el RUC.\n");
-            if (resultado == -4)printf("Ministerio o denuncia inválida.\n");
-            if (resultado == -3)printf("No se encontro una denuncia con ese ruc que pertenezca al usuario entregado.\n");
-            if (resultado == -2)printf("Error al asignar memoria para la causa.\n");
-            if (resultado == -1)printf("Persona o sus denuncias fueron  no encontradas.\n");
-            if (resultado == 1)printf("Causa agregada correctamente\n");
+            agregarCausaMenu(ministerio);
             break;
         }
         else if(opcion == 5){
         /*Opcion 5 agregar involucrado*/
-            resultado = agregarInvolucradoMenu(ministerio);
-            if (resultado == -2)printf("Error al asignar memoria");
-            if (resultado == -1)printf("No se encontro una causa con ese RUC\n");
-            if (resultado == 0)printf("Error: la causa o el involucrado están vacíos.\n");
-            if (resultado == 1)printf("Involucrado agregado correctamente\n");
-
+            agregarInvolucradoMenu(ministerio);
             break;
         }
         else{
@@ -3787,14 +3768,63 @@ void menuPrincipal(struct ministerio *ministerio) {
     }
 }
 
-int main(){
+void menuPrincipalUsuario(struct ministerio *ministerio, struct persona *usuarioEnSistema) {
+    int opcion;
+    opcion = -1;
+    while(opcion != 0) {
+        // Imprime el menu principal de opciones
+        printf("\n=========== MENU PRINCIPAL ===========\n");
+        printf("1. Mostrar sus datos.\n");
+        printf("2. Mostrar sus denuncias.\n");
+        printf("3. Mostrar casos donde esta involucrado.\n");
+        printf("4. Ingresar una denuncia en su nombre.\n");
+        printf("0. Salir\n");
+        printf("Seleccione una opcion: ");
+        scanf("%d", &opcion);
+        (void)getchar(); // Limpia el salto de linea despues de scanf
 
+        switch(opcion) {
+            case 1:
+                // Mostrar Datos de la persona
+                    mostrarUsuarioPorRut(ministerio->personas, usuarioEnSistema->rut);
+            break;
+            case 2:
+                // Mostrar Denuncias persona
+                    mostrarDenunciaPorRut(ministerio->personas, usuarioEnSistema->rut);
+            break;
+            case 3:
+                // Mostrar casos donde esta involucrado
+                    mostrarRucDePersonaBuscada(ministerio, usuarioEnSistema->rut);
+            break;
+            case 4:
+                // Ingresar denuncia
+                    agregarDenunciaMenu(ministerio, usuarioEnSistema->rut);
+            break;
+            case 0:
+                printf("\nSaliendo del sistema.\n");
+            break;
+            default:
+                printf("Opcion no valida. Intente de nuevo.\n");
+            break;
+        }
+    }
+}
+
+int main(){
+    struct persona *PersonaIngresada;
     struct ministerio *ministerio = (struct ministerio *)malloc(sizeof(struct ministerio));
     ministerio->personas = NULL;
     ministerio->causas = NULL;
 
-    ingresarAlSistema(ministerio);
-    menuPrincipal(ministerio);
+    PersonaIngresada = ingresarAlSistema(ministerio);
+    if (PersonaIngresada->rol == 1) {
+        printf("Ingresando al sistema...");
+        menuPrincipalUsuario(ministerio, PersonaIngresada);
+    }
+    else if (PersonaIngresada->rol == 2 || PersonaIngresada->rol == 3) {
+        printf("Ingresando al sistema...");
+        menuPrincipal(ministerio);
+    }
 
     return 0;
 }
