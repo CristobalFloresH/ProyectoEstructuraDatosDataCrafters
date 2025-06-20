@@ -1,5 +1,7 @@
+#include <stdio.h>
+
 void menuEliminarCausa(struct ministerio *ministerio) {
-    int opcion = -1;
+    int opcion = -1, exito;
     char rut[30];
     char ruc[30];
     struct nodoCausas *encontrado;
@@ -18,14 +20,19 @@ void menuEliminarCausa(struct ministerio *ministerio) {
         printf("0. Volver.\n");
         printf("Ingrese opcion:");
         scanf("%d", &opcion);
-        getchar();
+        (void)getchar();
 
         switch (opcion) {
             case 1:
                 printf("Ingrese RUC de la causa a eliminar:\n");
                 scanf("%s", ruc);
-                getchar();
-                eliminarCausa(&(ministerio->causas), ruc);
+                (void)getchar();
+                exito = eliminarCausa(&(ministerio->causas), ruc);
+                if (exito == 0)
+                    printf("No se pudo eliminar causa.\n");
+                else
+                    printf("Causa eliminada exitosamente.\n");
+
                 break;
 
             case 2:
@@ -35,16 +42,20 @@ void menuEliminarCausa(struct ministerio *ministerio) {
             case 3:
                 printf("Ingrese RUC de la causa y RUT del involucrado a eliminar.\n");
                 scanf("%s", ruc);
-                getchar();
+                (void)getchar();
                 scanf("%s", rut);
-                getchar();
-                eliminarInvolucrado(&(ministerio->causas), ruc, rut);
+                (void)getchar();
+                exito = eliminarInvolucrado(&(ministerio->causas), ruc, rut);
+                if (exito == 0)
+                    printf("No se pudo eliminar el involucrado.\n");
+                else
+                    printf("Involucrado eliminado exitosamente.\n");
                 break;
 
             case 4:
                 printf("Ingrese RUC de la sentencia a eliminar:\n");
                 scanf("%s", ruc);
-                getchar();
+                (void)getchar();
                 encontrado = buscarNodoCausa(ministerio->causas, ruc);
                 if (encontrado != NULL && encontrado->datosCausa != NULL && encontrado->datosCausa->sentencia != NULL) {
                     free(encontrado->datosCausa->sentencia);
