@@ -14,13 +14,13 @@ void menuEliminar(struct ministerio *ministerio) {
         printf("0. Volver.\n");
         printf("Ingrese una opcion:");
         scanf("%d", &opcion);
-        getchar();
+        (void)getchar();
 
         switch (opcion) {
             case 1:
                 printf("Ingrese RUT de la persona a eliminar:\n");
                 scanf("%s", rut);
-                getchar();
+                (void)getchar();
                 eliminarPersona(&(ministerio->personas), rut);
                 break;
 
@@ -31,7 +31,7 @@ void menuEliminar(struct ministerio *ministerio) {
             case 3:
                 printf("Ingrese RUT del denunciante:\n");
                 scanf("%s", rut);
-                getchar();
+                (void)getchar();
 
                 persona = buscarPersonaPorRut(ministerio->personas, rut);
                 if (persona == NULL)
@@ -39,7 +39,7 @@ void menuEliminar(struct ministerio *ministerio) {
                 else {
                     printf("Ingrese RUC de la denuncia a eliminar:\n");
                     scanf("%s", ruc);
-                    getchar();
+                    (void)getchar();
                     eliminarDenuncia(&(persona->denuncias), ruc);
                 }
                 break;
@@ -53,7 +53,7 @@ void menuEliminar(struct ministerio *ministerio) {
                 scanf("%s", ruc);
                 getchar();
                 scanf("%s", rut);
-                getchar();
+                (void)getchar();
                 eliminarInvolucrado(&(ministerio->causas), ruc, rut);
                 break;
 
