@@ -679,6 +679,10 @@ int agregarCarpetaMenu(struct ministerio *ministerio){
                 printf("Error al asignar memoria para diligencia.\n");
                 break;
             }
+            printf("Ingrese descripcion de la carpeta.\n");
+            scanf(" %[^\n]", palabra);
+            nuevaCarpeta->descripcion = (char *)malloc(strlen(palabra) + 1);
+            strcpy(nuevaCarpeta->descripcion, palabra);
 
             printf("Ingrese prioridad digligencia. (1 = muy baja, 2 = baja, 3 = media, 4 = alta, 5 = muy alta)\n");
             scanf(" %d", &tipoDato);
