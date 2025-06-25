@@ -4,8 +4,8 @@
 char *CONTRASENAFISCALJUEZ = "12064";
 
 
-struct denuncia { //Datos denuncia singular.
-    struct persona *denunciante; //persona que envio la denuncia
+struct denuncia { //Datos denuncia singular
+    struct persona *denunciante; //persona que envio la denuncia.
     struct persona *denunciado; //persona que recibio la denuncia
     char *fecha;
     char *descripcion;
@@ -732,6 +732,14 @@ int agregarCarpetaMenu(struct ministerio *ministerio){
                 printf("Denuncia no encontrada.\n");
                 break;
             }
+
+            printf("Ingrese descripcion de la carpeta.\n");
+            scanf(" %[^\n]", palabra);
+            nuevaCarpeta->descripcion = (char *)malloc(strlen(palabra) + 1);
+            strcpy(nuevaCarpeta->descripcion, palabra);
+
+            nuevaCarpeta->datosDenuncia = (struct denuncia *) malloc(sizeof(struct denuncia));
+
             nuevaCarpeta->datosDenuncia = denunciaAgregar;
             printf("Denuncia agregada correctamente.\n");
             break;
