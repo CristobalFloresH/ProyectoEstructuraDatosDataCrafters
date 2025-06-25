@@ -16,8 +16,6 @@ void compactarInvolucrados(struct involucrados **involucrados, int *tam) {
     *tam = j;
 }
 
-
-
 int eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, char *rut) {
     struct involucrados *involucrado;
     int i;
@@ -30,20 +28,26 @@ int eliminarInvolucradoPorRut(struct involucrados **involucrados, int tam, char 
         liberarDatosImputados(involucrado->datosImputados);
         involucrado->datosImputados = NULL;
     }
-
-    liberarPersona(involucrado->persona);
     involucrado->persona = NULL;
 
-    for (i = 0; i < tam; i++) {
+    for (i = 0; i < tam && involucrados[i] != NULL; i++) {
+  		if(involucrados[i]->persona->rut ==  NULL){
+          free(involucrados[i]);
+          involucrados[i] = NULL;
+          compactarInvolucrados(involucrados, &tam);
+        }
+
         if (involucrados[i] == involucrado) {
             free(involucrados[i]);
             involucrados[i] = NULL;
-            compactarInvolucrados(involucrados, tam);
+            compactarInvolucrados(involucrados, &tam);
             return 1;
         }
     }
     return 0;
 }
+
+
 int eliminarInvolucrado(struct nodoCausas **listaCausas, char *ruc, char *rut) {
     struct nodoCausas *actual;
     struct nodoCausas *inicio;
