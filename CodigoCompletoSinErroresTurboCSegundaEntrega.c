@@ -3000,6 +3000,7 @@ void mostrarTodasLasCausas(struct nodoCausas *causas)
 =========================================================**/
 
 // Busca usando busqueda binaria en el array involucrados ordenado por rut, devuelve el índice o -1 si no encontrado.
+// Log(N) iteraciones maximas
 struct persona *busquedaBinariaInvolucradosPorRut(struct involucrados **array, int tamInvolucrados, char *rutBuscado) {
     int izq, der, medio, cmp;
 
@@ -3023,7 +3024,7 @@ struct persona *busquedaBinariaInvolucradosPorRut(struct involucrados **array, i
     return NULL; // No encontrado // si sale del ciclo no encontramos
 }
 
-// Funcion de ordenamiento
+// Funcion de ordenamiento (N * (N - 1)) / 2  iteraciones maximas
 void OrdenarSeleccionDirectaInvolucradosPorRut(struct involucrados **involucrados, int tam) {
     int i, j, indiceMinimo;
     struct involucrados *temporal;
